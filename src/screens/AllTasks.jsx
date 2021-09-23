@@ -14,6 +14,7 @@ import TaskDrawer from '../components/TaskDrawer'
 import { capitalize, categorize } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
+import { Link } from 'react-router-dom'
 
 const AllTasks = () => {
   const { tasks: store } = useContext(TasksContext)
@@ -44,6 +45,9 @@ const AllTasks = () => {
           onClick={toggleCompTasks}
         >
           {!showCompTasks ? 'Show' : 'Hide'} Completed Tasks
+        </Button>
+        <Button bg='gray.100' _focus={{ border: 'none' }}>
+          <Link to='/test'>Test</Link>
         </Button>
       </HStack>
       <HStack mt={'30px'} w='full'>

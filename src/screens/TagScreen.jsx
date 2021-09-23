@@ -16,15 +16,18 @@ import { TasksContext } from '../Context/TasksContext'
 
 const TagScreen = ({ history, location }) => {
   const tag = location.pathname.split('/').slice(-1)[0]
+  const { tasks: store } = useContext(TasksContext)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [currTask, setCurrTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const { tasks: store } = useContext(TasksContext)
-  const tasks = store.filter((t) => t.tag === tag)
+  const [tasks, setTasks] = useState([])
 
   useEffect(() => {
-    if (tasks.length < 1) history.push('/')
-  }, [tasks, history, location])
+    const foundTasks = store.filter((t) => t.tag === tag)
+    foundTasks.length > 0 ? setTasks(foundTasks) : history.push('/')
+    setShowCompTasks(false)
+  }, [store, history, location])
 
   const taskOpenHandle = (task) => {
     setCurrTask(task)
@@ -46,19 +49,17 @@ const TagScreen = ({ history, location }) => {
         </Button>
       </HStack>
       <HStack mt={'30px'} w='full'>
-        <AddTask />
+        <AddTask tag={tag} />
       </HStack>
       <VStack mt={'50px'}>
-        {tasks.map((task, i) => (
-          <Task key={i} task={task} onOpen={taskOpenHandle} />
-        ))}
+        {tasks
+          .filter((t) => !t.done)
+          .map((task, i) => (
+            <Task key={i} task={task} onOpen={taskOpenHandle} />
+          ))}
       </VStack>
       <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
-      <CompletedTasks
-        show={showCompTasks}
-        tasks={tasks.filter((t) => t.done)}
-        onOpen={taskOpenHandle}
-      />
+      <CompletedTasks show={showCompTasks} tag={tag} onOpen={taskOpenHandle} />
     </Container>
   )
 }

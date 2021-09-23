@@ -3,11 +3,13 @@ import { VStack, Flex, Tag, TagLabel } from '@chakra-ui/react'
 import Task from './Task'
 import { TasksContext } from '../Context/TasksContext'
 
-const CompletedTasks = ({ show, onOpen }) => {
+const CompletedTasks = ({ show, onOpen, tag }) => {
   const { tasks: store } = useContext(TasksContext)
   const [tasks, setTasks] = useState([])
 
-  useEffect(() => setTasks(store.filter((t) => t.done)), [store])
+  useEffect(() => {
+    setTasks(store.filter((t) => (tag ? t.tag === tag && t.done : t.done)))
+  }, [store, tag])
 
   return (
     <div className={show && tasks.length > 0 ? '' : 'hidden'}>
@@ -33,6 +35,7 @@ const CompletedTasks = ({ show, onOpen }) => {
 CompletedTasks.defaultProps = {
   show: false,
   onOpen: () => false,
+  tag: null,
 }
 
 export default CompletedTasks

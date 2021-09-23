@@ -12,7 +12,6 @@ import { TasksContext } from '../Context/TasksContext'
 
 const initialValues = {
   name: '',
-  tag: 'untagged',
   done: false,
   description: '',
 }
@@ -21,11 +20,11 @@ const focusStyle = {
   borderColor: 'light.placeholder',
 }
 
-const AddTask = () => {
+const AddTask = ({ tag }) => {
   const { add, tasks } = useContext(TasksContext)
 
   const submitHandler = (todo, onSubmitProps) => {
-    add(todo)
+    add({ ...todo, tag })
     onSubmitProps.resetForm()
     onSubmitProps.setSubmitting(false)
   }
@@ -66,6 +65,10 @@ const AddTask = () => {
       </Form>
     </Formik>
   )
+}
+
+AddTask.defaultProps = {
+  tag: 'untagged',
 }
 
 export default AddTask

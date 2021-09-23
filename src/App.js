@@ -7,6 +7,7 @@ import AllTasks from './screens/AllTasks'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import TagScreen from './screens/TagScreen'
 import { TasksProvider } from './Context/TasksContext'
+import TestScreen from './screens/TestScreen'
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
             <GridItem colSpan={4} bg='whiteAlpha.200'>
               <Route path='/' component={AllTasks} exact />
               <Route path='/tag/:name' component={TagScreen} />
+              <Route path='/test' component={TestScreen} />
             </GridItem>
           </SimpleGrid>
         </Router>

@@ -47,6 +47,20 @@ export const categorize = (arr = []) => {
   return res
 }
 
+export const collect = (arr = [], prop) => {
+  return arr.map((e) => e[prop])
+}
+
+export const updateArr = (arr = [], newVal, key = 'id') => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][key] === newVal[key]) {
+      arr[i] = { ...arr[i], ...newVal }
+      break
+    }
+  }
+  return arr
+}
+
 const arr1 = [
   { tag: 'a', id: 1 },
   { tag: 'a', id: 2 },
@@ -55,5 +69,14 @@ const arr1 = [
 ]
 
 const arr2 = [{ done: false }, { done: false }, { done: false }]
+
+let arr = [
+  { id: 1, name: 'John' },
+  { id: 2, name: 'Ron' },
+  { id: 3, name: 'Don' },
+  { id: 4, name: 'tom' },
+]
+
+console.log(updateArr(arr, { id: 1, name: 'Begzod' }))
 
 // console.log(categorize(sampleTasks))
