@@ -9,7 +9,8 @@ import {
   Collapse,
 } from '@chakra-ui/react'
 import { TasksContext } from '../../Context/TasksContext'
-import { capitalize } from '../../helpers'
+import { Link } from 'react-router-dom'
+import { capitalize, groupByTag } from '../../helpers'
 const menuOptionHover = {
   background: 'light.sidebar_hover',
   cursor: 'pointer',
@@ -37,19 +38,21 @@ const Sidebar = () => {
         />
       </FormControl>
       <VStack w='full' alignItems='flex-start' mt={10}>
-        <Box
-          p={2}
-          display='flex'
-          alignItems='flex-start'
-          w={'full'}
-          fontSize={18}
-          color='light.sidebar_text'
-          fontWeight='600'
-          _hover={menuOptionHover}
-          borderRadius='10px'
-        >
-          All Tasks
-        </Box>
+        <Link to='/' style={{ width: '100%' }}>
+          <Box
+            p={2}
+            display='flex'
+            alignItems='flex-start'
+            w={'full'}
+            fontSize={18}
+            color='light.sidebar_text'
+            fontWeight='600'
+            _hover={menuOptionHover}
+            borderRadius='10px'
+          >
+            All Tasks
+          </Box>
+        </Link>
         <Box
           p={2}
           display='flex'
@@ -71,17 +74,18 @@ const Sidebar = () => {
         <Box color='light.sidebar_text' w='full'>
           <Collapse in={isOpen} animateOpacity>
             <VStack>
-              {Object.keys(tasks).map((tag, i) => (
-                <Box
-                  p={1}
-                  paddingLeft={'20px'}
-                  _hover={menuOptionHover}
-                  w='full'
-                  borderRadius='10px'
-                  key={i}
-                >
-                  <a href={`/tag/${tag}`}>{capitalize(tag)}</a>
-                </Box>
+              {Object.keys(groupByTag(tasks)).map((tag, i) => (
+                <Link key={i} to={`/tag/${tag}`} style={{ width: '100%' }}>
+                  <Box
+                    p={1}
+                    paddingLeft={'20px'}
+                    _hover={menuOptionHover}
+                    w='full'
+                    borderRadius='10px'
+                  >
+                    {capitalize(tag)}
+                  </Box>
+                </Link>
               ))}
             </VStack>
           </Collapse>

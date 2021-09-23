@@ -1,8 +1,14 @@
+import { useContext } from 'react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { Flex, Text } from '@chakra-ui/react'
+import { TasksContext } from '../Context/TasksContext'
 import CircleIcon from './CircleIcon'
 
 const Task = ({ task, onOpen, completed }) => {
+  const { toggle } = useContext(TasksContext)
+
+  const toggleDone = () => toggle(task.id)
+
   return (
     <div style={{ width: '100%', marginTop: '0.3rem' }}>
       <Flex
@@ -15,9 +21,11 @@ const Task = ({ task, onOpen, completed }) => {
       >
         <Flex justifyContent='center' alignItems='center' mr='10px'>
           {!completed ? (
-            <CircleIcon color='#808080' />
+            <CircleIcon onClick={toggleDone} color='#808080' />
           ) : (
-            <CheckCircleIcon color='blue.200' />
+            <div style={{ cursor: 'pointer' }}>
+              <CheckCircleIcon onClick={toggleDone} color='blue.200' />
+            </div>
           )}
         </Flex>
         <Text w='full' onClick={() => onOpen(task)} py={1} cursor='pointer'>

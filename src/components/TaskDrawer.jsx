@@ -20,7 +20,7 @@ import produce from 'immer'
 import { isEmpty } from '../helpers'
 
 const TaskDrawer = ({ isOpen, onClose, task }) => {
-  const { tasks: store, update } = useContext(TasksContext)
+  const { update } = useContext(TasksContext)
   const [vals, setVals] = useState({})
   const [change, setChange] = useState(false)
   useEffect(() => {

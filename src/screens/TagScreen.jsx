@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import {
   HStack,
   VStack,
@@ -12,49 +12,19 @@ import Task from '../components/Task'
 import TaskDrawer from '../components/TaskDrawer'
 import { capitalize } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
+import { TasksContext } from '../Context/TasksContext'
 
-const tasks = {
-  untagged: [
-    {
-      name: 'Bring egg',
-      tag: 'untagged',
-      description: '',
-    },
-    {
-      name: 'Do H/W',
-      tag: 'untagged',
-      description: '',
-    },
-  ],
-  work: [
-    {
-      name: 'Make a new design plan',
-      tag: 'work',
-      description: '',
-    },
-    {
-      name: 'Fix the existing bugs',
-      tag: 'work',
-      description: '',
-    },
-  ],
-}
-const completedTasks = [
-  {
-    name: 'Plan the appointment with Tom',
-    tag: 'work',
-    description: '',
-  },
-]
-
-const TagScreen = ({ location }) => {
+const TagScreen = ({ history, location }) => {
   const tag = location.pathname.split('/').slice(-1)[0]
-  const tagName = capitalize(
-    Object.keys(tasks).find((p) => p === tag) || 'unknown'
-  )
   const [currTask, setCurrTask] = useState({})
-  const [showCompTasks, setShowCompTasks] = useState(true)
+  const [showCompTasks, setShowCompTasks] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { tasks: store } = useContext(TasksContext)
+  const tasks = store.filter((t) => t.tag === tag)
+
+  useEffect(() => {
+    if (tasks.length < 1) history.push('/')
+  }, [tasks, history, location])
 
   const taskOpenHandle = (task) => {
     setCurrTask(task)
@@ -66,7 +36,7 @@ const TagScreen = ({ location }) => {
   return (
     <Container maxW='container.lg' pt={7}>
       <HStack display='flex' justifyContent='space-between' w='full'>
-        <Heading size='md'>{tagName}</Heading>
+        <Heading size='md'>{capitalize(tag)}</Heading>
         <Button
           bg='gray.100'
           _focus={{ border: 'none' }}
@@ -79,14 +49,14 @@ const TagScreen = ({ location }) => {
         <AddTask />
       </HStack>
       <VStack mt={'50px'}>
-        {tasks[tag].map((task, i) => (
+        {tasks.map((task, i) => (
           <Task key={i} task={task} onOpen={taskOpenHandle} />
         ))}
       </VStack>
       <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
       <CompletedTasks
         show={showCompTasks}
-        tasks={completedTasks}
+        tasks={tasks.filter((t) => t.done)}
         onOpen={taskOpenHandle}
       />
     </Container>

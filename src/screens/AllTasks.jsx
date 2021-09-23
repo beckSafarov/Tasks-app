@@ -11,19 +11,18 @@ import {
 import AddTask from '../components/AddTask'
 import Task from '../components/Task'
 import TaskDrawer from '../components/TaskDrawer'
-import { capitalize, groupByTag, objSize } from '../helpers'
+import { capitalize, categorize } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
 
 const AllTasks = () => {
-  const { tasks: store, update, remove } = useContext(TasksContext)
-  const [tasks, setTasks] = useState([])
-  const [currTask, setCurrTask] = useState({})
-  const [showCompTasks, setShowCompTasks] = useState(false)
-  const [compTasks, setCompTasks] = useState([])
+  const { tasks: store } = useContext(TasksContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const groupedByTags = groupByTag(tasks)
 
+  const [tasks, setTasks] = useState([])
+  const [showCompTasks, setShowCompTasks] = useState(false)
+  const [currTask, setCurrTask] = useState({})
+  const taggedTasks = categorize(tasks)
   useEffect(() => {
     setTasks(store)
   }, [store])
@@ -32,23 +31,8 @@ const AllTasks = () => {
     setCurrTask(task)
     onOpen()
   }
-  const toggleCompTasks = () => {
-    setShowCompTasks(!showCompTasks)
-    showCompTasks && setCompTasks(tasks.filter((t) => t.done))
-  }
 
-  // const updateTest = () => {
-  //   if (store && store.untagged) {
-  //     update({ ...store.untagged[0], name: 'juijo' })
-  //     console.log(store.untagged)
-  //   }
-  // }
-
-  // const removeTask = () => {
-  //   if (store && store.untagged) {
-  //     remove('untagged', store.untagged[0].id)
-  //   }
-  // }
+  const toggleCompTasks = () => setShowCompTasks(!showCompTasks)
 
   return (
     <Container maxW='container.lg' pt={7}>
@@ -65,22 +49,22 @@ const AllTasks = () => {
       <HStack mt={'30px'} w='full'>
         <AddTask />
       </HStack>
-      {Object.keys(groupedByTags).map((tag, i) => (
-        <VStack mt={'50px'} key={i}>
-          <Text as='strong' fontSize='lg' align='left' w='full' mb='10px'>
-            {capitalize(tag)}
-          </Text>
-          {groupedByTags[tag].map((t, i) => (
-            <Task key={i} task={t} onOpen={taskOpenHandle} />
-          ))}
-        </VStack>
-      ))}
+      {Object.keys(taggedTasks).map((tag, i) => {
+        if (taggedTasks[tag].undones.length > 0) {
+          return (
+            <VStack mt={'50px'} key={i}>
+              <Text as='strong' fontSize='lg' align='left' w='full' mb='10px'>
+                {capitalize(tag)}
+              </Text>
+              {taggedTasks[tag].undones.map((t, i) => (
+                <Task key={i} task={t} onOpen={taskOpenHandle} />
+              ))}
+            </VStack>
+          )
+        }
+      })}
       <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
-      <CompletedTasks
-        show={showCompTasks && compTasks.length > 0}
-        tasks={compTasks}
-        onOpen={taskOpenHandle}
-      />
+      <CompletedTasks show={showCompTasks} onOpen={taskOpenHandle} />
     </Container>
   )
 }
