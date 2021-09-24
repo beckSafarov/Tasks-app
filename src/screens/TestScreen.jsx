@@ -1,9 +1,17 @@
 import { useState } from 'react'
+import { add, remove, update } from '../helpers/tasksLCS'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
 
   const toggleFoo = () => setFoo((v) => !v)
+
+  const addLCS = () => {
+    add({ name: 'first task', id: 1, done: false })
+  }
+
+  const removeLCS = () => remove(1)
+  const updateLCS = () => update({ id: 2, done: true })
 
   return (
     <>
@@ -18,6 +26,12 @@ const TestScreen = () => {
         <button style={{ border: '1px solid #ccc' }} onClick={toggleFoo}>
           Click to toggle foo
         </button>
+        <br />
+        <button onClick={addLCS}>add</button>
+        <br />
+        <button onClick={removeLCS}>remove</button>
+        <br />
+        <button onClick={updateLCS}>update</button>
       </div>
     </>
   )

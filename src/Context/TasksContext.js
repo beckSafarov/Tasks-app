@@ -3,7 +3,7 @@ import { getStore } from '../helpers/tasksLCS'
 import TasksReducer from './TasksReducer'
 import { v4 as uuid4 } from 'uuid'
 
-const initialState = { tasks: [] }
+const initialState = { tasks: getStore() }
 export const TasksContext = createContext(initialState)
 
 export const TasksProvider = ({ children }) => {

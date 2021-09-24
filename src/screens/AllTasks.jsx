@@ -17,7 +17,7 @@ import { TasksContext } from '../Context/TasksContext'
 import { Link } from 'react-router-dom'
 
 const AllTasks = () => {
-  const { tasks: store } = useContext(TasksContext)
+  const { tasks: store, remove } = useContext(TasksContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [tasks, setTasks] = useState([])
@@ -34,6 +34,8 @@ const AllTasks = () => {
   }
 
   const toggleCompTasks = () => setShowCompTasks(!showCompTasks)
+
+  const deleteTheFirst = () => remove(tasks[0].id)
 
   return (
     <Container maxW='container.lg' pt={7}>
