@@ -17,37 +17,38 @@ import {
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
 import produce from 'immer'
-import { isEmpty } from '../helpers'
+import { capitalize, isEmpty } from '../helpers'
+import { TagsContext } from '../Context/TagsContext'
 
 const TaskDrawer = ({ isOpen, onClose, task }) => {
   const { update } = useContext(TasksContext)
+  const { tags } = useContext(TagsContext)
   const [vals, setVals] = useState({})
-  const [change, setChange] = useState(false)
+  let updated = {}
   useEffect(() => {
     if (!isEmpty(task) && (isEmpty(vals) || task.id !== vals.id)) {
       setVals({ ...task })
     }
-
-    if (change) {
-      update(vals)
-      setChange(false)
-    }
-  }, [vals, task, update])
+  }, [vals, task])
 
   const handleChanges = useCallback(
     (e) => {
-      setVals(
-        produce((draft) => {
-          draft[e.target.name] = e.target.value
-        })
-      )
-      setChange(true)
+      updated = { ...vals }
+      updated[e.target.name] = e.target.value
+      setVals(updated)
+      if (e.target.name === 'tag') update(updated)
     },
     [vals]
   )
 
+  const closeHandler = (e) => {
+    update(vals)
+    setVals({})
+    onClose(e)
+  }
+
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} trapFocus={false}>
+    <Drawer isOpen={isOpen} onClose={closeHandler} trapFocus={false}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
@@ -81,8 +82,11 @@ const TaskDrawer = ({ isOpen, onClose, task }) => {
                 onChange={handleChanges}
                 _focus={{ borderColor: 'transparent' }}
               >
-                <option value='untagged'>Untagged</option>
-                <option value='work'>Work</option>
+                {Object.keys(tags).map((t, i) => (
+                  <option key={i} value={t}>
+                    {capitalize(t)}
+                  </option>
+                ))}
               </Select>
             </HStack>
             <Textarea

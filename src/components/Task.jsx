@@ -10,6 +10,7 @@ import {
   MenuDivider,
   MenuList,
   MenuItem,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
 import CircleIcon from './CircleIcon'
@@ -20,13 +21,21 @@ import {
   FaCheckCircle,
   FaEdit,
 } from 'react-icons/fa'
+import ConfirmModal from './ConfirmModal'
 
 const Task = ({ task, onOpen, completed }) => {
   const { toggle, remove } = useContext(TasksContext)
-
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure()
   const toggleDone = () => toggle(task.id)
 
-  const removeTask = () => remove(task.id)
+  const removeTask = (e) => {
+    remove(task.id)
+    onModalClose(e)
+  }
 
   return (
     <div style={{ width: '100%', marginTop: '0.3rem' }}>
@@ -90,12 +99,20 @@ const Task = ({ task, onOpen, completed }) => {
             <MenuItem
               fontSize='sm'
               icon={<Icon color='gray.800' as={FaTrash}></Icon>}
-              onClick={removeTask}
+              onClick={onModalOpen}
             >
               Delete Task
             </MenuItem>
           </MenuList>
         </Menu>
+        <ConfirmModal
+          title={`"${task.name}" will be permanently deleted`}
+          body="You won't be able to undo this action."
+          onProceed={removeTask}
+          onClose={onModalClose}
+          isOpen={isModalOpen}
+          proceedTitle={'Delete'}
+        />
       </Flex>
     </div>
   )

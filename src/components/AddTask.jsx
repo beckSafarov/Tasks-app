@@ -9,6 +9,7 @@ import {
 import { AddIcon } from '@chakra-ui/icons'
 import { Formik, Form, Field } from 'formik'
 import { TasksContext } from '../Context/TasksContext'
+import { TagsContext } from '../Context/TagsContext'
 
 const initialValues = {
   name: '',
@@ -21,10 +22,12 @@ const focusStyle = {
 }
 
 const AddTask = ({ tag }) => {
-  const { add, tasks } = useContext(TasksContext)
+  const { add: addTask } = useContext(TasksContext)
+  const { tags, add: addTag } = useContext(TagsContext)
 
   const submitHandler = (todo, onSubmitProps) => {
-    add({ ...todo, tag })
+    addTask({ ...todo, tag })
+    if (!tags.untagged) addTag('untagged')
     onSubmitProps.resetForm()
     onSubmitProps.setSubmitting(false)
   }

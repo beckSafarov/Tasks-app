@@ -9,20 +9,6 @@ export const setStore = (n) => {
   localStorage.setItem('tasks', JSON.stringify(n))
 }
 
-export const add = (t) => {
-  let store = getStore()
-  store.push(t)
-  setStore(store)
-}
-
-export const update = (n) => setStore(updateArr(getStore(), n))
-
-export const remove = (id) => {
-  let store = getStore()
-  store = store.filter((t) => t.id !== id)
-  setStore(store)
-}
-
 // export const findTask = (keyword) => {
 //   let res = []
 //   const rx = new RegExp(keyword + 'gi')

@@ -10,22 +10,26 @@ import {
 import AddTask from '../components/AddTask'
 import Task from '../components/Task'
 import TaskDrawer from '../components/TaskDrawer'
-import { capitalize } from '../helpers'
+import { capitalize, findPropByVal, hasProp } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
+import { TagsContext } from '../Context/TagsContext'
 
 const TagScreen = ({ history, location }) => {
-  const tag = location.pathname.split('/').slice(-1)[0]
   const { tasks: store } = useContext(TasksContext)
+  const { tags } = useContext(TagsContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const tagId = location.pathname.split('/').slice(-1)[0]
+  const tag = findPropByVal(tags, tagId)
 
   const [currTask, setCurrTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(false)
   const [tasks, setTasks] = useState([])
 
   useEffect(() => {
-    const foundTasks = store.filter((t) => t.tag === tag)
-    foundTasks.length > 0 ? setTasks(foundTasks) : history.push('/')
+    tags[tag]
+      ? setTasks(() => store.filter((t) => t.tag == tag))
+      : history.push('/')
     setShowCompTasks(false)
   }, [store, history, location])
 

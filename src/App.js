@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ChakraProvider, SimpleGrid, GridItem } from '@chakra-ui/react'
 import theme from './themes'
 import './index.css'
@@ -6,13 +5,13 @@ import Sidebar from './components/Sidebar'
 import AllTasks from './screens/AllTasks'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import TagScreen from './screens/TagScreen'
-import { TasksProvider } from './Context/TasksContext'
 import TestScreen from './screens/TestScreen'
+import ContextProviders from './Context/ContextProviders'
 
 const App = () => {
   return (
     <ChakraProvider theme={theme}>
-      <TasksProvider>
+      <ContextProviders>
         <Router>
           <SimpleGrid columns={5} w='full' height={'100vh'}>
             <GridItem colSpan={1} bg='light.sidebar' color='brand.500'>
@@ -25,7 +24,7 @@ const App = () => {
             </GridItem>
           </SimpleGrid>
         </Router>
-      </TasksProvider>
+      </ContextProviders>
     </ChakraProvider>
   )
 }

@@ -45,10 +45,10 @@ export const updateArr = (arr = [], newVal, key = 'id') => {
   return arr
 }
 
-const hasProp = (obj = {}, prop) =>
+export const hasProp = (obj = {}, prop) =>
   Object.keys(obj).find((p) => p === prop) ? true : false
 
-const nthProp = (obj = {}, n) => Object.keys(obj)[n]
+export const nthProp = (obj = {}, n) => Object.keys(obj)[n]
 
 /**
  * @info: find index of an object with certain attribute in an array
@@ -227,15 +227,31 @@ const has = (arr = [], val) => {
   return typeof arr[0] === 'object' ? obj(arr, val) : numbOrString(arr, val)
 }
 
-const pluralize = (word = '', n = 0) =>
+export const pluralize = (word = '', n = 0) =>
   n === 0 ? `No ${word}s` : n === 1 ? `1 ${word}` : `${n} ${word}s`
 
-const withoutProp = (obj, prop) => {
+/**
+ * @param: obj: Object, prop: String
+ */
+export const withoutProp = (obj, prop) => {
   let out = {}
   for (let currProp in obj) {
     if (currProp !== prop) out[currProp] = obj[currProp]
   }
   return out
+}
+
+export const renameProp = (obj = {}, currProp, newProp) => {
+  let newObj = { ...obj }
+  newObj[newProp] = newObj[currProp]
+  return withoutProp(newObj, currProp)
+}
+
+export const findPropByVal = (obj = {}, val) => {
+  for (let prop in obj) {
+    if (obj[prop] === val) return prop
+  }
+  return false
 }
 
 const toArray = (obj = {}) => Object.keys(obj).map((prop) => obj[prop])

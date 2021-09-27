@@ -1,34 +1,5 @@
 import { extendTheme, theme as base } from '@chakra-ui/react'
 
-// console.log(Object.keys(base.components.Input.variants))
-
-// const InputStyles = {
-//   variants: {
-//     outline: {
-//       field: {
-//         _focus: {
-//           boxShadow: 'none',
-//           border: 'none',
-//         },
-//       },
-//     },
-//     filled: {
-//       field: {
-//         _focus: {
-//           borderWidth: '2px',
-//           borderColor: 'light.placeholder',
-//         },
-//       },
-//     },
-//   },
-// }
-
-// const SelectStyles = {
-//   variants: {
-//     filled: InputStyles.variants.filled,
-//   },
-// }
-
 const theme = extendTheme({
   colors: {
     light: {
