@@ -59,15 +59,6 @@ const Sidebar = () => {
         onSubmit={addTagModalSubmit}
         onClose={onAddTagModalClosed}
       />
-      <FormControl>
-        <Input
-          type='text'
-          placeholder='Search a task'
-          bg='white'
-          borderRadius='10px'
-          borderColor='light.text'
-        />
-      </FormControl>
       <VStack
         w='full'
         alignItems='flex-start'
@@ -75,12 +66,12 @@ const Sidebar = () => {
         color='light.sidebar_text'
       >
         {/* all tasks link */}
-        <Link to='/' style={{ width: '100%' }}>
+        <Link to='/' style={{ position: 'inherit', width: '100%' }}>
           <Box
             p={2}
+            position='relative'
             display='flex'
             alignItems='flex-start'
-            w={'full'}
             fontSize={18}
             fontWeight='600'
             _hover={menuOptionHover}
@@ -135,7 +126,7 @@ const Sidebar = () => {
 
         <Box
           cursor='pointer'
-          position='absolute'
+          position='fixed'
           bottom='20px'
           width='100%'
           fontSize='1rem'
