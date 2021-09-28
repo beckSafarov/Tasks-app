@@ -14,6 +14,7 @@ import { capitalize, findPropByVal, hasProp } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
+import TaskHeader from '../components/TaskHeader'
 
 const TagScreen = ({ history, location }) => {
   const { tasks: store } = useContext(TasksContext)
@@ -40,31 +41,32 @@ const TagScreen = ({ history, location }) => {
 
   const compTasksHandler = () => setShowCompTasks(!showCompTasks)
 
+  const onSearch = (keyword) => {
+    console.log(keyword)
+  }
+
   return (
-    <Container maxW='container.lg' pt={7}>
-      <HStack display='flex' justifyContent='space-between' w='full'>
-        <Heading size='md'>{capitalize(tag)}</Heading>
-        <Button
-          bg='gray.100'
-          _focus={{ border: 'none' }}
-          onClick={compTasksHandler}
-        >
-          {!showCompTasks ? 'Show' : 'Hide'} Completed Tasks
-        </Button>
-      </HStack>
-      <HStack mt={'30px'} w='full'>
-        <AddTask tag={tag} />
-      </HStack>
-      <VStack mt={'50px'}>
-        {tasks
-          .filter((t) => !t.done)
-          .map((task, i) => (
-            <Task key={i} task={task} onOpen={taskOpenHandle} />
-          ))}
-      </VStack>
-      <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
-      <CompletedTasks show={showCompTasks} tag={tag} onOpen={taskOpenHandle} />
-    </Container>
+    <>
+      <TaskHeader title={capitalize(tag)} onSearchSubmit={onSearch} />
+      <Container maxW='container.lg' pt={7}>
+        <HStack mt={'30px'} w='full'>
+          <AddTask tag={tag} />
+        </HStack>
+        <VStack mt={'50px'}>
+          {tasks
+            .filter((t) => !t.done)
+            .map((task, i) => (
+              <Task key={i} task={task} onOpen={taskOpenHandle} />
+            ))}
+        </VStack>
+        <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
+        <CompletedTasks
+          show={showCompTasks}
+          tag={tag}
+          onOpen={taskOpenHandle}
+        />
+      </Container>
+    </>
   )
 }
 

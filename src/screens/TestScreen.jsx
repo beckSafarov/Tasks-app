@@ -5,6 +5,8 @@ import { add, remove, update } from '../helpers/tasksLCS'
 import { useDisclosure } from '@chakra-ui/react'
 import { TagsContext } from '../Context/TagsContext'
 import { nthProp } from '../helpers'
+import { Box } from '@chakra-ui/react'
+import SearchTask from '../components/SearchTask'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
@@ -24,6 +26,9 @@ const TestScreen = () => {
   return (
     <>
       <div style={{ width: '100%', padding: '50px' }}>
+        <Box>
+          <SearchTask onSubmit={(v) => console.log(v)} />
+        </Box>
         {/* <AddTagModal show={show} close={close} onSubmit={proceed} /> */}
         <h2>
           <strong>Foo value: </strong>

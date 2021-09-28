@@ -17,3 +17,19 @@ code {
 .hidden {
   display: none !important;
 }
+
+.navbar {
+  position: sticky;
+  background-color: #fff;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  /* opacity: 0.8; */
+  padding-top: 20px;
+  padding-bottom: 10px;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.zIndex {
+  z-index: 100;
+}

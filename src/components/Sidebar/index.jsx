@@ -63,10 +63,11 @@ const Sidebar = () => {
         w='full'
         alignItems='flex-start'
         mt={10}
+        spacing={0}
         color='light.sidebar_text'
       >
         {/* all tasks link */}
-        <Link to='/' style={{ position: 'inherit', width: '100%' }}>
+        <Link to='/' style={{ width: '100%' }}>
           <Box
             p={2}
             position='relative'
@@ -123,6 +124,22 @@ const Sidebar = () => {
             </VStack>
           </Collapse>
         </Box>
+
+        {/* link to test page */}
+        <Link to='/test' style={{ width: '100%' }}>
+          <Box
+            p={2}
+            position='relative'
+            display='flex'
+            alignItems='flex-start'
+            fontSize={18}
+            fontWeight='600'
+            _hover={menuOptionHover}
+            borderRadius='10px'
+          >
+            Test
+          </Box>
+        </Link>
 
         <Box
           cursor='pointer'

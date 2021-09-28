@@ -7,6 +7,10 @@ import {
   Container,
   useDisclosure,
   Heading,
+  Icon,
+  Box,
+  Tooltip,
+  Flex,
 } from '@chakra-ui/react'
 import AddTask from '../components/AddTask'
 import Task from '../components/Task'
@@ -14,7 +18,9 @@ import TaskDrawer from '../components/TaskDrawer'
 import { capitalize, categorize } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
-import { Link } from 'react-router-dom'
+import SearchTask from '../components/SearchTask'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import TaskHeader from '../components/TaskHeader'
 
 const AllTasks = () => {
   const { tasks: store, remove } = useContext(TasksContext)
@@ -38,40 +44,30 @@ const AllTasks = () => {
   const deleteTheFirst = () => remove(tasks[0].id)
 
   return (
-    <Container maxW='container.lg' pt={7}>
-      <HStack display='flex' justifyContent='space-between' w='full'>
-        <Heading size='md'>All Tasks</Heading>
-        <Button
-          bg='gray.100'
-          _focus={{ border: 'none' }}
-          onClick={toggleCompTasks}
-        >
-          {!showCompTasks ? 'Show' : 'Hide'} Completed Tasks
-        </Button>
-        <Button bg='gray.100' _focus={{ border: 'none' }}>
-          <Link to='/test'>Test</Link>
-        </Button>
-      </HStack>
-      <HStack mt={'30px'} w='full'>
-        <AddTask />
-      </HStack>
-      {Object.keys(taggedTasks).map((tag, i) => {
-        if (taggedTasks[tag].undones.length > 0) {
-          return (
-            <VStack mt={'50px'} key={i}>
-              <Text as='strong' fontSize='lg' align='left' w='full' mb='10px'>
-                {capitalize(tag)}
-              </Text>
-              {taggedTasks[tag].undones.map((t, i) => (
-                <Task key={i} task={t} onOpen={taskOpenHandle} />
-              ))}
-            </VStack>
-          )
-        }
-      })}
-      <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
-      <CompletedTasks show={showCompTasks} onOpen={taskOpenHandle} />
-    </Container>
+    <>
+      <TaskHeader onSearchSubmit={(v) => console.log(v)} />
+      <Container maxW='container.lg' pt={10}>
+        <HStack mt={'30px'} w='full'>
+          <AddTask />
+        </HStack>
+        {Object.keys(taggedTasks).map((tag, i) => {
+          if (taggedTasks[tag].undones.length > 0) {
+            return (
+              <VStack mt={'50px'} key={i}>
+                <Text as='strong' fontSize='lg' align='left' w='full' mb='10px'>
+                  {capitalize(tag)}
+                </Text>
+                {taggedTasks[tag].undones.map((t, i) => (
+                  <Task key={i} task={t} onOpen={taskOpenHandle} />
+                ))}
+              </VStack>
+            )
+          }
+        })}
+        <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
+        <CompletedTasks show={showCompTasks} onOpen={taskOpenHandle} />
+      </Container>
+    </>
   )
 }
 
