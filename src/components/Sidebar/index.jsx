@@ -1,7 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
 import {
-  FormControl,
-  Input,
   Container,
   VStack,
   Box,
@@ -11,7 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { capitalize, groupByTag, hasProp } from '../../helpers'
+import { capitalize } from '../../helpers'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'

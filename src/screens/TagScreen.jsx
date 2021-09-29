@@ -47,7 +47,12 @@ const TagScreen = ({ history, location }) => {
 
   return (
     <>
-      <TaskHeader title={capitalize(tag)} onSearchSubmit={onSearch} />
+      <TaskHeader
+        title={capitalize(tag)}
+        onSearchSubmit={onSearch}
+        showCompTasks={showCompTasks}
+        toggleCompTasks={compTasksHandler}
+      />
       <Container maxW='container.lg' pt={7}>
         <HStack mt={'30px'} w='full'>
           <AddTask tag={tag} />

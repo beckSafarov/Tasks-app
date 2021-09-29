@@ -12,15 +12,6 @@ export const objToArr = (obj) => {
   return res
 }
 
-export const groupByTag = (arr = []) => {
-  let res = {}
-  arr.forEach((curr) => {
-    if (!res[curr.tag]) res[curr.tag] = []
-    res[curr.tag].push(curr)
-  })
-  return res
-}
-
 export const categorize = (arr = []) => {
   let res = {}
   arr.forEach((curr) => {
@@ -34,6 +25,44 @@ export const categorize = (arr = []) => {
   })
   return res
 }
+
+export const getTasksPerTag = (tags, tasks) => {
+  console.log(tasks)
+  const res = { ...tags }
+  tasks.forEach((task) => {
+    if (typeof res[task.tag] !== 'object') {
+      res[task.tag] = { dones: [], undones: [] }
+    }
+    res[task.tag][task.dones ? 'dones' : 'undones'].push(task)
+  })
+  console.log(res)
+  return res
+}
+
+const tags = {
+  untagged: 'fewfqf232',
+  newTag: 'nwefq3f2',
+  extras: 'weewhfiuh23f23',
+}
+const tasks = [
+  { name: 'wewefew', tag: 'untagged' },
+  { name: 'ewfew', tag: 'newTag' },
+  { name: 'ewfew', tag: 'extras' },
+  { name: 'ewf', tag: 'untagged' },
+  { name: 'ewfewf', tag: 'newTag' },
+  { name: 'ewf23', tag: 'extras' },
+  { name: 'ewfewfq32', tag: 'untagged' },
+  { name: 'wefewf23', tag: 'newTag' },
+  { name: 'verbh45', tag: 'extras' },
+  { name: 'wefwqf3', tag: 'untagged' },
+  { name: 'wececg', tag: 'newTag' },
+  { name: 'wef32f3f', tag: 'extras' },
+  { name: 'weewvevr', tag: 'untagged' },
+  { name: 'ewf3', tag: 'newTag' },
+  { name: 'ewf33f', tag: 'extras' },
+]
+
+// console.log(getTasksPerTag(tags, tasks))
 
 export const updateArr = (arr = [], newVal, key = 'id') => {
   for (let i = 0; i < arr.length; i++) {

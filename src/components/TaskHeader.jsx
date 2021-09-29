@@ -1,9 +1,6 @@
 import {
-  HStack,
-  Button,
   Heading,
   Icon,
-  Tooltip,
   Menu,
   MenuButton,
   MenuList,
@@ -22,7 +19,12 @@ import AddTask from './AddTask'
 import SearchTask from './SearchTask'
 import { FaEllipsisH, FaEye, FaEyeSlash, FaEdit } from 'react-icons/fa'
 
-const TaskHeader = ({ title, onSearchSubmit, showCompTasks }) => {
+const TaskHeader = ({
+  title,
+  onSearchSubmit,
+  showCompTasks,
+  toggleCompTasks,
+}) => {
   return (
     <div className='navbar'>
       <Container
@@ -34,20 +36,6 @@ const TaskHeader = ({ title, onSearchSubmit, showCompTasks }) => {
           {title}
         </Heading>
         <SearchTask onSubmit={onSearchSubmit} />
-        {/* <Tooltip
-        label={`${!1 == 1 ? 'Show' : 'Hide'} completed tasks`}
-        aria-label='A tooltip'
-        borderRadius='5px'
-      >
-        <Button
-          bg='gray.100'
-          _focus={{ border: 'none' }}
-          onClick={toggleCompTasks}
-        >
-          {!showCompTasks ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />}
-          <Icon as={FaEye} />
-        </Button>
-      </Tooltip> */}
         <Menu size='sm'>
           <MenuButton
             as={IconButton}
@@ -60,6 +48,7 @@ const TaskHeader = ({ title, onSearchSubmit, showCompTasks }) => {
               icon={
                 !showCompTasks ? <Icon as={FaEye} /> : <Icon as={FaEyeSlash} />
               }
+              onClick={toggleCompTasks}
             >
               {!showCompTasks ? 'Show' : 'Hide'} completed tasks
             </MenuItem>

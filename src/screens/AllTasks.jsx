@@ -3,33 +3,28 @@ import {
   HStack,
   VStack,
   Text,
-  Button,
   Container,
   useDisclosure,
-  Heading,
-  Icon,
-  Box,
-  Tooltip,
-  Flex,
 } from '@chakra-ui/react'
 import AddTask from '../components/AddTask'
 import Task from '../components/Task'
 import TaskDrawer from '../components/TaskDrawer'
-import { capitalize, categorize } from '../helpers'
+import { capitalize, categorize, getTasksPerTag } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
-import SearchTask from '../components/SearchTask'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import TaskHeader from '../components/TaskHeader'
+import { TagsContext } from '../Context/TagsContext'
 
 const AllTasks = () => {
   const { tasks: store, remove } = useContext(TasksContext)
+  const { tags } = useContext(TagsContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [tasks, setTasks] = useState([])
   const [showCompTasks, setShowCompTasks] = useState(false)
   const [currTask, setCurrTask] = useState({})
-  const taggedTasks = categorize(tasks)
+  const taggedTasks = getTasksPerTag(tags, store)
+  // console.log(taggedTasks)
   useEffect(() => {
     setTasks(store)
   }, [store])
@@ -39,13 +34,17 @@ const AllTasks = () => {
     onOpen()
   }
 
-  const toggleCompTasks = () => setShowCompTasks(!showCompTasks)
+  const toggleCompTasks = () => setShowCompTasks((v) => !v)
 
   const deleteTheFirst = () => remove(tasks[0].id)
 
   return (
     <>
-      <TaskHeader onSearchSubmit={(v) => console.log(v)} />
+      <TaskHeader
+        onSearchSubmit={(v) => console.log(v)}
+        showCompTasks={showCompTasks}
+        toggleCompTasks={toggleCompTasks}
+      />
       <Container maxW='container.lg' pt={10}>
         <HStack mt={'30px'} w='full'>
           <AddTask />
