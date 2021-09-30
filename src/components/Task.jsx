@@ -30,7 +30,11 @@ const Task = ({ task, onOpen, completed }) => {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure()
-  const toggleDone = () => toggle(task.id)
+
+  const toggleDone = () => {
+    console.log('toggle clicked for ' + task.name)
+    toggle(task.id)
+  }
 
   const removeTask = (e) => {
     remove(task.id)

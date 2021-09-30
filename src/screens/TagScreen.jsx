@@ -14,10 +14,10 @@ import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import TaskHeader from '../components/TaskHeader'
+import { PreferencesContext } from '../Context/PreferencesContext'
 import {
   capitalize,
   findPropByVal,
-  getTasksPerTag,
   groupByBinaryProp,
   rgxSearch,
 } from '../helpers'
@@ -28,17 +28,22 @@ const TagScreen = ({ history, location }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const tagId = location.pathname.split('/').slice(-1)[0]
   const tag = findPropByVal(tags, tagId)
+  const { preferences: prefs, toggleShowCompletedTasks } =
+    useContext(PreferencesContext)
 
   const [currTask, setCurrTask] = useState({})
-  const [showCompTasks, setShowCompTasks] = useState(false)
+  const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [tasks, setTasks] = useState([])
-  const [compTasks, setCompTasks] = useState(tasks.filter((t) => t.done))
+  const [compTasks, setCompTasks] = useState([])
 
   useEffect(() => {
     tags[tag]
       ? setTasks(() => store.filter((t) => t.tag == tag))
       : history.push('/')
-    setShowCompTasks(false)
+    if (tags[tag]) {
+      setTasks(() => store.filter((t) => t.tag == tag))
+      setCompTasks(store.filter((t) => t.done && t.tag === tag))
+    }
   }, [store, history, location])
 
   const taskOpenHandle = (task) => {
@@ -46,7 +51,10 @@ const TagScreen = ({ history, location }) => {
     onOpen()
   }
 
-  const compTasksHandler = () => setShowCompTasks((v) => !v)
+  const compTasksHandler = () => {
+    setShowCompTasks(!showCompTasks)
+    toggleShowCompletedTasks()
+  }
 
   const onSearch = (keyword) => {
     const res = rgxSearch(tasks, keyword)
@@ -68,6 +76,7 @@ const TagScreen = ({ history, location }) => {
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
         toggleCompTasks={compTasksHandler}
+        isMainPage={false}
       />
       <Container maxW='container.lg' pt={7}>
         <HStack mt={'30px'} w='full'>
@@ -83,8 +92,8 @@ const TagScreen = ({ history, location }) => {
         <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
         <CompletedTasks
           show={showCompTasks}
-          tasks={compTasks}
           onOpen={taskOpenHandle}
+          tasks={compTasks}
         />
       </Container>
     </>

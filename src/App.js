@@ -35,18 +35,6 @@ const App = () => {
             <Route path='/tag/:name' component={TagScreen} />
             <Route path='/test' component={TestScreen} />
           </Box>
-
-          {/* below is the bad one */}
-          {/* <SimpleGrid columns={5} w='full' height={'100vh'}>
-            <GridItem colSpan={1} bg='light.sidebar' color='brand.500'>
-              <Sidebar />
-            </GridItem>
-            <GridItem colSpan={4} bg='whiteAlpha.200' pb={'100px'}>
-              <Route path='/' component={AllTasks} exact />
-              <Route path='/tag/:name' component={TagScreen} />
-              <Route path='/test' component={TestScreen} />
-            </GridItem>
-          </SimpleGrid> */}
         </Router>
       </ContextProviders>
     </ChakraProvider>

@@ -2,7 +2,6 @@ import { VStack, Flex, Tag, TagLabel } from '@chakra-ui/react'
 import Task from './Task'
 
 const CompletedTasks = ({ show, onOpen, tasks }) => {
-  console.log(tasks)
   return (
     <div className={show && tasks.length > 0 ? '' : 'hidden'}>
       <VStack mt='50px'>

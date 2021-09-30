@@ -14,6 +14,7 @@ import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
 import { useHistory } from 'react-router'
+import { PreferencesContext } from '../../Context/PreferencesContext'
 
 const menuOptionHover = {
   background: 'light.sidebar_hover',
@@ -22,7 +23,12 @@ const menuOptionHover = {
 }
 
 const Sidebar = () => {
-  const { isOpen, onToggle } = useDisclosure()
+  const { preferences: prefs, sidebarTagsToggle } =
+    useContext(PreferencesContext)
+  const { isOpen, onToggle } = useDisclosure({
+    defaultIsOpen: prefs.sidebarTagsToggle,
+  })
+
   const history = useHistory()
   const {
     isOpen: isAddTagModalOpen,
@@ -42,6 +48,7 @@ const Sidebar = () => {
   const toggleClicked = (e) => {
     onToggle(e)
     setCaret(!caret)
+    sidebarTagsToggle()
   }
 
   const addTagModalSubmit = (tag, e) => {

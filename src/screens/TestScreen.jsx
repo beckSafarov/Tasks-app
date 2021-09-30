@@ -1,16 +1,14 @@
 import { useContext, useState } from 'react'
-// import ConfirmModal from '../components/ConfirmModal'
-import AddTagModal from '../components/AddTagModal'
-import { add, remove, update } from '../helpers/tasksLCS'
-import { useDisclosure } from '@chakra-ui/react'
 import { TagsContext } from '../Context/TagsContext'
-import { nthProp } from '../helpers'
 import { Box } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
+import { PreferencesContext } from '../Context/PreferencesContext'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
   const { tags, add, update, remove } = useContext(TagsContext)
+  const context = useContext(PreferencesContext)
+  console.log(context)
   const toggleFoo = () => setFoo((v) => !v)
 
   const addLCS = () => add('personal')

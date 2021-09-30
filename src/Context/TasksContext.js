@@ -1,9 +1,9 @@
 import React, { createContext, useReducer } from 'react'
-import { getStore } from '../helpers/tasksLCS'
 import TasksReducer from './TasksReducer'
 import { v4 as uuid4 } from 'uuid'
+import { getTasks } from '../helpers/lcs'
 
-const initialState = { tasks: getStore() }
+const initialState = { tasks: getTasks() }
 export const TasksContext = createContext(initialState)
 
 export const TasksProvider = ({ children }) => {

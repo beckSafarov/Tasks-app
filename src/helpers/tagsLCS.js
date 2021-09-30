@@ -1,5 +1,3 @@
-import { withoutProp } from '.'
-
 export const getStore = () => {
   const lcs = JSON.parse(localStorage.getItem('tags'))
   return lcs !== null ? lcs : {}
