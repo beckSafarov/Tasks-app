@@ -1,24 +1,37 @@
-import { Form, Formik, Field } from 'formik'
+import { Form, Formik, Field, useFormikContext } from 'formik'
 import { useState, useEffect } from 'react'
 import {
   Flex,
   Input,
   FormControl,
   InputLeftElement,
+  InputRightElement,
   InputGroup,
   Icon,
+  Button,
 } from '@chakra-ui/react'
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch, FaTimesCircle } from 'react-icons/fa'
 
-const SearchTask = ({ onSubmit }) => {
+const SearchTask = ({ onSubmit, onClear }) => {
+  const [onSubmitProps, setOnSubmitProps] = useState({})
+  const [searchState, setSearchState] = useState(false)
+
   const submitHandler = ({ keyword }, onSubmitProps) => {
     onSubmit(keyword)
-    onSubmitProps.resetForm()
+    setSearchState(true)
     onSubmitProps.setSubmitting(false)
+    setOnSubmitProps(onSubmitProps)
   }
 
   const validate = (keyword) => {
     if (keyword === '') return { keyword: 'empty' }
+  }
+
+  const formClearHandler = () => {
+    setSearchState(false)
+    onSubmitProps?.setSubmitting(false)
+    onSubmitProps?.resetForm()
+    onClear()
   }
 
   return (
@@ -44,7 +57,16 @@ const SearchTask = ({ onSubmit }) => {
                     type='text'
                     variant='filled'
                     _focus={{ borderColor: 'light.placeholder' }}
+                    disabled={field.isSubmitting}
                   />
+                  {searchState && (
+                    <InputRightElement
+                      onClick={formClearHandler}
+                      children={
+                        <Icon color='light.placeholder' as={FaTimesCircle} />
+                      }
+                    />
+                  )}
                 </InputGroup>
               </FormControl>
             )}
@@ -57,6 +79,7 @@ const SearchTask = ({ onSubmit }) => {
 
 SearchTask.defaultProps = {
   onSubmit: () => void 0,
+  onClear: () => void 0,
 }
 
 export default SearchTask

@@ -10,11 +10,17 @@ import {
 import AddTask from '../components/AddTask'
 import Task from '../components/Task'
 import TaskDrawer from '../components/TaskDrawer'
-import { capitalize, findPropByVal, hasProp } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import TaskHeader from '../components/TaskHeader'
+import {
+  capitalize,
+  findPropByVal,
+  getTasksPerTag,
+  groupByBinaryProp,
+  rgxSearch,
+} from '../helpers'
 
 const TagScreen = ({ history, location }) => {
   const { tasks: store } = useContext(TasksContext)
@@ -26,6 +32,7 @@ const TagScreen = ({ history, location }) => {
   const [currTask, setCurrTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(false)
   const [tasks, setTasks] = useState([])
+  const [compTasks, setCompTasks] = useState(tasks.filter((t) => t.done))
 
   useEffect(() => {
     tags[tag]
@@ -39,17 +46,26 @@ const TagScreen = ({ history, location }) => {
     onOpen()
   }
 
-  const compTasksHandler = () => setShowCompTasks(!showCompTasks)
+  const compTasksHandler = () => setShowCompTasks((v) => !v)
 
   const onSearch = (keyword) => {
-    console.log(keyword)
+    const res = rgxSearch(tasks, keyword)
+    const { positives, negatives } = groupByBinaryProp(res)
+    setTasks(negatives)
+    if (positives.length > 0) {
+      setCompTasks(positives)
+      setShowCompTasks(true)
+    }
   }
+
+  const onSearchClear = () => setTasks(() => store.filter((t) => t.tag == tag))
 
   return (
     <>
       <TaskHeader
         title={capitalize(tag)}
         onSearchSubmit={onSearch}
+        onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
         toggleCompTasks={compTasksHandler}
       />
@@ -67,7 +83,7 @@ const TagScreen = ({ history, location }) => {
         <TaskDrawer isOpen={isOpen} onClose={onClose} task={currTask} />
         <CompletedTasks
           show={showCompTasks}
-          tag={tag}
+          tasks={compTasks}
           onOpen={taskOpenHandle}
         />
       </Container>

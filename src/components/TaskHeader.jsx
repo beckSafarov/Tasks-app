@@ -22,6 +22,7 @@ import { FaEllipsisH, FaEye, FaEyeSlash, FaEdit } from 'react-icons/fa'
 const TaskHeader = ({
   title,
   onSearchSubmit,
+  onSearchClear,
   showCompTasks,
   toggleCompTasks,
 }) => {
@@ -35,7 +36,7 @@ const TaskHeader = ({
         <Heading size='lg' color='gray.800'>
           {title}
         </Heading>
-        <SearchTask onSubmit={onSearchSubmit} />
+        <SearchTask onSubmit={onSearchSubmit} onClear={onSearchClear} />
         <Menu size='sm'>
           <MenuButton
             as={IconButton}
@@ -64,6 +65,7 @@ TaskHeader.defaultProps = {
   title: 'All Tasks',
   showCompTasks: false,
   onSearchSubmit: () => void 0,
+  onSearchClear: () => void 0,
   toggleCompTasks: () => void 0,
   showCompTasks: false,
 }

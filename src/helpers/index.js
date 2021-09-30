@@ -26,16 +26,50 @@ export const categorize = (arr = []) => {
   return res
 }
 
-export const getTasksPerTag = (tags, tasks) => {
-  console.log(tasks)
-  const res = { ...tags }
-  tasks.forEach((task) => {
-    if (typeof res[task.tag] !== 'object') {
-      res[task.tag] = { dones: [], undones: [] }
-    }
-    res[task.tag][task.dones ? 'dones' : 'undones'].push(task)
+export const groupByBinaryProp = (arr = [], prop = 'done') => {
+  const res = { positives: [], negatives: [] }
+  arr.forEach((elem) => {
+    res[elem[prop] ? 'positives' : 'negatives'].push(elem)
   })
-  console.log(res)
+  return res
+}
+
+const objList = [
+  { id: 1, done: true },
+  { id: 2, done: false },
+  { id: 3, done: true },
+  { id: 4, done: false },
+]
+
+// console.log(groupByBinaryProp(objList))
+
+// export const groupByProp = (arr = [], prop = 'tag') => {
+//   const res = {}
+//   let elemProp
+//   arr.forEach((elem) => {
+//     elemProp = elem[prop]
+//     if (!res[elemProp]) res[elemProp] = []
+//     res[elemProp].push(elem)
+//   })
+//   return res
+// }
+
+export const getTasksPerTag = (tags, tasks) => {
+  const res = {}
+  let foundTasks = []
+  Object.keys(tags).forEach((tag) => {
+    foundTasks = tasks.filter((t) => t.tag === tag)
+    if (foundTasks.length > 0) res[tag] = [...foundTasks]
+  })
+  return res
+}
+
+export const rgxSearch = (arr = [], keyword, prop = 'name') => {
+  let res = []
+  const rx = new RegExp(keyword, 'gi')
+  arr.forEach((elem) => {
+    if (elem[prop].match(rx)) res.push(elem)
+  })
   return res
 }
 
@@ -43,6 +77,7 @@ const tags = {
   untagged: 'fewfqf232',
   newTag: 'nwefq3f2',
   extras: 'weewhfiuh23f23',
+  rubio: 'wewefew',
 }
 const tasks = [
   { name: 'wewefew', tag: 'untagged' },
@@ -62,7 +97,13 @@ const tasks = [
   { name: 'ewf33f', tag: 'extras' },
 ]
 
-// console.log(getTasksPerTag(tags, tasks))
+// console.time('serrero')
+// console.log(serrero(tags, tasks))
+// console.timeEnd('serrero')
+
+const obj = { name: 'begzod', age: 21 }
+
+// console.log(Object.keys(obj))
 
 export const updateArr = (arr = [], newVal, key = 'id') => {
   for (let i = 0; i < arr.length; i++) {
