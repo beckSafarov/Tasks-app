@@ -66,12 +66,15 @@ const TagScreen = ({ history, location }) => {
     }
   }
 
-  const onSearchClear = () => setTasks(() => store.filter((t) => t.tag == tag))
+  const onSearchClear = () => {
+    setTasks(() => store.filter((t) => t.tag == tag))
+    setCompTasks(store.filter((t) => !t.done && t.tag !== tag))
+  }
 
   return (
     <>
       <TaskHeader
-        title={capitalize(tag)}
+        title={tag}
         onSearchSubmit={onSearch}
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}

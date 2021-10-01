@@ -9,7 +9,6 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { capitalize } from '../../helpers'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
@@ -122,7 +121,7 @@ const Sidebar = () => {
                     // border='1px solid white'
                     borderRadius='10px'
                   >
-                    {capitalize(tag)}
+                    {tag}
                   </Box>
                 </Link>
               ))}

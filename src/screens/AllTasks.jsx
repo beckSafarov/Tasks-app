@@ -115,7 +115,7 @@ const AllTasks = () => {
           Object.keys(tasks).map((tag, i) => (
             <VStack mt={'50px'} key={i}>
               <Text as='strong' fontSize='lg' align='left' w='full' mb='10px'>
-                {capitalize(tag)}
+                {tag}
               </Text>
               {tasks[tag].map((t, i) => (
                 <Task key={i} task={t} onOpen={taskOpenHandle} />
