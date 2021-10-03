@@ -8,11 +8,11 @@ import {
 import theme from './themes'
 import './index.css'
 import Sidebar from './components/Sidebar'
-import AllTasks from './screens/AllTasks'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import TagScreen from './screens/TagScreen'
 import TestScreen from './screens/TestScreen'
 import ContextProviders from './Context/ContextProviders'
+import TodayScreen from './screens/TodayScreen'
 
 const App = () => {
   return (
@@ -31,7 +31,7 @@ const App = () => {
             <Sidebar />
           </Box>
           <Box ml='220px' pb='100px'>
-            <Route path='/' component={AllTasks} exact />
+            <Route path='/' component={TodayScreen} exact />
             <Route path='/tag/:name' component={TagScreen} />
             <Route path='/test' component={TestScreen} />
           </Box>

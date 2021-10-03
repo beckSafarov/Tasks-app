@@ -237,7 +237,7 @@ const count = (arr = [], val) => {
   return typeof arr[0] === 'object' ? objCount(arr, val) : numbCount(arr, val)
 }
 
-const sort = (arr = [], prop) => {
+export const sort = (arr = [], prop) => {
   const ObjSort = (arr, prop) => arr.sort((x, y) => x[prop] - y[prop])
   const numbSort = (arr) => arr.sort((x, y) => x - y)
   return typeof arr[0] === 'object' ? ObjSort(arr, prop) : numbSort(arr)
@@ -311,6 +311,53 @@ export const withoutProp = (obj, prop) => {
   return out
 }
 
+export const filterPropTypes = (obj = {}, propType = 'string') => {
+  let out = {}
+  for (let prop in obj) {
+    if (typeof obj[prop] !== propType) {
+      out[prop] = obj[prop]
+    }
+  }
+  return out
+}
+
+export const setAllProps = (obj = {}, val = null) => {
+  const res = {}
+  for (let prop in obj) {
+    res[prop] = val
+  }
+  return res
+}
+
+export const resetAllProps = (obj = {}) => {
+  const res = {}
+  let propVal
+  for (let prop in obj) {
+    propVal = obj[prop]
+    switch (typeof propVal) {
+      case 'object':
+        res[prop] = propVal.length ? [] : {}
+        break
+      case 'string':
+        res[prop] = ''
+        break
+      case 'number':
+        res[prop] = 0
+        break
+      case 'boolean':
+        res[prop] = false
+        break
+      default:
+        res[prop] = null
+    }
+  }
+  return res
+}
+
+const obj2 = { name: 'begzod', age: 21, some: false, arr: [1, 2] }
+
+console.log(resetAllProps(obj2))
+
 export const renameProp = (obj = {}, currProp, newProp) => {
   let newObj = { ...obj }
   newObj[newProp] = newObj[currProp]
@@ -323,5 +370,3 @@ export const findPropByVal = (obj = {}, val) => {
   }
   return false
 }
-
-const toArray = (obj = {}) => Object.keys(obj).map((prop) => obj[prop])

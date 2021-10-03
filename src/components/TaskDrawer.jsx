@@ -23,13 +23,9 @@ import { TagsContext } from '../Context/TagsContext'
 const TaskDrawer = ({ isOpen, onClose, task }) => {
   const { update } = useContext(TasksContext)
   const { tags } = useContext(TagsContext)
-  const [vals, setVals] = useState({})
+  const [vals, setVals] = useState({ ...task })
   let updated = {}
-  useEffect(() => {
-    if (!isEmpty(task) && (isEmpty(vals) || task.id !== vals.id)) {
-      setVals({ ...task })
-    }
-  }, [vals, task])
+  useEffect(() => setVals({ ...task }), [task])
 
   const handleChanges = useCallback(
     (e) => {

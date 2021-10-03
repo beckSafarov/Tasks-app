@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { setPreferences } from '../helpers/lcs'
+import { setStore } from '../helpers/lcs'
 
 const PreferencesReducer = produce((draft, action) => {
   let { showCompletedTasks, sidebarTagsToggle, sortType } = draft.preferences
@@ -16,7 +16,7 @@ const PreferencesReducer = produce((draft, action) => {
     default:
       return draft
   }
-  setPreferences(draft.preferences)
+  setStore(draft.preferences, 'preferences')
 })
 
 export default PreferencesReducer

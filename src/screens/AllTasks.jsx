@@ -5,17 +5,11 @@ import {
   Text,
   Container,
   useDisclosure,
-  Button,
 } from '@chakra-ui/react'
 import AddTask from '../components/AddTask'
 import Task from '../components/Task'
 import TaskDrawer from '../components/TaskDrawer'
-import {
-  capitalize,
-  getTasksPerTag,
-  groupByBinaryProp,
-  rgxSearch,
-} from '../helpers'
+import { getTasksPerTag, groupByBinaryProp, rgxSearch } from '../helpers'
 import CompletedTasks from '../components/CompletedTasks'
 import { TasksContext } from '../Context/TasksContext'
 import TaskHeader from '../components/TaskHeader'
@@ -28,7 +22,7 @@ const AllTasks = () => {
   const {
     preferences: prefs,
     toggleShowCompletedTasks,
-    setSortType: lcsSortBy,
+    setSortType,
   } = useContext(PreferencesContext)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -36,18 +30,18 @@ const AllTasks = () => {
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [selectedTask, setSelectedTask] = useState({})
   const [compTasks, setCompTasks] = useState([])
-  const [sortType, setSortType] = useState(prefs.sortType)
 
   useEffect(() => {
+    const ctasks = store.filter((t) => t.done)
     setTasks(
       prefs.sortType === 'none'
         ? store
         : getTasksPerTag(
             tags,
-            store.concat().filter((t) => !t.done)
+            store.filter((t) => !t.done)
           )
     )
-    setCompTasks(store.filter((t) => t.done))
+    setCompTasks(ctasks)
   }, [store])
 
   const taskOpenHandle = (task) => {
@@ -72,7 +66,7 @@ const AllTasks = () => {
 
   const sortTypeHandler = (type) => {
     let data
-    type = sortType === type ? 'none' : type
+    type = prefs.sortType === type ? 'none' : type
     switch (type) {
       case 'tag':
         data = getTasksPerTag(
@@ -80,14 +74,12 @@ const AllTasks = () => {
           store.concat().filter((t) => !t.done)
         )
         setSortType('tag')
-        lcsSortBy('tag')
         setTasks(data)
         break
       case 'date':
       case 'importance':
       default:
         setSortType('none')
-        lcsSortBy('none')
         setTasks(store)
     }
   }
@@ -97,6 +89,19 @@ const AllTasks = () => {
     setCompTasks(store.filter((t) => !t.done))
   }
 
+  const respectiveSort = (list) => {
+    switch (prefs.sortType) {
+      case 'tag':
+        return getTasksPerTag(
+          tags,
+          list.concat().filter((t) => !t.done)
+        )
+      case 'date':
+      default:
+        return list
+    }
+  }
+
   return (
     <>
       <TaskHeader
@@ -104,14 +109,14 @@ const AllTasks = () => {
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
         toggleCompTasks={toggleCompTasks}
-        sortType={sortType}
+        sortType={prefs.sortType}
         onSort={sortTypeHandler}
       />
       <Container maxW='container.lg' pt={10}>
         <HStack mt={'30px'} w='full'>
           <AddTask />
         </HStack>
-        {sortType !== 'none' ? (
+        {prefs.sortType !== 'none' ? (
           Object.keys(tasks).map((tag, i) => (
             <VStack mt={'50px'} key={i}>
               <Text as='strong' fontSize='lg' align='left' w='full' mb='10px'>

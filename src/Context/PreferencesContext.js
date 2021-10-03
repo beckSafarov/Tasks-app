@@ -1,9 +1,15 @@
 import React, { createContext, useReducer } from 'react'
-import { getPreferences } from '../helpers/lcs'
+import { getStore } from '../helpers/lcs'
 import PreferencesReducer from './PreferencesReducer'
 
+const defaultPrefs = {
+  showCompletedTasks: false,
+  sortType: 'none',
+  sidebarTagsToggle: false,
+}
+
 const initialState = {
-  preferences: getPreferences(),
+  preferences: getStore(defaultPrefs, 'preferences'),
 }
 
 export const PreferencesContext = createContext(initialState)

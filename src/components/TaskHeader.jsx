@@ -5,11 +5,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
   MenuGroup,
-  MenuOptionGroup,
-  MenuIcon,
-  MenuCommand,
   MenuDivider,
   IconButton,
   Container,
@@ -17,7 +13,6 @@ import {
   Spacer,
   Flex,
 } from '@chakra-ui/react'
-import AddTask from './AddTask'
 import SearchTask from './SearchTask'
 import {
   FaEllipsisH,
@@ -75,43 +70,53 @@ const TaskHeader = ({
               </MenuItem>
 
               {/* rename list btn */}
-              <MenuItem isDisabled={isMainPage} icon={<Icon as={FaEdit} />}>
+              <MenuItem hidden={isMainPage} icon={<Icon as={FaEdit} />}>
                 Rename list
               </MenuItem>
             </MenuGroup>
             <MenuDivider />
+
             <MenuGroup title='Sort By'>
               {/* sort by tag */}
               <MenuItem
                 onClick={() => onSort('tag')}
-                isDisabled={!isMainPage}
+                hidden={!isMainPage}
                 icon={<Icon as={FaTag} />}
               >
                 <Flex>
                   <Box>Tag</Box>
                   <Spacer />
-                  {sortType === 'tag' && (
-                    <Box>
-                      <Icon as={FaCheck} />
-                    </Box>
-                  )}
+                  <Box>
+                    <Icon hidden={sortType !== 'tag'} as={FaCheck} />
+                  </Box>
                 </Flex>
               </MenuItem>
               {/* sort by date */}
               <MenuItem
                 onClick={() => onSort('date')}
-                isDisabled
                 icon={<Icon as={FaRegCalendarAlt} />}
               >
-                Date
+                <Flex>
+                  <Box>Date</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'date'} as={FaCheck} />
+                  </Box>
+                </Flex>
               </MenuItem>
+
               {/* sort by importance */}
               <MenuItem
                 onClick={() => onSort('importance')}
-                isDisabled
                 icon={<Icon as={FaRegStar} />}
               >
-                Importance
+                <Flex>
+                  <Box>Importance</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'importance'} as={FaCheck} />
+                  </Box>
+                </Flex>
               </MenuItem>
             </MenuGroup>
           </MenuList>
