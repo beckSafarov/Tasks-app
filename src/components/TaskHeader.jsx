@@ -24,7 +24,19 @@ import {
   FaCheck,
   FaRegStar,
 } from 'react-icons/fa'
-
+/**
+ * position: sticky;
+background: #fff;
+padding-top: 20px;
+padding-bottom: 10px;
+top: 5px;
+box-shadow: var(--chakra-shadows-md);
+right: 10px;
+left: 10px;
+border-radius: 10px;
+z-index: 10;
+border: 1px solid #ccc;
+ */
 const TaskHeader = ({
   title,
   onSearchSubmit,
@@ -36,7 +48,20 @@ const TaskHeader = ({
   onSort,
 }) => {
   return (
-    <div className='navbar'>
+    <Box
+      position='sticky'
+      bg='#fff'
+      pt='20px'
+      pb='10px'
+      top='10px'
+      ml='20px'
+      mr='20px'
+      boxShadow='base'
+      right='5px'
+      left='5px'
+      rounded='md'
+      zIndex={10}
+    >
       <Container
         maxW='container.lg'
         display='flex'
@@ -122,7 +147,7 @@ const TaskHeader = ({
           </MenuList>
         </Menu>
       </Container>
-    </div>
+    </Box>
   )
 }
 

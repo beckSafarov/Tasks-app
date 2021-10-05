@@ -50,17 +50,37 @@ const Task = ({ task, onOpen, completed }) => {
         py='5px'
         borderRadius='10px'
         fontSize='lg'
+        id='task_flex'
       >
-        <Flex justifyContent='center' alignItems='center' mr='10px'>
+        <Flex
+          id='task_circle_div'
+          justifyContent='center'
+          alignItems='center'
+          mr='10px'
+        >
           {!completed ? (
-            <CircleIcon onClick={toggleDone} color='#808080' />
+            <CircleIcon
+              id='task_emptyCircle_icon'
+              onClick={toggleDone}
+              color='#808080'
+            />
           ) : (
-            <div style={{ cursor: 'pointer' }}>
-              <CheckCircleIcon onClick={toggleDone} color='blue.200' />
+            <div id='task_fullCircle_icon_div' style={{ cursor: 'pointer' }}>
+              <CheckCircleIcon
+                id='task_fullCircle_icon'
+                onClick={toggleDone}
+                color='blue.200'
+              />
             </div>
           )}
         </Flex>
-        <Text w='full' onClick={() => onOpen(task)} py={1} cursor='pointer'>
+        <Text
+          id='task_text'
+          w='full'
+          onClick={() => onOpen(task)}
+          py={1}
+          cursor='pointer'
+        >
           {!completed ? (
             task.name
           ) : (

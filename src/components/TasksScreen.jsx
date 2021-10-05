@@ -22,12 +22,7 @@ import { TagsContext } from '../Context/TagsContext'
 // --- helper methods ---
 import { getTasksPerTag, groupByBinaryProp, rgxSearch } from '../helpers'
 import { sortTasks } from '../helpers/tasksHelpers'
-
-const defaultProps = {
-  store: [],
-  tag: '',
-  title: 'All tasks',
-}
+import NewDrawer from './NewDrawer'
 
 const TasksScreen = ({ store, tag, title }) => {
   const {
@@ -44,6 +39,7 @@ const TasksScreen = ({ store, tag, title }) => {
   const [compTasks, setCompTasks] = useState([...dones])
   const [selectedTask, setSelectedTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
+  const [openTaskBar, setOpenTaskBar] = useState(false)
 
   useEffect(() => {
     setTasks(sortTasks(undones, prefs.sortType, tags))
@@ -52,7 +48,12 @@ const TasksScreen = ({ store, tag, title }) => {
 
   const taskOpenHandle = (task) => {
     setSelectedTask(task)
-    onOpen()
+    // onOpen()
+    setOpenTaskBar(true)
+  }
+
+  const taskCloseHandler = (updatedTask) => {
+    setOpenTaskBar(false)
   }
 
   const toggleCompTasks = () => {
@@ -93,7 +94,7 @@ const TasksScreen = ({ store, tag, title }) => {
         title={title}
         isMainPage={!tag ? true : false}
       />
-      <Container maxW='container.lg' pt={10}>
+      <Container maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
           <AddTask />
         </HStack>
@@ -102,21 +103,29 @@ const TasksScreen = ({ store, tag, title }) => {
             <Task key={i} task={task} onOpen={taskOpenHandle} />
           ))}
         </VStack>
-        <TaskDrawer isOpen={isOpen} onClose={onClose} task={selectedTask} />
+        {/* <TaskDrawer isOpen={isOpen} onClose={onClose} task={selectedTask} /> */}
+        <NewDrawer
+          show={openTaskBar}
+          onClose={taskCloseHandler}
+          task={selectedTask}
+          tags={tags}
+        />
 
         {/* completed tasks */}
         <VStack
           mt='50px'
+          id='completed_tasks_div'
           className={showCompTasks && compTasks.length > 0 ? '' : 'hidden'}
         >
-          <Flex mb='15px' w='full'>
+          <Flex mb='15px' w='full' id='completed_tasks_flex'>
             <Tag
               size='lg'
               variant='outline'
               colorScheme='green'
               justifyContent='flex-start'
+              id='completed_tasks_completed_tag'
             >
-              <TagLabel>Completed</TagLabel>
+              <TagLabel id='completed_tasks_label'>Completed</TagLabel>
             </Tag>
           </Flex>
           {compTasks.map((t, i) => (

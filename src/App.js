@@ -1,10 +1,4 @@
-import {
-  ChakraProvider,
-  SimpleGrid,
-  GridItem,
-  Box,
-  Flex,
-} from '@chakra-ui/react'
+import { ChakraProvider, Box } from '@chakra-ui/react'
 import theme from './themes'
 import './index.css'
 import Sidebar from './components/Sidebar'
@@ -30,7 +24,7 @@ const App = () => {
           >
             <Sidebar />
           </Box>
-          <Box ml='220px' pb='100px'>
+          <Box ml='220px' pb='100px' id='main'>
             <Route path='/' component={TodayScreen} exact />
             <Route path='/tag/:name' component={TagScreen} />
             <Route path='/test' component={TestScreen} />

@@ -32,7 +32,7 @@ const TaskDrawer = ({ isOpen, onClose, task }) => {
       updated = { ...vals }
       updated[e.target.name] = e.target.value
       setVals(updated)
-      if (e.target.name === 'tag') update(updated)
+      if (e.target.name === 'tag') update({ ...task, tag: e.target.value })
     },
     [vals]
   )
