@@ -6,7 +6,15 @@ import { Textarea } from '@chakra-ui/textarea'
 import { TasksContext } from '../Context/TasksContext'
 import { Collapse } from '@chakra-ui/transition'
 
-const TaskDrawer = ({ show, width, transition, onClose, task, tags }) => {
+const TaskDrawer = ({
+  show,
+  width,
+  transition,
+  onClose,
+  task,
+  tags,
+  currDeleted,
+}) => {
   const { update } = useContext(TasksContext)
   const styles = document?.querySelector('#main')?.style || {}
   const [fields, setFields] = useState({ ...task })
@@ -18,10 +26,13 @@ const TaskDrawer = ({ show, width, transition, onClose, task, tags }) => {
 
     if (task && task.id !== fields.id) setFields(task)
 
+    // if the task of the current drawer is deleted, close the drawer
+    if (currDeleted.id === task.id) onClose({})
+
     return () => {
       document.removeEventListener('click', outsideClicked)
     }
-  }, [show, task, fields])
+  }, [show, task, fields, currDeleted.id])
 
   const handleChanges = useCallback(
     (e) => {
@@ -119,6 +130,7 @@ TaskDrawer.defaultProps = {
   width: '250px',
   transition: '0.3s',
   onClose: () => void 0,
+  currDeleted: {},
   task: {
     name: '',
     tag: 'untagged',

@@ -24,7 +24,7 @@ import {
 } from 'react-icons/fa'
 import ConfirmModal from './ConfirmModal'
 
-const Task = ({ task, onOpen, completed }) => {
+const Task = ({ task, onOpen, completed, onDelete }) => {
   const { toggle, remove } = useContext(TasksContext)
   const {
     isOpen: isModalOpen,
@@ -35,6 +35,7 @@ const Task = ({ task, onOpen, completed }) => {
   const toggleDone = () => toggle(task.id)
 
   const removeTask = (e) => {
+    onDelete(task)
     remove(task.id)
     onModalClose(e)
   }
@@ -126,7 +127,8 @@ Task.defaultProps = {
     name: 'unnamed',
     description: '',
   },
-  onOpen: () => false,
+  onOpen: () => void 0,
+  onDelete: () => void 0,
   completed: false,
 }
 

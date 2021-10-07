@@ -38,26 +38,31 @@ const TasksScreen = ({ store, tag, title }) => {
   const [selectedTask, setSelectedTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [openTaskBar, setOpenTaskBar] = useState(false)
+  const [currDeleted, setCurrDeleted] = useState({})
 
   useEffect(() => {
     setTasks(sortTasks(undones, prefs.sortType, tags))
     setCompTasks([...dones])
   }, [prefs, store, tag])
 
+  // when a task is clicked, it opens the taskDrawer
   const taskOpenHandle = (task) => {
     setSelectedTask(task)
     setOpenTaskBar(true)
   }
 
+  // closes the taskDrawer
   const taskCloseHandler = (updatedTask) => {
     setOpenTaskBar(false)
   }
 
+  // toggle a task to be completed or back to incompleted
   const toggleCompTasks = () => {
     setShowCompTasks((v) => !v)
     toggleShowCompletedTasks()
   }
 
+  // receives a search keyword and searches through task names
   const onSearch = (keyword) => {
     const res = rgxSearch(store, keyword)
     const { positives, negatives } = groupByBinaryProp(res)
@@ -68,15 +73,20 @@ const TasksScreen = ({ store, tag, title }) => {
     }
   }
 
+  // clears the search result and brings back the initial task list
+  const onSearchClear = () => {
+    setTasks(sortTasks(undones, prefs.sortType, tags))
+    setCompTasks(dones)
+  }
+
+  // when a task deleted, to check whether the taskbar for that task is not open. If yes, it will be closed
+  const onDelete = (task) => setCurrDeleted(task)
+
+  // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
     type = prefs.sortType === type ? 'none' : type
     setSortType(type)
     setTasks(sortTasks(undones, type, tags))
-  }
-
-  const onSearchClear = () => {
-    setTasks(sortTasks(undones, prefs.sortType, tags))
-    setCompTasks(dones)
   }
 
   return (
@@ -97,7 +107,12 @@ const TasksScreen = ({ store, tag, title }) => {
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           {tasks.map((task, i) => (
-            <Task key={i} task={task} onOpen={taskOpenHandle} />
+            <Task
+              key={i}
+              task={task}
+              onOpen={taskOpenHandle}
+              onDelete={onDelete}
+            />
           ))}
         </VStack>
         <TaskDrawer
@@ -105,6 +120,7 @@ const TasksScreen = ({ store, tag, title }) => {
           onClose={taskCloseHandler}
           task={selectedTask}
           tags={tags}
+          currDeleted={currDeleted}
         />
 
         {/* completed tasks */}
@@ -125,7 +141,13 @@ const TasksScreen = ({ store, tag, title }) => {
             </Tag>
           </Flex>
           {compTasks.map((t, i) => (
-            <Task key={i} task={t} onOpen={taskOpenHandle} completed />
+            <Task
+              key={i}
+              task={t}
+              onOpen={taskOpenHandle}
+              onDelete={onDelete}
+              completed
+            />
           ))}
         </VStack>
       </Container>
