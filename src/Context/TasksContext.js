@@ -24,6 +24,7 @@ export const TasksProvider = ({ children }) => {
   }
 
   const update = (newTask) => {
+    console.log(newTask)
     dispatch({
       type: 'update',
       newTask,

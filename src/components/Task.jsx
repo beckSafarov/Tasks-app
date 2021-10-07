@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
   Flex,
@@ -11,6 +11,7 @@ import {
   MenuList,
   MenuItem,
   useDisclosure,
+  Box,
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
 import CircleIcon from './CircleIcon'
@@ -31,10 +32,7 @@ const Task = ({ task, onOpen, completed }) => {
     onClose: onModalClose,
   } = useDisclosure()
 
-  const toggleDone = () => {
-    console.log('toggle clicked for ' + task.name)
-    toggle(task.id)
-  }
+  const toggleDone = () => toggle(task.id)
 
   const removeTask = (e) => {
     remove(task.id)
@@ -42,7 +40,7 @@ const Task = ({ task, onOpen, completed }) => {
   }
 
   return (
-    <div style={{ width: '100%', marginTop: '0.3rem' }}>
+    <Box w='full' mt='0.3rem'>
       <Flex
         w='full'
         bg='gray.100'
@@ -50,44 +48,25 @@ const Task = ({ task, onOpen, completed }) => {
         py='5px'
         borderRadius='10px'
         fontSize='lg'
-        id='task_flex'
       >
-        <Flex
-          id='task_circle_div'
-          justifyContent='center'
-          alignItems='center'
-          mr='10px'
-        >
-          {!completed ? (
-            <CircleIcon
-              id='task_emptyCircle_icon'
-              onClick={toggleDone}
-              color='#808080'
-            />
-          ) : (
-            <div id='task_fullCircle_icon_div' style={{ cursor: 'pointer' }}>
-              <CheckCircleIcon
-                id='task_fullCircle_icon'
-                onClick={toggleDone}
-                color='blue.200'
-              />
-            </div>
-          )}
+        <Flex justifyContent='center' alignItems='center' mr='10px'>
+          <div style={{ cursor: 'pointer' }}>
+            {!completed ? (
+              <CircleIcon onClick={toggleDone} color='#808080' />
+            ) : (
+              <CheckCircleIcon onClick={toggleDone} color='blue.200' />
+            )}
+          </div>
         </Flex>
         <Text
-          id='task_text'
           w='full'
           onClick={() => onOpen(task)}
           py={1}
           cursor='pointer'
+          as={completed ? 's' : ''}
+          color={completed ? 'gray.500' : ''}
         >
-          {!completed ? (
-            task.name
-          ) : (
-            <Text as='s' color='gray.500'>
-              {task.name}
-            </Text>
-          )}
+          {task.name}
         </Text>
         {/* actions with the task */}
         <Menu>
@@ -138,7 +117,7 @@ const Task = ({ task, onOpen, completed }) => {
           proceedTitle={'Delete'}
         />
       </Flex>
-    </div>
+    </Box>
   )
 }
 

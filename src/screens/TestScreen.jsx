@@ -3,7 +3,6 @@ import { TagsContext } from '../Context/TagsContext'
 import { Box } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import { PreferencesContext } from '../Context/PreferencesContext'
-import NewDrawer from '../components/NewDrawer'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
@@ -42,14 +41,6 @@ const TestScreen = () => {
 
   return (
     <>
-      <NewDrawer
-        show={foo}
-        width='250px'
-        onClose={() => setFoo(false)}
-        task={myTask}
-        tags={myTags}
-        onChange={changeHandler}
-      />
       <div
         style={{
           width: '100%',
@@ -70,7 +61,6 @@ const TestScreen = () => {
         <button style={{ border: '1px solid #ccc' }} onClick={toggleFoo}>
           Click to toggle foo
         </button>
-
         {/* <br />
         <button onClick={addLCS}>add</button>
         <br />

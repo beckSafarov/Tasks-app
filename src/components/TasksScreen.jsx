@@ -22,7 +22,6 @@ import { TagsContext } from '../Context/TagsContext'
 // --- helper methods ---
 import { getTasksPerTag, groupByBinaryProp, rgxSearch } from '../helpers'
 import { sortTasks } from '../helpers/tasksHelpers'
-import NewDrawer from './NewDrawer'
 
 const TasksScreen = ({ store, tag, title }) => {
   const {
@@ -31,7 +30,6 @@ const TasksScreen = ({ store, tag, title }) => {
     setSortType,
   } = useContext(PreferencesContext)
   const { tags } = useContext(TagsContext)
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const { positives: dones, negatives: undones } = groupByBinaryProp(store)
 
   // hooks
@@ -48,7 +46,6 @@ const TasksScreen = ({ store, tag, title }) => {
 
   const taskOpenHandle = (task) => {
     setSelectedTask(task)
-    // onOpen()
     setOpenTaskBar(true)
   }
 
@@ -94,17 +91,16 @@ const TasksScreen = ({ store, tag, title }) => {
         title={title}
         isMainPage={!tag ? true : false}
       />
-      <Container maxW='container.md' pt={10}>
+      <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
           <AddTask />
         </HStack>
-        <VStack mt={'50px'}>
+        <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           {tasks.map((task, i) => (
             <Task key={i} task={task} onOpen={taskOpenHandle} />
           ))}
         </VStack>
-        {/* <TaskDrawer isOpen={isOpen} onClose={onClose} task={selectedTask} /> */}
-        <NewDrawer
+        <TaskDrawer
           show={openTaskBar}
           onClose={taskCloseHandler}
           task={selectedTask}
