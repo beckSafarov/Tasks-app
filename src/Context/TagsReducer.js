@@ -1,6 +1,6 @@
 import produce from 'immer'
 import { renameProp, withoutProp } from '../helpers'
-import { setTags } from '../helpers/lcs'
+import { setStore } from '../helpers/lcs'
 
 const TagsReducer = produce((draft, action) => {
   let { tags } = draft
@@ -17,7 +17,7 @@ const TagsReducer = produce((draft, action) => {
     default:
       return draft
   }
-  setTags(draft.tags)
+  setStore(draft.tags, 'tags')
 })
 
 export default TagsReducer

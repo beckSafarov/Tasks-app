@@ -11,12 +11,6 @@ import { Formik, Form, Field } from 'formik'
 import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 
-const initialValues = {
-  name: '',
-  done: false,
-  description: '',
-}
-
 const focusStyle = {
   borderColor: 'light.placeholder',
 }
@@ -38,7 +32,12 @@ const AddTask = ({ tag }) => {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{
+        name: '',
+        tag,
+        done: false,
+        description: '',
+      }}
       onSubmit={submitHandler}
       validate={validate}
     >

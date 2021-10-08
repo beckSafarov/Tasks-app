@@ -8,12 +8,8 @@ export const TasksContext = createContext(initialState)
 
 export const TasksProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TasksReducer, initialState)
-  const toggle = (id) => {
-    dispatch({
-      type: 'toggle',
-      id,
-    })
-  }
+
+  const toggle = (id) => dispatch({ type: 'toggle', id })
 
   const add = (task) => {
     task.id = uuid4()
@@ -23,20 +19,11 @@ export const TasksProvider = ({ children }) => {
     })
   }
 
-  const update = (newTask) => {
-    console.log(newTask)
-    dispatch({
-      type: 'update',
-      newTask,
-    })
-  }
+  const update = (newTask) => dispatch({ type: 'update', newTask })
 
-  const remove = (id) => {
-    dispatch({
-      type: 'remove',
-      id,
-    })
-  }
+  const remove = (id) => dispatch({ type: 'remove', id })
+
+  const removeAllByTag = (tag) => dispatch({ type: 'removeAllByTag', tag })
 
   return (
     <TasksContext.Provider
@@ -44,8 +31,9 @@ export const TasksProvider = ({ children }) => {
         tasks: state.tasks,
         toggle,
         add,
-        remove,
         update,
+        remove,
+        removeAllByTag,
       }}
     >
       {children}

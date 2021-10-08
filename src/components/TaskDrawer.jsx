@@ -46,7 +46,7 @@ const TaskDrawer = ({
   )
 
   const outsideClicked = (e) => {
-    if (show && e.target.id.match(/main|container/)) {
+    if (show && e.target.id.match(/main|container|completed_tasks_flex/)) {
       update(fields.name ? fields : { ...fields, name: task.name })
       onClose(fields)
     }

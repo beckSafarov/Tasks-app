@@ -23,20 +23,9 @@ import {
   FaRegCalendarAlt,
   FaCheck,
   FaRegStar,
+  FaTrash,
 } from 'react-icons/fa'
-/**
- * position: sticky;
-background: #fff;
-padding-top: 20px;
-padding-bottom: 10px;
-top: 5px;
-box-shadow: var(--chakra-shadows-md);
-right: 10px;
-left: 10px;
-border-radius: 10px;
-z-index: 10;
-border: 1px solid #ccc;
- */
+
 const TaskHeader = ({
   title,
   onSearchSubmit,
@@ -46,6 +35,7 @@ const TaskHeader = ({
   isMainPage,
   sortType,
   onSort,
+  removeTasksByTag,
 }) => {
   return (
     <Box
@@ -77,10 +67,13 @@ const TaskHeader = ({
             aria-label='Options'
             icon={<Icon as={FaEllipsisH} />}
             variant='flushed'
+            _focus={{ borderColor: 'none' }}
+            borderRadius={'50%'}
+            _hover={{ background: 'gray.100' }}
           />
           <MenuList>
             <MenuGroup title='Actions'>
-              {/* show/hide completed tasks btn */}
+              {/* --- actions ---*/}
               <MenuItem
                 icon={
                   !showCompTasks ? (
@@ -94,15 +87,21 @@ const TaskHeader = ({
                 {!showCompTasks ? 'Show' : 'Hide'} completed tasks
               </MenuItem>
 
-              {/* rename list btn */}
               <MenuItem hidden={isMainPage} icon={<Icon as={FaEdit} />}>
-                Rename list
+                Rename tag
+              </MenuItem>
+              <MenuItem
+                onClick={() => removeTasksByTag()}
+                hidden={isMainPage}
+                icon={<Icon as={FaTrash} />}
+              >
+                Delete tag
               </MenuItem>
             </MenuGroup>
             <MenuDivider />
 
             <MenuGroup title='Sort By'>
-              {/* sort by tag */}
+              {/* --- sorts ---*/}
               <MenuItem
                 onClick={() => onSort('tag')}
                 hidden={!isMainPage}
@@ -161,6 +160,7 @@ TaskHeader.defaultProps = {
   isMainPage: true,
   sortType: 'none',
   onSort: () => void 0,
+  removeTasksByTag: () => void 0,
 }
 
 export default TaskHeader

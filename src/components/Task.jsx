@@ -41,7 +41,7 @@ const Task = ({ task, onOpen, completed, onDelete }) => {
   }
 
   return (
-    <Box w='full' mt='0.3rem'>
+    <div style={{ width: '100%', marginTop: '5px' }}>
       <Flex
         w='full'
         bg='gray.100'
@@ -118,7 +118,7 @@ const Task = ({ task, onOpen, completed, onDelete }) => {
           proceedTitle={'Delete'}
         />
       </Flex>
-    </Box>
+    </div>
   )
 }
 

@@ -1,6 +1,6 @@
 import produce from 'immer'
 import { updateArr } from '../helpers'
-import { setTasks } from '../helpers/lcs'
+import { setStore } from '../helpers/lcs'
 
 const TasksReducer = produce((draft, action) => {
   let { tasks } = draft
@@ -8,23 +8,23 @@ const TasksReducer = produce((draft, action) => {
     case 'toggle':
       const task = draft.tasks.find((t) => t.id === action.id)
       task.done = !task.done
-      setTasks(draft.tasks)
       break
     case 'add':
       tasks.push(action.task)
-      setTasks(tasks)
       break
     case 'update':
       tasks = updateArr(tasks, action.newTask)
-      setTasks(tasks)
       break
     case 'remove':
       draft.tasks = tasks.filter((t) => t.id !== action.id)
-      setTasks(draft.tasks)
+      break
+    case 'removeAllByTag':
+      draft.tasks = tasks.filter((t) => t.tag !== action.tag)
       break
     default:
       return draft
   }
+  setStore(draft.tasks)
 })
 
 export default TasksReducer

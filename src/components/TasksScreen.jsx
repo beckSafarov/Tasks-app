@@ -2,12 +2,11 @@
 import {
   HStack,
   VStack,
-  Text,
   Container,
-  useDisclosure,
   Flex,
   Tag,
   TagLabel,
+  useDisclosure,
 } from '@chakra-ui/react'
 import AddTask from './AddTask'
 import Task from './Task'
@@ -22,6 +21,9 @@ import { TagsContext } from '../Context/TagsContext'
 // --- helper methods ---
 import { getTasksPerTag, groupByBinaryProp, rgxSearch } from '../helpers'
 import { sortTasks } from '../helpers/tasksHelpers'
+import { TasksContext } from '../Context/TasksContext'
+import { useHistory } from 'react-router'
+import ConfirmModal from './ConfirmModal'
 
 const TasksScreen = ({ store, tag, title }) => {
   const {
@@ -29,8 +31,15 @@ const TasksScreen = ({ store, tag, title }) => {
     toggleShowCompletedTasks,
     setSortType,
   } = useContext(PreferencesContext)
-  const { tags } = useContext(TagsContext)
+  const {
+    isOpen: isConfOpen,
+    onOpen: onConfOpen,
+    onClose: onConfClose,
+  } = useDisclosure()
+  const { tags, remove: removeTag } = useContext(TagsContext)
+  const { removeAllByTag } = useContext(TasksContext)
   const { positives: dones, negatives: undones } = groupByBinaryProp(store)
+  const history = useHistory()
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -39,6 +48,12 @@ const TasksScreen = ({ store, tag, title }) => {
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [openTaskBar, setOpenTaskBar] = useState(false)
   const [currDeleted, setCurrDeleted] = useState({})
+  const [confModal, setConfModal] = useState({
+    title: '',
+    body: '',
+    onProceed: () => void 0,
+    proceedTitle: 'Delete',
+  })
 
   useEffect(() => {
     setTasks(sortTasks(undones, prefs.sortType, tags))
@@ -52,9 +67,7 @@ const TasksScreen = ({ store, tag, title }) => {
   }
 
   // closes the taskDrawer
-  const taskCloseHandler = (updatedTask) => {
-    setOpenTaskBar(false)
-  }
+  const taskCloseHandler = () => setOpenTaskBar(false)
 
   // toggle a task to be completed or back to incompleted
   const toggleCompTasks = () => {
@@ -79,7 +92,7 @@ const TasksScreen = ({ store, tag, title }) => {
     setCompTasks(dones)
   }
 
-  // when a task deleted, to check whether the taskbar for that task is not open. If yes, it will be closed
+  // when a task is deleted, checks whether the taskbar for that task is not open. If yes, it will be closed
   const onDelete = (task) => setCurrDeleted(task)
 
   // receives and sets a new sort type for tasks
@@ -87,6 +100,22 @@ const TasksScreen = ({ store, tag, title }) => {
     type = prefs.sortType === type ? 'none' : type
     setSortType(type)
     setTasks(sortTasks(undones, type, tags))
+  }
+
+  // delete a tag and tasks associated with it
+  const removeTasksByTag = (warned = false) => {
+    if (!warned) {
+      setConfModal({
+        title: `Tag "${tag}"" will be permanently deleted`,
+        body: `All tasks associated with this tag will be permanently deleted, you will not be able to reverse this action!`,
+        onProceed: () => removeTasksByTag(true),
+      })
+      onConfOpen()
+    } else {
+      removeTag(tag)
+      removeAllByTag(tag)
+      history.push('/')
+    }
   }
 
   return (
@@ -100,10 +129,11 @@ const TasksScreen = ({ store, tag, title }) => {
         onSort={sortTypeHandler}
         title={title}
         isMainPage={!tag ? true : false}
+        removeTasksByTag={removeTasksByTag}
       />
       <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
-          <AddTask />
+          <AddTask tag={tag} />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           {tasks.map((task, i) => (
@@ -121,6 +151,7 @@ const TasksScreen = ({ store, tag, title }) => {
           task={selectedTask}
           tags={tags}
           currDeleted={currDeleted}
+          transition={'0.2s'}
         />
 
         {/* completed tasks */}
@@ -150,6 +181,14 @@ const TasksScreen = ({ store, tag, title }) => {
             />
           ))}
         </VStack>
+        <ConfirmModal
+          title={confModal.title}
+          body={confModal.body}
+          onProceed={confModal.onProceed}
+          onClose={onConfClose}
+          isOpen={isConfOpen}
+          proceedTitle={confModal.proceedTitle}
+        />
       </Container>
     </>
   )

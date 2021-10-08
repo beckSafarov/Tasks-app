@@ -7,13 +7,16 @@ import {
   Collapse,
   Icon,
   Text,
+  Flex,
+  Spacer,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
+import { FaCaretRight, FaCaretDown, FaEllipsisH } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
 import { useHistory } from 'react-router'
 import { PreferencesContext } from '../../Context/PreferencesContext'
+import TagDropdown from './TagDropdown'
 
 const menuOptionHover = {
   background: 'light.sidebar_hover',
@@ -27,13 +30,13 @@ const Sidebar = () => {
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: prefs.sidebarTagsToggle,
   })
-
   const history = useHistory()
   const {
     isOpen: isAddTagModalOpen,
     onOpen: onAddTagModalOpen,
     onClose: onAddTagModalClosed,
   } = useDisclosure()
+
   const [caret, setCaret] = useState(false)
   const [newTag, setNewTag] = useState('')
   const { tags, add: addTag } = useContext(TagsContext)
@@ -54,6 +57,13 @@ const Sidebar = () => {
     addTag(tag)
     setNewTag(tag)
     onAddTagModalClosed(e)
+  }
+
+  const onTagDelete = () => {
+    console.log('you deleted this tag')
+  }
+  const onTagRename = () => {
+    console.log('you renamed this tag')
   }
 
   return (
@@ -118,13 +128,28 @@ const Sidebar = () => {
                     paddingLeft={'20px'}
                     _hover={menuOptionHover}
                     w='full'
-                    // border='1px solid white'
                     borderRadius='10px'
                   >
-                    {tag}
+                    <Flex
+                      alignItems='center'
+                      justifyContent='space-between'
+                      pr='5px'
+                    >
+                      <Text isTruncated>{tag}</Text>{' '}
+                    </Flex>
                   </Box>
                 </Link>
               ))}
+              <Box
+                p={1}
+                paddingLeft={'20px'}
+                // _hover={{ cursor: 'pointer', color: 'blue.200', background: 'light.sidebar_hover' }}
+                _hover={{ ...menuOptionHover, color: 'blue.200' }}
+                w='full'
+                borderRadius='10px'
+              >
+                <Text onClick={onAddTagModalOpen}>+ New Tag</Text>
+              </Box>
             </VStack>
           </Collapse>
         </Box>
@@ -145,7 +170,7 @@ const Sidebar = () => {
           </Box>
         </Link>
 
-        <Box
+        {/* <Box
           cursor='pointer'
           position='fixed'
           bottom='20px'
@@ -155,7 +180,7 @@ const Sidebar = () => {
           <Text fontWeight='700' onClick={onAddTagModalOpen}>
             + New Tag
           </Text>
-        </Box>
+        </Box> */}
       </VStack>
     </Container>
   )

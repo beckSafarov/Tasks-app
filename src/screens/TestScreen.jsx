@@ -3,10 +3,12 @@ import { TagsContext } from '../Context/TagsContext'
 import { Box } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import { PreferencesContext } from '../Context/PreferencesContext'
+import TagDropdown from '../components/Sidebar/TagDropdown'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
   const { tags, add, update, remove } = useContext(TagsContext)
+
   const myTask = {
     name: 'Sample task',
     tag: 'work',
@@ -17,13 +19,10 @@ const TestScreen = () => {
     work: '',
     personal: '',
   }
-  const toggleFoo = () => setFoo((v) => !v)
-  // const styles = document?.querySelector('#main')?.style || {}
-
-  // useEffect(() => {
-  //   styles.marginRight = foo ? '220px' : '0'
-  //   styles.transition = '0.5s'
-  // }, [foo])
+  const toggleFoo = (e) => {
+    console.log(e.target)
+    setFoo((v) => !v)
+  }
 
   const addLCS = () => add('personal')
 
@@ -51,6 +50,7 @@ const TestScreen = () => {
           <SearchTask onSubmit={(v) => console.log(v)} />
         </Box>
         {/* <AddTagModal show={show} close={close} onSubmit={proceed} /> */}
+        <TagDropdown />
         <h2>
           <strong>Foo value: </strong>
           <span style={{ color: foo ? 'green' : 'red' }}>
@@ -58,7 +58,11 @@ const TestScreen = () => {
           </span>
         </h2>
         <br />
-        <button style={{ border: '1px solid #ccc' }} onClick={toggleFoo}>
+        <button
+          className='jobona'
+          style={{ border: '1px solid #ccc' }}
+          onClick={toggleFoo}
+        >
           Click to toggle foo
         </button>
         {/* <br />
