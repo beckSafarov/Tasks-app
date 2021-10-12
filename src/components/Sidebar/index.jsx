@@ -93,7 +93,7 @@ const Sidebar = () => {
             _hover={menuOptionHover}
             borderRadius='10px'
           >
-            Today
+            All Tasks
           </Box>
         </Link>
         {/* tags toggle */}
