@@ -28,6 +28,8 @@ import {
   FaCheck,
   FaRegStar,
   FaTrash,
+  FaSortAlphaDown,
+  FaRegCalendarPlus,
 } from 'react-icons/fa'
 import { useState, useEffect, useContext, useRef } from 'react'
 import { TagsContext } from '../Context/TagsContext'
@@ -105,7 +107,7 @@ const TaskHeader = ({
           <SearchTask onSubmit={onSearchSubmit} onClear={onSearchClear} />
         </Box>
         <Box flex='1' display='flex' justifyContent='right'>
-          <Menu size='sm'>
+          <Menu>
             <MenuButton
               as={IconButton}
               aria-label='Options'
@@ -115,7 +117,7 @@ const TaskHeader = ({
               borderRadius={'50%'}
               _hover={{ background: 'gray.100' }}
             />
-            <MenuList>
+            <MenuList fontSize='0.8rem'>
               <MenuGroup title='Actions'>
                 {/* --- actions ---*/}
                 <MenuItem
@@ -148,8 +150,23 @@ const TaskHeader = ({
               </MenuGroup>
               <MenuDivider />
 
-              <MenuGroup title='Sort By'>
-                {/* --- sorts ---*/}
+              {/* --- sorts ---*/}
+              <MenuGroup title='Sort'>
+                <MenuItem
+                  onClick={() => onSort('alphabetically')}
+                  icon={<Icon as={FaSortAlphaDown} />}
+                >
+                  <Flex>
+                    <Box>Alphabetically</Box>
+                    <Spacer />
+                    <Box>
+                      <Icon
+                        hidden={sortType !== 'alphabetically'}
+                        as={FaCheck}
+                      />
+                    </Box>
+                  </Flex>
+                </MenuItem>
                 <MenuItem
                   onClick={() => onSort('tag')}
                   hidden={!isMainPage}
@@ -163,16 +180,32 @@ const TaskHeader = ({
                     </Box>
                   </Flex>
                 </MenuItem>
-                {/* sort by date */}
+                {/* sort by creation date */}
                 <MenuItem
-                  onClick={() => onSort('date')}
+                  onClick={() => onSort('creation_date')}
+                  icon={<Icon as={FaRegCalendarPlus} />}
+                >
+                  <Flex>
+                    <Box>Creation Date</Box>
+                    <Spacer />
+                    <Box>
+                      <Icon
+                        hidden={sortType !== 'creation_date'}
+                        as={FaCheck}
+                      />
+                    </Box>
+                  </Flex>
+                </MenuItem>
+                {/* sort by due date */}
+                <MenuItem
+                  onClick={() => onSort('due_date')}
                   icon={<Icon as={FaRegCalendarAlt} />}
                 >
                   <Flex>
-                    <Box>Date</Box>
+                    <Box>Due Date</Box>
                     <Spacer />
                     <Box>
-                      <Icon hidden={sortType !== 'date'} as={FaCheck} />
+                      <Icon hidden={sortType !== 'due_date'} as={FaCheck} />
                     </Box>
                   </Flex>
                 </MenuItem>

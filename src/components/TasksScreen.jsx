@@ -87,6 +87,8 @@ const TasksScreen = ({ store, tag, title }) => {
       if (positives.length > 0) {
         setCompTasks(positives)
         setShowCompTasks(true)
+      } else {
+        setShowCompTasks(false)
       }
     } else {
       toast({
@@ -113,9 +115,10 @@ const TasksScreen = ({ store, tag, title }) => {
 
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
-    type = prefs.sortType === type ? 'none' : type
-    setSortType(type)
-    setTasks(sortTasks(undones, type, tags))
+    if (prefs.sortType !== type) {
+      setSortType(type)
+      setTasks(sortTasks(undones, type, tags))
+    }
   }
 
   // delete a tag and tasks associated with it

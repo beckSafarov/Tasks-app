@@ -4,7 +4,7 @@ import PreferencesReducer from './PreferencesReducer'
 
 const defaultPrefs = {
   showCompletedTasks: false,
-  sortType: 'none',
+  sortType: 'creation_date',
   sidebarTagsToggle: false,
 }
 

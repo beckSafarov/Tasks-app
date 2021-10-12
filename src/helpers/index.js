@@ -237,9 +237,14 @@ const count = (arr = [], val) => {
   return typeof arr[0] === 'object' ? objCount(arr, val) : numbCount(arr, val)
 }
 
+export const objSort = (arr, prop) =>
+  typeof arr[0][prop] === 'number'
+    ? arr.concat().sort((x, y) => x[prop] - y[prop])
+    : arr.concat().sort((x, y) => x[prop] > y[prop])
+
 export const sort = (arr = [], prop) => {
-  const ObjSort = (arr, prop) => arr.sort((x, y) => x[prop] - y[prop])
-  const numbSort = (arr) => arr.sort((x, y) => x - y)
+  const ObjSort = (arr, prop) => arr.concat().sort((x, y) => x[prop] - y[prop])
+  const numbSort = (arr) => arr.concat().sort((x, y) => x - y)
   return typeof arr[0] === 'object' ? ObjSort(arr, prop) : numbSort(arr)
 }
 
