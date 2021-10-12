@@ -20,13 +20,20 @@ const theme = extendTheme({
   },
   components: {
     Textarea: {},
+    Editable: {
+      baseStyle: {
+        input: {
+          width: 'sm',
+        },
+      },
+    },
     // Input: InputStyles,
     // Select: SelectStyles,
   },
 })
 
 // console.log(Object.keys(theme.components))
-// console.log(Object.keys(theme.components.Textarea))
+// console.log(Object.keys(theme.components.Editable.baseStyle.preview))
 // console.log(theme.components.Textarea.variants)
 // console.log(Object.keys(theme.components.Textarea.baseStyle))
 

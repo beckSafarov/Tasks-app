@@ -11,7 +11,7 @@ import {
   MenuList,
   MenuItem,
   useDisclosure,
-  Box,
+  VStack,
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
 import CircleIcon from './CircleIcon'
@@ -21,10 +21,11 @@ import {
   FaRegCheckCircle,
   FaCheckCircle,
   FaEdit,
+  FaTag,
 } from 'react-icons/fa'
 import ConfirmModal from './ConfirmModal'
 
-const Task = ({ task, onOpen, completed, onDelete }) => {
+const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
   const { toggle, remove } = useContext(TasksContext)
   const {
     isOpen: isModalOpen,
@@ -59,16 +60,25 @@ const Task = ({ task, onOpen, completed, onDelete }) => {
             )}
           </div>
         </Flex>
-        <Text
+        <Flex
+          alignItems='flex-start'
+          flexDirection='column'
           w='full'
-          onClick={() => onOpen(task)}
           py={1}
           cursor='pointer'
-          as={completed ? 's' : ''}
-          color={completed ? 'gray.500' : ''}
+          onClick={() => onOpen(task)}
         >
-          {task.name}
-        </Text>
+          <Text
+            as={completed ? 's' : ''}
+            color={completed ? 'gray.500' : ''}
+            mb='0'
+          >
+            {task.name}
+          </Text>
+          <Text mt='0' hidden={!isMainPage} fontSize='0.8rem' color='gray.500'>
+            {task.tag}
+          </Text>
+        </Flex>
         {/* actions with the task */}
         <Menu>
           <MenuButton

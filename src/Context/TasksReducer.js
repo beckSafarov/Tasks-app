@@ -1,4 +1,4 @@
-import produce from 'immer'
+import produce, { current } from 'immer'
 import { updateArr } from '../helpers'
 import { setStore } from '../helpers/lcs'
 
@@ -14,6 +14,13 @@ const TasksReducer = produce((draft, action) => {
       break
     case 'update':
       tasks = updateArr(tasks, action.newTask)
+      break
+    case 'updateMany':
+      tasks.forEach((task) => {
+        if (task.tag === action.oldTag) {
+          task.tag = action.newTag
+        }
+      })
       break
     case 'remove':
       draft.tasks = tasks.filter((t) => t.id !== action.id)

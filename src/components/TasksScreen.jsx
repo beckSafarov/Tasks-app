@@ -58,7 +58,7 @@ const TasksScreen = ({ store, tag, title }) => {
   useEffect(() => {
     setTasks(sortTasks(undones, prefs.sortType, tags))
     setCompTasks([...dones])
-  }, [prefs, store, tag])
+  }, [prefs, store, tag, title])
 
   // when a task is clicked, it opens the taskDrawer
   const taskOpenHandle = (task) => {
@@ -79,7 +79,7 @@ const TasksScreen = ({ store, tag, title }) => {
   const onSearch = (keyword) => {
     const res = rgxSearch(store, keyword)
     const { positives, negatives } = groupByBinaryProp(res)
-    setTasks(getTasksPerTag(tags, negatives))
+    setTasks(negatives)
     if (positives.length > 0) {
       setCompTasks(positives)
       setShowCompTasks(true)
@@ -121,13 +121,13 @@ const TasksScreen = ({ store, tag, title }) => {
   return (
     <>
       <TaskHeader
+        title={title}
         onSearchSubmit={onSearch}
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
         toggleCompTasks={toggleCompTasks}
         sortType={prefs.sortType}
         onSort={sortTypeHandler}
-        title={title}
         isMainPage={!tag ? true : false}
         removeTasksByTag={removeTasksByTag}
       />
@@ -142,6 +142,7 @@ const TasksScreen = ({ store, tag, title }) => {
               task={task}
               onOpen={taskOpenHandle}
               onDelete={onDelete}
+              isMainPage={!tag ? true : false}
             />
           ))}
         </VStack>
@@ -177,6 +178,7 @@ const TasksScreen = ({ store, tag, title }) => {
               task={t}
               onOpen={taskOpenHandle}
               onDelete={onDelete}
+              isMainPage={!tag ? true : false}
               completed
             />
           ))}

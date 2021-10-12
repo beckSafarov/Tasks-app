@@ -1,4 +1,4 @@
-import produce from 'immer'
+import produce, { current } from 'immer'
 import { renameProp, withoutProp } from '../helpers'
 import { setStore } from '../helpers/lcs'
 

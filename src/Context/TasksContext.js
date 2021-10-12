@@ -13,6 +13,7 @@ export const TasksProvider = ({ children }) => {
 
   const add = (task) => {
     task.id = uuid4()
+    if (!task.tag) task.tag = 'untagged'
     dispatch({
       type: 'add',
       task,
@@ -20,6 +21,9 @@ export const TasksProvider = ({ children }) => {
   }
 
   const update = (newTask) => dispatch({ type: 'update', newTask })
+
+  const updateMany = (oldTag, newTag) =>
+    dispatch({ type: 'updateMany', oldTag, newTag })
 
   const remove = (id) => dispatch({ type: 'remove', id })
 
@@ -32,6 +36,7 @@ export const TasksProvider = ({ children }) => {
         toggle,
         add,
         update,
+        updateMany,
         remove,
         removeAllByTag,
       }}

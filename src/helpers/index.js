@@ -356,12 +356,14 @@ export const resetAllProps = (obj = {}) => {
 
 const obj2 = { name: 'begzod', age: 21, some: false, arr: [1, 2] }
 
-console.log(resetAllProps(obj2))
-
 export const renameProp = (obj = {}, currProp, newProp) => {
-  let newObj = { ...obj }
-  newObj[newProp] = newObj[currProp]
-  return withoutProp(newObj, currProp)
+  if (currProp !== newProp) {
+    let newObj = { ...obj }
+    newObj[newProp] = newObj[currProp]
+    return withoutProp(newObj, currProp)
+  } else {
+    return obj
+  }
 }
 
 export const findPropByVal = (obj = {}, val) => {

@@ -30,10 +30,10 @@ const ConfirmModal = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='gray' mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={onProceed} colorScheme={proceedScheme}>
+            <Button onClick={onProceed} colorScheme={'blue'}>
               {proceedTitle}
             </Button>
           </ModalFooter>
@@ -48,7 +48,7 @@ ConfirmModal.defaultProps = {
   body: '',
   isOpen: false,
   proceedTitle: 'Continue',
-  proceedScheme: 'gray',
+  proceedScheme: 'blue',
   onClose: () => void 0,
   onProceed: () => void 0,
 }

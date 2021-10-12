@@ -1,4 +1,4 @@
-import { filterPropTypes, sort as objSort } from '.'
+import { sort as objSort } from '.'
 
 export const sortTasks = (list = [], type = 'none', tags) => {
   switch (type) {

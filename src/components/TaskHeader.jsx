@@ -12,6 +12,10 @@ import {
   Box,
   Spacer,
   Flex,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  HStack,
 } from '@chakra-ui/react'
 import SearchTask from './SearchTask'
 import {
@@ -25,6 +29,9 @@ import {
   FaRegStar,
   FaTrash,
 } from 'react-icons/fa'
+import { useState, useEffect, useContext, useRef } from 'react'
+import { TagsContext } from '../Context/TagsContext'
+import { TasksContext } from '../Context/TasksContext'
 
 const TaskHeader = ({
   title,
@@ -37,6 +44,26 @@ const TaskHeader = ({
   onSort,
   removeTasksByTag,
 }) => {
+  const [tagName, setTagName] = useState('')
+  const [tagEditMode, setTagEditMode] = useState(false)
+  const tagEditInput = useRef(null)
+  const { update: updateTag } = useContext(TagsContext)
+  const { updateMany: updateTaskTags } = useContext(TasksContext)
+
+  useEffect(() => {
+    if (title !== tagName) setTagName(title)
+  }, [title])
+
+  const tagUpdated = (value) => {
+    if (tagName) {
+      updateTag(title, value)
+      updateTaskTags(title, value)
+    } else {
+      setTagName(title)
+    }
+    setTagEditMode(false)
+  }
+
   return (
     <Box
       position='sticky'
@@ -52,100 +79,122 @@ const TaskHeader = ({
       rounded='md'
       zIndex={10}
     >
-      <Container
-        maxW='container.lg'
-        display='flex'
-        justifyContent='space-between'
-      >
-        <Heading size='lg' color='gray.800'>
-          {title}
+      <HStack px='50px' display='flex'>
+        <Heading size='lg' color='gray.800' flex='1'>
+          <Editable
+            value={tagName}
+            onSubmit={tagUpdated}
+            onCancel={tagUpdated}
+            isDisabled={isMainPage}
+            startWithEditView={tagEditMode}
+          >
+            <EditablePreview
+              overflow='hidden'
+              textOverflow='ellipsis'
+              whiteSpace='nowrap'
+              w='200px'
+              ref={tagEditInput}
+            />
+            <EditableInput
+              _focus={{ border: 'none' }}
+              onChange={(e) => setTagName(e.target.value)}
+            />
+          </Editable>
         </Heading>
-        <SearchTask onSubmit={onSearchSubmit} onClear={onSearchClear} />
-        <Menu size='sm' closeOnSelect={false}>
-          <MenuButton
-            as={IconButton}
-            aria-label='Options'
-            icon={<Icon as={FaEllipsisH} />}
-            variant='flushed'
-            _focus={{ borderColor: 'none' }}
-            borderRadius={'50%'}
-            _hover={{ background: 'gray.100' }}
-          />
-          <MenuList>
-            <MenuGroup title='Actions'>
-              {/* --- actions ---*/}
-              <MenuItem
-                icon={
-                  !showCompTasks ? (
-                    <Icon as={FaEye} />
-                  ) : (
-                    <Icon as={FaEyeSlash} />
-                  )
-                }
-                onClick={toggleCompTasks}
-              >
-                {!showCompTasks ? 'Show' : 'Hide'} completed tasks
-              </MenuItem>
+        <Box flex='1'>
+          <SearchTask onSubmit={onSearchSubmit} onClear={onSearchClear} />
+        </Box>
+        <Box flex='1' display='flex' justifyContent='right'>
+          <Menu size='sm'>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<Icon as={FaEllipsisH} />}
+              variant='flushed'
+              _focus={{ borderColor: 'none' }}
+              borderRadius={'50%'}
+              _hover={{ background: 'gray.100' }}
+            />
+            <MenuList>
+              <MenuGroup title='Actions'>
+                {/* --- actions ---*/}
+                <MenuItem
+                  icon={
+                    !showCompTasks ? (
+                      <Icon as={FaEye} />
+                    ) : (
+                      <Icon as={FaEyeSlash} />
+                    )
+                  }
+                  onClick={toggleCompTasks}
+                >
+                  {!showCompTasks ? 'Show' : 'Hide'} completed tasks
+                </MenuItem>
 
-              <MenuItem hidden={isMainPage} icon={<Icon as={FaEdit} />}>
-                Rename tag
-              </MenuItem>
-              <MenuItem
-                onClick={() => removeTasksByTag()}
-                hidden={isMainPage}
-                icon={<Icon as={FaTrash} />}
-              >
-                Delete tag
-              </MenuItem>
-            </MenuGroup>
-            <MenuDivider />
+                <MenuItem
+                  onClick={() => tagEditInput.current.focus()}
+                  hidden={isMainPage}
+                  icon={<Icon as={FaEdit} />}
+                >
+                  Rename tag
+                </MenuItem>
+                <MenuItem
+                  onClick={() => removeTasksByTag()}
+                  hidden={isMainPage}
+                  icon={<Icon as={FaTrash} />}
+                >
+                  Delete tag
+                </MenuItem>
+              </MenuGroup>
+              <MenuDivider />
 
-            <MenuGroup title='Sort By'>
-              {/* --- sorts ---*/}
-              <MenuItem
-                onClick={() => onSort('tag')}
-                hidden={!isMainPage}
-                icon={<Icon as={FaTag} />}
-              >
-                <Flex>
-                  <Box>Tag</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'tag'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
-              {/* sort by date */}
-              <MenuItem
-                onClick={() => onSort('date')}
-                icon={<Icon as={FaRegCalendarAlt} />}
-              >
-                <Flex>
-                  <Box>Date</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'date'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
+              <MenuGroup title='Sort By'>
+                {/* --- sorts ---*/}
+                <MenuItem
+                  onClick={() => onSort('tag')}
+                  hidden={!isMainPage}
+                  icon={<Icon as={FaTag} />}
+                >
+                  <Flex>
+                    <Box>Tag</Box>
+                    <Spacer />
+                    <Box>
+                      <Icon hidden={sortType !== 'tag'} as={FaCheck} />
+                    </Box>
+                  </Flex>
+                </MenuItem>
+                {/* sort by date */}
+                <MenuItem
+                  onClick={() => onSort('date')}
+                  icon={<Icon as={FaRegCalendarAlt} />}
+                >
+                  <Flex>
+                    <Box>Date</Box>
+                    <Spacer />
+                    <Box>
+                      <Icon hidden={sortType !== 'date'} as={FaCheck} />
+                    </Box>
+                  </Flex>
+                </MenuItem>
 
-              {/* sort by importance */}
-              <MenuItem
-                onClick={() => onSort('importance')}
-                icon={<Icon as={FaRegStar} />}
-              >
-                <Flex>
-                  <Box>Importance</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'importance'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
-            </MenuGroup>
-          </MenuList>
-        </Menu>
-      </Container>
+                {/* sort by importance */}
+                <MenuItem
+                  onClick={() => onSort('importance')}
+                  icon={<Icon as={FaRegStar} />}
+                >
+                  <Flex>
+                    <Box>Importance</Box>
+                    <Spacer />
+                    <Box>
+                      <Icon hidden={sortType !== 'importance'} as={FaCheck} />
+                    </Box>
+                  </Flex>
+                </MenuItem>
+              </MenuGroup>
+            </MenuList>
+          </Menu>
+        </Box>
+      </HStack>
     </Box>
   )
 }
