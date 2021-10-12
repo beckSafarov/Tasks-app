@@ -7,6 +7,8 @@ import {
   Tag,
   TagLabel,
   useDisclosure,
+  useToast,
+  Divider,
 } from '@chakra-ui/react'
 import AddTask from './AddTask'
 import Task from './Task'
@@ -38,6 +40,7 @@ const TasksScreen = ({ store, tag, title }) => {
   } = useDisclosure()
   const { tags, remove: removeTag } = useContext(TagsContext)
   const { removeAllByTag } = useContext(TasksContext)
+  const toast = useToast()
   const { positives: dones, negatives: undones } = groupByBinaryProp(store)
   const history = useHistory()
 
@@ -79,16 +82,29 @@ const TasksScreen = ({ store, tag, title }) => {
   const onSearch = (keyword) => {
     const res = rgxSearch(store, keyword)
     const { positives, negatives } = groupByBinaryProp(res)
-    setTasks(negatives)
-    if (positives.length > 0) {
-      setCompTasks(positives)
-      setShowCompTasks(true)
+    if (positives.length > 0 || negatives.length > 0) {
+      setTasks(negatives)
+      if (positives.length > 0) {
+        setCompTasks(positives)
+        setShowCompTasks(true)
+      }
+    } else {
+      toast({
+        title: 'Search failed',
+        position: 'bottom-right',
+        description: `No result found for ${keyword}`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        variant: 'subtle',
+      })
     }
   }
 
   // clears the search result and brings back the initial task list
   const onSearchClear = () => {
     setTasks(sortTasks(undones, prefs.sortType, tags))
+    setShowCompTasks(prefs.showCompletedTasks)
     setCompTasks(dones)
   }
 
@@ -161,17 +177,6 @@ const TasksScreen = ({ store, tag, title }) => {
           id='completed_tasks_div'
           className={showCompTasks && compTasks.length > 0 ? '' : 'hidden'}
         >
-          <Flex mb='15px' w='full' id='completed_tasks_flex'>
-            <Tag
-              size='lg'
-              variant='outline'
-              colorScheme='green'
-              justifyContent='flex-start'
-              id='completed_tasks_completed_tag'
-            >
-              <TagLabel id='completed_tasks_label'>Completed</TagLabel>
-            </Tag>
-          </Flex>
           {compTasks.map((t, i) => (
             <Task
               key={i}

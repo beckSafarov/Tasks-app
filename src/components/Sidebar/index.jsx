@@ -53,10 +53,10 @@ const Sidebar = () => {
     sidebarTagsToggle()
   }
 
-  const addTagModalSubmit = (tag, e) => {
+  const addTagModalSubmit = (tag) => {
     addTag(tag)
     setNewTag(tag)
-    onAddTagModalClosed(e)
+    onAddTagModalClosed()
   }
 
   const onTagDelete = () => {
@@ -72,6 +72,7 @@ const Sidebar = () => {
         isOpen={isAddTagModalOpen}
         onSubmit={addTagModalSubmit}
         onClose={onAddTagModalClosed}
+        tags={tags}
       />
       <VStack
         w='full'

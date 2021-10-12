@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import {
   Modal,
@@ -9,65 +9,73 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Box,
   FormControl,
   Input,
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 
-const AddTagModal = ({ isOpen, onSubmit, onClose }) => {
-  const [tag, setTag] = useState('')
-  const [error, setError] = useState('')
-
-  const submitHandler = (e) => {
-    e.preventDefault()
-    if (tag) {
-      onSubmit(tag, e)
-      setTag('')
-      setError('')
-    } else {
-      setError('Please enter a tag title')
-    }
+const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
+  const validate = ({ tag }) => {
+    const res = {}
+    if (!tag) res.tag = 'Please enter a tag title'
+    if (tags[tag]) res.tag = 'Such tag already exists'
+    return res
   }
 
-  const closeHandler = (e) => {
-    setError('')
-    setTag('')
-    onClose(e)
-  }
+  const submitHandler = ({ tag }) => onSubmit(tag)
+  const closeHandler = (e) => onClose(e)
+  const handleBorderColor = ({ tag }) => ({
+    borderColor: tag ? 'red.500' : '',
+  })
 
   return (
-    <div>
-      <Modal isOpen={isOpen} onClose={closeHandler}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>New Tag</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <Input
-                type='text'
-                onChange={(e) => setTag(e.target.value)}
-                placeholder='Title'
-                borderColor={error ? 'red' : 'none'}
-              />
-              <Text color='red' pt='10px'>
-                {error}
-              </Text>
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='gray' mr={3} onClick={closeHandler}>
-              Cancel
-            </Button>
-            <Button onClick={submitHandler} colorScheme='green'>
-              Save
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </div>
+    <Modal isOpen={isOpen} onClose={closeHandler}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>New Tag</ModalHeader>
+        <ModalCloseButton _focus={{ border: 'none' }} />
+        <ModalBody>
+          <Formik
+            initialValues={{ tag: '' }}
+            onSubmit={submitHandler}
+            validate={validate}
+          >
+            {({ errors }) => (
+              <Form style={{ width: '100%' }}>
+                <Field name='tag'>
+                  {({ field }) => (
+                    <Input
+                      id='tag'
+                      type='text'
+                      placeholder='Title'
+                      variant='flushed'
+                      borderColor={handleBorderColor(errors)}
+                      _focus={handleBorderColor(errors)}
+                      {...field}
+                    />
+                  )}
+                </Field>
+                <ErrorMessage name='tag'>
+                  {(msg) => (
+                    <Text py='2' color='red.500'>
+                      {msg}
+                    </Text>
+                  )}
+                </ErrorMessage>
+                <Box py='20px'>
+                  <Button type='submit' colorScheme='blue' w='full'>
+                    Save
+                  </Button>
+                </Box>
+              </Form>
+            )}
+          </Formik>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   )
 }
 
@@ -75,6 +83,7 @@ AddTagModal.defaultProps = {
   onSubmit: () => void 0,
   isOpen: () => void 0,
   onClose: () => void 0,
+  tags: {},
 }
 
 export default AddTagModal
