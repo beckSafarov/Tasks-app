@@ -46,7 +46,7 @@ const TasksScreen = ({ store, tag, title }) => {
 
   // hooks
   const [tasks, setTasks] = useState([])
-  const [compTasks, setCompTasks] = useState([...dones])
+  const [compTasks, setCompTasks] = useState([])
   const [selectedTask, setSelectedTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [openTaskBar, setOpenTaskBar] = useState(false)
@@ -60,7 +60,7 @@ const TasksScreen = ({ store, tag, title }) => {
 
   useEffect(() => {
     setTasks(sortTasks(undones, sortType, tags))
-    setCompTasks([...dones])
+    setCompTasks(sortTasks(dones, sortType, tags))
   }, [prefs, store, tag, title])
 
   // when a task is clicked, it opens the taskDrawer
@@ -107,7 +107,7 @@ const TasksScreen = ({ store, tag, title }) => {
   const onSearchClear = () => {
     setTasks(sortTasks(undones, sortType, tags))
     setShowCompTasks(prefs.showCompletedTasks)
-    setCompTasks(dones)
+    setCompTasks(sortTasks(dones, sortType, tags))
   }
 
   // when a task is deleted, checks whether the taskbar for that task is not open. If yes, it will be closed
