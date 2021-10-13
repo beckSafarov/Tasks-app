@@ -4,12 +4,9 @@ import PreferencesReducer from './PreferencesReducer'
 
 const defaultPrefs = {
   showCompletedTasks: false,
-  sortType: 'creation_date',
   sidebarTagsToggle: false,
-  pages: {
-    'All Tasks': {
-      sortType: 'creation_date',
-    },
+  sorts: {
+    'All Tasks': 'creation_date',
   },
 }
 
@@ -25,10 +22,8 @@ export const PreferencesProvider = ({ children }) => {
   const toggleShowCompletedTasks = () =>
     dispatch({ type: 'showCompletedTasks' })
 
-  const setSortType = (newType) => dispatch({ type: 'sortType', newType })
-
-  const pageSort = (page, newSort) =>
-    dispatch({ type: 'pageSort', page, newSort })
+  const setSortType = (page, newSort) =>
+    dispatch({ type: 'sort', page, newSort })
 
   const sidebarTagsToggle = () => dispatch({ type: 'sidebarTagsToggle' })
 
@@ -37,7 +32,6 @@ export const PreferencesProvider = ({ children }) => {
       value={{
         preferences: state.preferences,
         toggleShowCompletedTasks,
-        pageSort,
         setSortType,
         sidebarTagsToggle,
       }}

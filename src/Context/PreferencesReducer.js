@@ -2,16 +2,13 @@ import produce from 'immer'
 import { setStore } from '../helpers/lcs'
 
 const PreferencesReducer = produce((draft, action) => {
-  let { showCompletedTasks, sidebarTagsToggle, sortType } = draft.preferences
+  let { showCompletedTasks, sidebarTagsToggle } = draft.preferences
   switch (action.type) {
     case 'showCompletedTasks':
       draft.preferences.showCompletedTasks = !showCompletedTasks
       break
-    case 'sortType':
-      draft.preferences.sortType = action.newType
-      break
-    case 'pageSort':
-      draft.preferences.pages[action.page] = action.newSort
+    case 'sort':
+      draft.preferences.sorts[action.page] = action.newSort
       break
     case 'sidebarTagsToggle':
       draft.preferences.sidebarTagsToggle = !sidebarTagsToggle

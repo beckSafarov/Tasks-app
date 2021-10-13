@@ -38,9 +38,11 @@ const TasksScreen = ({ store, tag, title }) => {
   } = useDisclosure()
   const { tags, remove: removeTag } = useContext(TagsContext)
   const { removeAllByTag } = useContext(TasksContext)
-  const toast = useToast()
   const { positives: dones, negatives: undones } = group(store)
+
+  const toast = useToast()
   const history = useHistory()
+  const sortType = prefs.sorts[tag || title] || 'creation_date'
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -57,7 +59,7 @@ const TasksScreen = ({ store, tag, title }) => {
   })
 
   useEffect(() => {
-    setTasks(sortTasks(undones, prefs.sortType, tags))
+    setTasks(sortTasks(undones, sortType, tags))
     setCompTasks([...dones])
   }, [prefs, store, tag, title])
 
@@ -103,7 +105,7 @@ const TasksScreen = ({ store, tag, title }) => {
 
   // clears the search result and brings back the initial task list
   const onSearchClear = () => {
-    setTasks(sortTasks(undones, prefs.sortType, tags))
+    setTasks(sortTasks(undones, sortType, tags))
     setShowCompTasks(prefs.showCompletedTasks)
     setCompTasks(dones)
   }
@@ -113,8 +115,8 @@ const TasksScreen = ({ store, tag, title }) => {
 
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
-    if (prefs.sortType !== type) {
-      setSortType(type)
+    if (sortType !== type) {
+      setSortType(tag || title, type)
       setTasks(sortTasks(undones, type, tags))
     }
   }
@@ -143,7 +145,7 @@ const TasksScreen = ({ store, tag, title }) => {
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
         toggleCompTasks={toggleCompTasks}
-        sortType={prefs.sortType}
+        sortType={sortType}
         onSort={sortTypeHandler}
         isMainPage={!tag ? true : false}
         removeTasksByTag={removeTasksByTag}
