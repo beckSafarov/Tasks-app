@@ -11,6 +11,7 @@ import {
   MenuList,
   MenuItem,
   useDisclosure,
+  Box,
   VStack,
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
@@ -22,11 +23,13 @@ import {
   FaCheckCircle,
   FaEdit,
   FaTag,
+  FaStar as FullStar,
+  FaRegStar as EmptyStar,
 } from 'react-icons/fa'
 import ConfirmModal from './ConfirmModal'
 
 const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
-  const { toggle, remove } = useContext(TasksContext)
+  const { toggle, remove, toggleStar } = useContext(TasksContext)
   const {
     isOpen: isModalOpen,
     onOpen: onModalOpen,
@@ -34,6 +37,8 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
   } = useDisclosure()
 
   const toggleDone = () => toggle(task.id)
+
+  const handleToggleStar = () => toggleStar(task.id)
 
   const removeTask = (e) => {
     onDelete(task)
@@ -79,46 +84,58 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
             {task.tag}
           </Text>
         </Flex>
-        {/* actions with the task */}
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label='Options'
-            icon={<Icon color='gray.800' as={FaEllipsisV}></Icon>}
-            variant='unstyled'
-            size='sm'
-            _focus={{ border: 'none' }}
+
+        {/* --- importance star */}
+        <Box display='flex' alignItems='center'>
+          <Icon
+            cursor='pointer'
+            as={task.starred ? FullStar : EmptyStar}
+            onClick={handleToggleStar}
           />
-          <MenuList>
-            <MenuItem
-              fontSize='sm'
-              icon={
-                <Icon
-                  color='gray.800'
-                  as={!task.done ? FaCheckCircle : FaRegCheckCircle}
-                ></Icon>
-              }
-              onClick={toggleDone}
-            >
-              {!task.done ? 'Mark as Completed' : 'Undo Completed'}
-            </MenuItem>
-            <MenuItem
-              fontSize='sm'
-              icon={<Icon color='gray.800' as={FaEdit}></Icon>}
-              onClick={() => onOpen(task)}
-            >
-              Edit Task
-            </MenuItem>
-            <MenuDivider />
-            <MenuItem
-              fontSize='sm'
-              icon={<Icon color='gray.800' as={FaTrash}></Icon>}
-              onClick={onModalOpen}
-            >
-              Delete Task
-            </MenuItem>
-          </MenuList>
-        </Menu>
+        </Box>
+
+        {/* actions with the task */}
+        <Box display='flex' alignItems='center'>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<Icon color='gray.800' as={FaEllipsisV}></Icon>}
+              variant='unstyled'
+              size='sm'
+              _focus={{ border: 'none' }}
+            />
+            <MenuList>
+              <MenuItem
+                fontSize='sm'
+                icon={
+                  <Icon
+                    color='gray.800'
+                    as={!task.done ? FaCheckCircle : FaRegCheckCircle}
+                  ></Icon>
+                }
+                onClick={toggleDone}
+              >
+                {!task.done ? 'Mark as Completed' : 'Undo Completed'}
+              </MenuItem>
+              <MenuItem
+                fontSize='sm'
+                icon={<Icon color='gray.800' as={FaEdit}></Icon>}
+                onClick={() => onOpen(task)}
+              >
+                Edit Task
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem
+                fontSize='sm'
+                icon={<Icon color='gray.800' as={FaTrash}></Icon>}
+                onClick={onModalOpen}
+              >
+                Delete Task
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
         <ConfirmModal
           title={`"${task.name}" will be permanently deleted`}
           body="You won't be able to undo this action."

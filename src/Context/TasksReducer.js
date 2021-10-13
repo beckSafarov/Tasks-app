@@ -1,18 +1,23 @@
-import produce, { current } from 'immer'
+import produce from 'immer'
 import { updateArr } from '../helpers'
-import { setStore } from '../helpers/lcs'
+import { setStore as setTasks } from '../helpers/lcs'
 
 const TasksReducer = produce((draft, action) => {
   let { tasks } = draft
+  let task
   switch (action.type) {
     case 'toggle':
-      const task = draft.tasks.find((t) => t.id === action.id)
+      task = draft.tasks.find((t) => t.id === action.id)
       task.done = !task.done
       break
     case 'add':
       tasks.push(action.task)
       break
-    case 'update':
+    case 'star':
+      task = draft.tasks.find((t) => t.id === action.id)
+      task.starred = task.starred ? null : { date: new Date() }
+      break
+    case 'updateOne':
       tasks = updateArr(tasks, action.newTask)
       break
     case 'updateMany':
@@ -31,7 +36,7 @@ const TasksReducer = produce((draft, action) => {
     default:
       return draft
   }
-  setStore(draft.tasks)
+  setTasks(draft.tasks)
 })
 
 export default TasksReducer

@@ -1,9 +1,9 @@
 import React, { createContext, useReducer } from 'react'
-import { getTags } from '../helpers/lcs'
+import { getStore } from '../helpers/lcs'
 import { v1 as uuidv1 } from 'uuid'
 import TagsReducer from './TagsReducer'
 
-const initialState = { tags: getTags() }
+const initialState = { tags: getStore({}, 'tags') }
 export const TagsContext = createContext(initialState)
 
 export const TagsProvider = ({ children }) => {

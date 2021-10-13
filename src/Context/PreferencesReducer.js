@@ -10,6 +10,9 @@ const PreferencesReducer = produce((draft, action) => {
     case 'sortType':
       draft.preferences.sortType = action.newType
       break
+    case 'pageSort':
+      draft.preferences.pages[action.page] = action.newSort
+      break
     case 'sidebarTagsToggle':
       draft.preferences.sidebarTagsToggle = !sidebarTagsToggle
       break

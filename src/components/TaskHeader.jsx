@@ -103,9 +103,12 @@ const TaskHeader = ({
             />
           </Editable>
         </Heading>
+
         <Box flex='1'>
           <SearchTask onSubmit={onSearchSubmit} onClear={onSearchClear} />
         </Box>
+
+        {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
           <Menu>
             <MenuButton

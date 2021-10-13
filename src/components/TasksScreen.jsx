@@ -3,29 +3,27 @@ import {
   HStack,
   VStack,
   Container,
-  Flex,
-  Tag,
-  TagLabel,
   useDisclosure,
   useToast,
-  Divider,
 } from '@chakra-ui/react'
 import AddTask from './AddTask'
 import Task from './Task'
 import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
+import ConfirmModal from './ConfirmModal'
 
 // --- library methods ---
 import { useEffect, useState, useContext } from 'react'
-import { PreferencesContext } from '../Context/PreferencesContext'
-import { TagsContext } from '../Context/TagsContext'
+import { useHistory } from 'react-router'
 
 // --- helper methods ---
-import { getTasksPerTag, groupByBinaryProp, rgxSearch } from '../helpers'
+import { groupByBinaryProp as group, rgxSearch } from '../helpers'
 import { sortTasks } from '../helpers/tasksHelpers'
+
+// --- context stuff ---
 import { TasksContext } from '../Context/TasksContext'
-import { useHistory } from 'react-router'
-import ConfirmModal from './ConfirmModal'
+import { TagsContext } from '../Context/TagsContext'
+import { PreferencesContext } from '../Context/PreferencesContext'
 
 const TasksScreen = ({ store, tag, title }) => {
   const {
@@ -41,7 +39,7 @@ const TasksScreen = ({ store, tag, title }) => {
   const { tags, remove: removeTag } = useContext(TagsContext)
   const { removeAllByTag } = useContext(TasksContext)
   const toast = useToast()
-  const { positives: dones, negatives: undones } = groupByBinaryProp(store)
+  const { positives: dones, negatives: undones } = group(store)
   const history = useHistory()
 
   // hooks
@@ -81,7 +79,7 @@ const TasksScreen = ({ store, tag, title }) => {
   // receives a search keyword and searches through task names
   const onSearch = (keyword) => {
     const res = rgxSearch(store, keyword)
-    const { positives, negatives } = groupByBinaryProp(res)
+    const { positives, negatives } = group(res)
     if (positives.length > 0 || negatives.length > 0) {
       setTasks(negatives)
       if (positives.length > 0) {

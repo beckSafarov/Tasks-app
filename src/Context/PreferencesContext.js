@@ -6,6 +6,11 @@ const defaultPrefs = {
   showCompletedTasks: false,
   sortType: 'creation_date',
   sidebarTagsToggle: false,
+  pages: {
+    'All Tasks': {
+      sortType: 'creation_date',
+    },
+  },
 }
 
 const initialState = {
@@ -22,6 +27,9 @@ export const PreferencesProvider = ({ children }) => {
 
   const setSortType = (newType) => dispatch({ type: 'sortType', newType })
 
+  const pageSort = (page, newSort) =>
+    dispatch({ type: 'pageSort', page, newSort })
+
   const sidebarTagsToggle = () => dispatch({ type: 'sidebarTagsToggle' })
 
   return (
@@ -29,6 +37,7 @@ export const PreferencesProvider = ({ children }) => {
       value={{
         preferences: state.preferences,
         toggleShowCompletedTasks,
+        pageSort,
         setSortType,
         sidebarTagsToggle,
       }}
