@@ -16,6 +16,7 @@ import {
   EditableInput,
   EditablePreview,
   HStack,
+  Tooltip,
 } from '@chakra-ui/react'
 import SearchTask from './SearchTask'
 import {
@@ -111,15 +112,17 @@ const TaskHeader = ({
         {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
           <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label='Options'
-              icon={<Icon as={FaEllipsisH} />}
-              variant='flushed'
-              _focus={{ borderColor: 'none' }}
-              borderRadius={'50%'}
-              _hover={{ background: 'gray.100' }}
-            />
+            <Tooltip label='Menu'>
+              <MenuButton
+                as={IconButton}
+                aria-label='Menu'
+                icon={<Icon as={FaEllipsisH} />}
+                variant='flushed'
+                _focus={{ borderColor: 'none' }}
+                borderRadius={'50%'}
+                _hover={{ background: 'gray.100' }}
+              />
+            </Tooltip>
             <MenuList fontSize='0.8rem'>
               <MenuGroup title='Actions'>
                 {/* --- actions ---*/}

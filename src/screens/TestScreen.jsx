@@ -5,8 +5,6 @@ import SearchTask from '../components/SearchTask'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import TagDropdown from '../components/Sidebar/TagDropdown'
 import SubTasks from '../components/SubTasks'
-import MyEditable2 from '../components/MyEditable2'
-import MyEditable from '../components/MyEditable'
 
 const subtasks = [
   { id: '1', text: 'task 1', done: false },
@@ -20,6 +18,7 @@ const TestScreen = () => {
   const [foo, setFoo] = useState(false)
 
   const toggleFoo = (e) => {
+    console.log(e.target)
     setFoo((v) => !v)
   }
 
@@ -45,13 +44,13 @@ const TestScreen = () => {
         <br />
         <button
           className='jobona'
+          name='my name is d'
           style={{ border: '1px solid #ccc' }}
           onClick={toggleFoo}
         >
           Click to toggle foo
         </button>
         {/* <SubTasks /> */}
-        <MyEditable onSubmit={(v) => console.log(v)} />
       </div>
     </>
   )
