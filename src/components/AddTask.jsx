@@ -10,6 +10,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { Formik, Form, Field } from 'formik'
 import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
+import { v4 as uuid4 } from 'uuid'
 
 const focusStyle = {
   borderColor: 'light.placeholder',
@@ -20,7 +21,8 @@ const AddTask = ({ tag }) => {
   const { tags, add: addTag } = useContext(TagsContext)
 
   const submitHandler = (todo, onSubmitProps) => {
-    addTask({ ...todo, tag })
+    todo.id = uuid4()
+    addTask({ ...todo, tag: tag || 'untagged' })
     if (!tags.untagged) addTag('untagged')
     onSubmitProps.resetForm()
     onSubmitProps.setSubmitting(false)
@@ -36,6 +38,7 @@ const AddTask = ({ tag }) => {
         name: '',
         tag,
         done: false,
+        subtasks: [],
         description: '',
       }}
       onSubmit={submitHandler}

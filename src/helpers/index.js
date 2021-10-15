@@ -155,6 +155,12 @@ export const without = (arr, val) => {
   return typeof val === 'object' ? obj() : normal()
 }
 
+// @param val: Obj, {name: 'something'}
+export const withoutMany = (arr, val) => {
+  const prop = Object.keys(val)[0]
+  return arr.filter((t) => t[prop] !== val[prop])
+}
+
 const withoutFirst = (arr, val) => {
   let res = arr.concat()
   res.splice(arr.indexOf(val), 1)

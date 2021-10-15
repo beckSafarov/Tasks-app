@@ -5,6 +5,7 @@ import { Editable, EditablePreview, EditableInput } from '@chakra-ui/editable'
 import { Textarea } from '@chakra-ui/textarea'
 import { TasksContext } from '../Context/TasksContext'
 import { Collapse } from '@chakra-ui/transition'
+import SubTasks from './SubTasks'
 
 const TaskDrawer = ({
   show,
@@ -108,6 +109,9 @@ const TaskDrawer = ({
                 ))}
               </Select>
             </HStack>
+            {/* subtasks */}
+            <SubTasks task={task} />
+
             <Textarea
               placeholder='Add note...'
               resize='none'

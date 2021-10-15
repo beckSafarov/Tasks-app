@@ -1,41 +1,26 @@
 import { useContext, useState, useEffect } from 'react'
 import { TagsContext } from '../Context/TagsContext'
-import { Box } from '@chakra-ui/react'
+import { Box, FormControl, Input, Button, Textarea } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import TagDropdown from '../components/Sidebar/TagDropdown'
+import SubTasks from '../components/SubTasks'
+import MyEditable2 from '../components/MyEditable2'
+import MyEditable from '../components/MyEditable'
+
+const subtasks = [
+  { id: '1', text: 'task 1', done: false },
+  { id: '2', text: 'task 2', done: false },
+  { id: '3', text: 'task 3', done: false },
+  { id: '4', text: 'task 4', done: false },
+  { id: '5', text: 'task 5', done: false },
+]
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
-  const { tags, add, update, remove } = useContext(TagsContext)
 
-  const myTask = {
-    name: 'Sample task',
-    tag: 'work',
-    description: '',
-  }
-  const myTags = {
-    untagged: '',
-    work: '',
-    personal: '',
-  }
   const toggleFoo = (e) => {
-    console.log(e.target)
     setFoo((v) => !v)
-  }
-
-  const addLCS = () => add('personal')
-
-  const removeLCS = () => remove('aromat')
-  const updateLCS = () => update('personal', 'aromat')
-
-  const proceed = (tag) => {
-    console.log(tag)
-    // setClose(true)
-  }
-
-  const changeHandler = (newValue) => {
-    console.log(newValue)
   }
 
   return (
@@ -65,16 +50,8 @@ const TestScreen = () => {
         >
           Click to toggle foo
         </button>
-        {/* <br />
-        <button onClick={addLCS}>add</button>
-        <br />
-        <button onClick={removeLCS}>remove</button>
-        <br />
-        <button onClick={updateLCS}>update</button>
-        <br /> */}
-        {/* <button onClick={() => console.log(tags)}>print</button>
-        <br />
-        <button onClick={() => setShow(true)}>open modal</button> */}
+        {/* <SubTasks /> */}
+        <MyEditable onSubmit={(v) => console.log(v)} />
       </div>
     </>
   )

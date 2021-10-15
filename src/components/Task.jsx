@@ -57,13 +57,13 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
         fontSize='lg'
       >
         <Flex justifyContent='center' alignItems='center' mr='10px'>
-          <div style={{ cursor: 'pointer' }}>
+          <Box cursor='pointer'>
             {!completed ? (
               <CircleIcon onClick={toggleDone} color='#808080' />
             ) : (
               <CheckCircleIcon onClick={toggleDone} color='blue.200' />
             )}
-          </div>
+          </Box>
         </Flex>
         <Flex
           alignItems='flex-start'

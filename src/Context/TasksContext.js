@@ -1,7 +1,17 @@
 import React, { createContext, useReducer } from 'react'
 import TasksReducer from './TasksReducer'
-import { v4 as uuid4 } from 'uuid'
 import { getStore as getTasks } from '../helpers/lcs'
+
+/**
+ * sample format of a task:
+ * {
+ *    name: 'task text or name',
+ *    tag: 'untagged',
+ *    done: false,
+ *    subtasks: [],
+ *    description: ''
+ * }
+ */
 
 const initialState = { tasks: getTasks() }
 export const TasksContext = createContext(initialState)
@@ -11,14 +21,10 @@ export const TasksProvider = ({ children }) => {
 
   const toggle = (id) => dispatch({ type: 'toggle', id })
 
-  const add = (task) => {
-    task.id = uuid4()
-    if (!task.tag) task.tag = 'untagged'
-    dispatch({
-      type: 'add',
-      task,
-    })
-  }
+  const add = (task) => dispatch({ type: 'add', task })
+
+  const addSubtask = (id, subtask) =>
+    dispatch({ type: 'add_subtask', id, subtask })
 
   const toggleStar = (id) => dispatch({ type: 'star', id })
 
@@ -27,9 +33,15 @@ export const TasksProvider = ({ children }) => {
   const updateMany = (oldTag, newTag) =>
     dispatch({ type: 'updateMany', oldTag, newTag })
 
+  const updateSubtask = (id, newSubtask) =>
+    dispatch({ type: 'update_subtask', id, newSubtask })
+
   const remove = (id) => dispatch({ type: 'remove', id })
 
   const removeAllByTag = (tag) => dispatch({ type: 'removeAllByTag', tag })
+
+  const removeSubtask = (id, subtask) =>
+    dispatch({ type: 'remove_subtask', id, subtask })
 
   return (
     <TasksContext.Provider
@@ -38,10 +50,13 @@ export const TasksProvider = ({ children }) => {
         toggle,
         toggleStar,
         add,
+        addSubtask,
         update,
         updateMany,
+        updateSubtask,
         remove,
         removeAllByTag,
+        removeSubtask,
       }}
     >
       {children}
