@@ -37,7 +37,7 @@ const TasksScreen = ({ store, tag, title }) => {
     onClose: onConfClose,
   } = useDisclosure()
   const { tags, remove: removeTag } = useContext(TagsContext)
-  const { removeAllByTag } = useContext(TasksContext)
+  const { removeAllByTag, remove: removeTask } = useContext(TasksContext)
   const { positives: dones, negatives: undones } = group(store)
 
   const toast = useToast()
@@ -50,7 +50,6 @@ const TasksScreen = ({ store, tag, title }) => {
   const [selectedTask, setSelectedTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [openTaskBar, setOpenTaskBar] = useState(false)
-  const [currDeleted, setCurrDeleted] = useState({})
   const [confModal, setConfModal] = useState({
     title: '',
     body: '',
@@ -68,9 +67,6 @@ const TasksScreen = ({ store, tag, title }) => {
     setSelectedTask(task)
     setOpenTaskBar(true)
   }
-
-  // closes the taskDrawer
-  const taskCloseHandler = () => setOpenTaskBar(false)
 
   // toggle a task to be completed or back to incompleted
   const toggleCompTasks = () => {
@@ -110,8 +106,20 @@ const TasksScreen = ({ store, tag, title }) => {
     setCompTasks(sortTasks(dones, sortType, tags))
   }
 
-  // when a task is deleted, checks whether the taskbar for that task is not open. If yes, it will be closed
-  const onDelete = (task) => setCurrDeleted(task)
+  const taskDeleteHandler = (deletingTask = {}, warned = false) => {
+    if (!warned) {
+      setConfModal({
+        title: `Task "${deletingTask.name}"" will be permanently deleted`,
+        body: `You will not be able to reverse this action`,
+        onProceed: () => taskDeleteHandler(deletingTask, true),
+      })
+      onConfOpen()
+    } else {
+      onConfClose()
+      removeTask(deletingTask.id)
+      setOpenTaskBar(false)
+    }
+  }
 
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
@@ -160,17 +168,17 @@ const TasksScreen = ({ store, tag, title }) => {
               key={i}
               task={task}
               onOpen={taskOpenHandle}
-              onDelete={onDelete}
+              onDelete={taskDeleteHandler}
               isMainPage={!tag ? true : false}
             />
           ))}
         </VStack>
         <TaskDrawer
           show={openTaskBar}
-          onClose={taskCloseHandler}
+          onClose={() => setOpenTaskBar(false)}
           task={selectedTask}
           tags={tags}
-          currDeleted={currDeleted}
+          onDelete={taskDeleteHandler}
           transition={'0.2s'}
         />
 
@@ -185,7 +193,7 @@ const TasksScreen = ({ store, tag, title }) => {
               key={i}
               task={t}
               onOpen={taskOpenHandle}
-              onDelete={onDelete}
+              onDelete={taskDeleteHandler}
               isMainPage={!tag ? true : false}
               completed
             />

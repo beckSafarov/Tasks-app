@@ -15,7 +15,7 @@ import { Textarea } from '@chakra-ui/textarea'
 import { TasksContext } from '../Context/TasksContext'
 import { Collapse } from '@chakra-ui/transition'
 import SubTasks from './SubTasks'
-import { FaChevronRight, FaTimes } from 'react-icons/fa'
+import { FaChevronRight, FaTimes, FaTrash } from 'react-icons/fa'
 import { Tooltip } from '@chakra-ui/tooltip'
 
 const TaskDrawer = ({
@@ -23,9 +23,9 @@ const TaskDrawer = ({
   width,
   transition,
   onClose,
+  onDelete,
   task,
   tags,
-  currDeleted,
 }) => {
   const { update } = useContext(TasksContext)
   const styles = document?.querySelector('#main')?.style || {}
@@ -39,22 +39,16 @@ const TaskDrawer = ({
 
     if (task.id !== fields.id) setFields(task)
 
-    // if the task of the current drawer is deleted, close the drawer
-    if (currDeleted.id === task.id) onClose({})
-
     return () => {
       document.removeEventListener('click', outsideClicked)
     }
-  }, [show, task, fields, currDeleted.id])
+  }, [show, task, fields])
 
-  const handleChanges = useCallback(
-    (e) => {
-      updated = { ...fields }
-      updated[e.target.name] = e.target.value
-      setFields(updated)
-    },
-    [fields]
-  )
+  const handleChanges = (e) => {
+    updated = { ...fields }
+    updated[e.target.name] = e.target.value
+    setFields(updated)
+  }
 
   const outsideClicked = (e) => {
     if (show && e.target.id.match(/main|container|completed_tasks_flex/)) {
@@ -75,45 +69,37 @@ const TaskDrawer = ({
         right='10px'
         bg='whiteAlpha.200'
         boxShadow='lg'
-        overflowX='hidden'
+        overflowX='scroll'
         transition={transition}
         color='gray.800'
-        boxSizing='border-box'
+        // boxSizing='border-box'
         rounded='md'
       >
         <Box py={7} px='20px'>
-          <Flex alignItems='center' justifyContent='space-between'>
-            <Heading size='md'>
-              <Editable
-                value={fields.name || ''}
+          <Heading size='md'>
+            <Editable
+              value={fields.name || ''}
+              name='name'
+              onChange={(v) =>
+                handleChanges({ target: { name: 'name', value: v } })
+              }
+              onSubmit={(v) => updateHandler({ ...fields, name: v })}
+              onCancel={(v) => updateHandler({ ...fields, name: v })}
+            >
+              <EditablePreview
+                overflow='hidden'
+                textOverflow='ellipsis'
+                whiteSpace='wrap'
+              />
+              <EditableInput
+                position='relative'
+                width='full'
                 name='name'
-                onChange={(v) =>
-                  handleChanges({ target: { name: 'name', value: v } })
-                }
-                onSubmit={(v) => updateHandler({ ...fields, name: v })}
-                onCancel={(v) => updateHandler({ ...fields, name: v })}
-              >
-                <EditablePreview
-                  overflow='hidden'
-                  textOverflow='ellipsis'
-                  whiteSpace='wrap'
-                />
-                <EditableInput name='name' variant='unstyled' />
-              </Editable>
-            </Heading>
-            <Tooltip label='Close'>
-              <Box
-                borderRadius='50%'
-                cursor='pointer'
-                color='gray.600'
-                p='5px'
-                onClick={() => onClose(fields)}
-                aria-label='Close'
-              >
-                <Icon fontSize='1.2rem' as={FaChevronRight} />
-              </Box>
-            </Tooltip>
-          </Flex>
+                variant='unstyled'
+                _focus={{ border: 'none' }}
+              />
+            </Editable>
+          </Heading>
           <Divider mt={2} />
           <VStack pt={8} spacing={8}>
             <HStack
@@ -149,11 +135,18 @@ const TaskDrawer = ({
             <SubTasks task={task} />
 
             <Textarea
+              position='relative'
               placeholder='Add note...'
+              fontSize='0.9em'
               resize='none'
+              // border='1px 0 1px 0'
+              // borderTop='1px'
+              // borderBottom='1px'
+              borderRadius='0'
+              borderColor='gray.200'
               variant='unstyled'
               name='description'
-              height={'500px'}
+              height='300px'
               value={fields.description}
               onChange={handleChanges}
               onBlur={(e) =>
@@ -161,7 +154,47 @@ const TaskDrawer = ({
               }
               hidden={!show}
             />
+            {/* <Divider /> */}
           </VStack>
+          {/* actions with the task & the window */}
+          <Flex
+            position='absolute'
+            bottom='0'
+            left='0'
+            right='0'
+            // bg='gray.100'
+            borderTop='1px'
+            borderColor='gray.200'
+            justifyContent='space-between'
+            alignItems='center'
+            color='gray.800'
+            p='5px'
+          >
+            <Tooltip label='Close'>
+              <Box
+                borderRadius='50%'
+                cursor='pointer'
+                _hover={{ backgroundColor: 'gray.200' }}
+                py='5px'
+                px='10px'
+                onClick={() => onClose()}
+              >
+                <Icon as={FaChevronRight} />
+              </Box>
+            </Tooltip>
+            <Tooltip label='delete the task'>
+              <Box
+                borderRadius='50%'
+                cursor='pointer'
+                _hover={{ backgroundColor: 'gray.200' }}
+                py='5px'
+                px='10px'
+                onClick={() => onDelete(task)}
+              >
+                <Icon as={FaTrash} />
+              </Box>
+            </Tooltip>
+          </Flex>
         </Box>
       </Box>
     </Collapse>
@@ -173,7 +206,7 @@ TaskDrawer.defaultProps = {
   width: '250px',
   transition: '0.3s',
   onClose: () => void 0,
-  currDeleted: {},
+  onDelete: () => void 0,
   task: {
     id: '',
     name: '',

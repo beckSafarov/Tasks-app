@@ -12,7 +12,6 @@ import {
   MenuItem,
   useDisclosure,
   Box,
-  VStack,
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
 import CircleIcon from './CircleIcon'
@@ -22,14 +21,12 @@ import {
   FaRegCheckCircle,
   FaCheckCircle,
   FaEdit,
-  FaTag,
   FaStar as FullStar,
   FaRegStar as EmptyStar,
 } from 'react-icons/fa'
-import ConfirmModal from './ConfirmModal'
 
 const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
-  const { toggle, remove, toggleStar } = useContext(TasksContext)
+  const { toggle, toggleStar } = useContext(TasksContext)
   const {
     isOpen: isModalOpen,
     onOpen: onModalOpen,
@@ -40,9 +37,8 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
 
   const handleToggleStar = () => toggleStar(task.id)
 
-  const removeTask = (e) => {
+  const removeTaskHandler = (e) => {
     onDelete(task)
-    remove(task.id)
     onModalClose(e)
   }
 
@@ -105,7 +101,7 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
               size='sm'
               _focus={{ border: 'none' }}
             />
-            <MenuList>
+            <MenuList zIndex='2'>
               <MenuItem
                 fontSize='sm'
                 icon={
@@ -129,21 +125,13 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
               <MenuItem
                 fontSize='sm'
                 icon={<Icon color='gray.800' as={FaTrash}></Icon>}
-                onClick={onModalOpen}
+                onClick={removeTaskHandler}
               >
                 Delete Task
               </MenuItem>
             </MenuList>
           </Menu>
         </Box>
-        <ConfirmModal
-          title={`"${task.name}" will be permanently deleted`}
-          body="You won't be able to undo this action."
-          onProceed={removeTask}
-          onClose={onModalClose}
-          isOpen={isModalOpen}
-          proceedTitle={'Delete'}
-        />
       </Flex>
     </div>
   )
