@@ -28,7 +28,10 @@ export const TasksProvider = ({ children }) => {
 
   const toggleStar = (id) => dispatch({ type: 'star', id })
 
-  const update = (newTask) => dispatch({ type: 'updateOne', newTask })
+  const update = (newTask) => {
+    console.log(newTask)
+    dispatch({ type: 'updateOne', newTask })
+  }
 
   const updateMany = (oldTag, newTag) =>
     dispatch({ type: 'updateMany', oldTag, newTag })

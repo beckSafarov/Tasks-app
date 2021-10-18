@@ -1,5 +1,5 @@
 import produce, { current } from 'immer'
-import { renameProp, withoutProp } from '../helpers'
+import { renameProp } from '../helpers'
 import { setStore } from '../helpers/lcs'
 
 const TagsReducer = produce((draft, action) => {
@@ -12,7 +12,7 @@ const TagsReducer = produce((draft, action) => {
       draft.tags = renameProp(tags, action.currTag, action.newTag)
       break
     case 'remove':
-      draft.tags = withoutProp(tags, action.tag)
+      delete draft.tags[action.tag]
       break
     default:
       return draft

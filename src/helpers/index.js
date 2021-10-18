@@ -311,17 +311,6 @@ const has = (arr = [], val) => {
 export const pluralize = (word = '', n = 0) =>
   n === 0 ? `No ${word}s` : n === 1 ? `1 ${word}` : `${n} ${word}s`
 
-/**
- * @param: obj: Object, prop: String
- */
-export const withoutProp = (obj, prop) => {
-  let out = {}
-  for (let currProp in obj) {
-    if (currProp !== prop) out[currProp] = obj[currProp]
-  }
-  return out
-}
-
 export const filterPropTypes = (obj = {}, propType = 'string') => {
   let out = {}
   for (let prop in obj) {
@@ -371,10 +360,10 @@ export const renameProp = (obj = {}, currProp, newProp) => {
   if (currProp !== newProp) {
     let newObj = { ...obj }
     newObj[newProp] = newObj[currProp]
-    return withoutProp(newObj, currProp)
-  } else {
-    return obj
+    delete newObj[currProp]
+    return newObj
   }
+  return obj
 }
 
 export const findPropByVal = (obj = {}, val) => {

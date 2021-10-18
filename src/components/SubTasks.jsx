@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fa'
 import { Field, Form, Formik } from 'formik'
 import { TasksContext } from '../Context/TasksContext'
+import MyEditable from './MyEditable'
 
 const initialValue = { text: '', done: false }
 
@@ -85,27 +86,9 @@ const SubTasks = ({ task }) => {
                   onClick={() => toggleHandler(task.id)}
                   as={task.done ? FullCircle : EmptyCircle}
                 />
-                <Editable
-                  defaultValue={task.text || ''}
-                  onSubmit={(v) => updateHandler(task.id, v)}
-                  onCancel={(v) => updateHandler(task.id, v)}
-                  display='flex'
-                  alignItems='center'
-                >
-                  <EditablePreview
-                    overflow='hidden'
-                    textOverflow='ellipsis'
-                    whiteSpace='wrap'
-                    color={task.done ? 'gray.500' : ''}
-                    as={task.done ? 's' : ''}
-                  />
-                  <EditableInput
-                    overflow='hidden'
-                    textOverflow='ellipsis'
-                    whiteSpace='wrap'
-                    _focus={{ border: 'none' }}
-                  />
-                </Editable>
+                <MyEditable onSubmit={(v) => updateHandler(task.id, v)}>
+                  {task.text || ''}
+                </MyEditable>
               </Flex>
               {/* delete subtask icon */}
               <Flex

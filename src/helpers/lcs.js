@@ -6,3 +6,5 @@ export const getStore = (fallBack = [], store = 'tasks') => {
 export const setStore = (n, store = 'tasks') => {
   localStorage.setItem(store, JSON.stringify(n))
 }
+
+console.log(getStore({}, 'tags'))

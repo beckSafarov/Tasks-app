@@ -8,15 +8,13 @@ import {
   Icon,
   Text,
   Flex,
-  Spacer,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { FaCaretRight, FaCaretDown, FaEllipsisH } from 'react-icons/fa'
+import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
 import { useHistory } from 'react-router'
 import { PreferencesContext } from '../../Context/PreferencesContext'
-import TagDropdown from './TagDropdown'
 
 const menuOptionHover = {
   background: 'light.sidebar_hover',
@@ -43,6 +41,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     if (newTag && tags[newTag]) {
+      setNewTag('')
       history.push(`/tag/${tags[newTag]}`)
     }
   }, [tags])
@@ -54,16 +53,9 @@ const Sidebar = () => {
   }
 
   const addTagModalSubmit = (tag) => {
-    addTag(tag)
     setNewTag(tag)
+    addTag(tag)
     onAddTagModalClosed()
-  }
-
-  const onTagDelete = () => {
-    console.log('you deleted this tag')
-  }
-  const onTagRename = () => {
-    console.log('you renamed this tag')
   }
 
   return (

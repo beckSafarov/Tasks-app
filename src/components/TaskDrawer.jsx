@@ -10,13 +10,12 @@ import {
 } from '@chakra-ui/layout'
 import { Icon } from '@chakra-ui/icon'
 import { Select } from '@chakra-ui/select'
-import { Editable, EditablePreview, EditableInput } from '@chakra-ui/editable'
-import { Textarea } from '@chakra-ui/textarea'
 import { TasksContext } from '../Context/TasksContext'
 import { Collapse } from '@chakra-ui/transition'
 import SubTasks from './SubTasks'
 import { FaChevronRight, FaTimes, FaTrash } from 'react-icons/fa'
 import { Tooltip } from '@chakra-ui/tooltip'
+import MyEditable from './MyEditable'
 
 const TaskDrawer = ({
   show,
@@ -56,7 +55,15 @@ const TaskDrawer = ({
     }
   }
 
-  const updateHandler = (v) => update(v)
+  const descUpdated = (description) => {
+    setFields({ ...fields, description })
+    update({ ...fields, description })
+  }
+
+  const nameUpdated = (name) => {
+    setFields({ ...fields, name })
+    update({ ...fields, name })
+  }
 
   return (
     <Collapse in={show} animateOpacity>
@@ -76,29 +83,8 @@ const TaskDrawer = ({
         rounded='md'
       >
         <Box py={7} px='20px'>
-          <Heading size='md'>
-            <Editable
-              value={fields.name || ''}
-              name='name'
-              onChange={(v) =>
-                handleChanges({ target: { name: 'name', value: v } })
-              }
-              onSubmit={(v) => updateHandler({ ...fields, name: v })}
-              onCancel={(v) => updateHandler({ ...fields, name: v })}
-            >
-              <EditablePreview
-                overflow='hidden'
-                textOverflow='ellipsis'
-                whiteSpace='wrap'
-              />
-              <EditableInput
-                position='relative'
-                width='full'
-                name='name'
-                variant='unstyled'
-                _focus={{ border: 'none' }}
-              />
-            </Editable>
+          <Heading size='md' w='full'>
+            <MyEditable onSubmit={nameUpdated}>{fields.name}</MyEditable>
           </Heading>
           <Divider mt={2} />
           <VStack pt={8} spacing={8}>
@@ -119,7 +105,7 @@ const TaskDrawer = ({
                 name='tag'
                 onChange={(e) => {
                   handleChanges(e)
-                  updateHandler({ ...fields, tag: e.target.value })
+                  update({ ...fields, tag: e.target.value })
                 }}
                 _focus={{ borderColor: 'transparent' }}
                 isTruncated
@@ -134,35 +120,24 @@ const TaskDrawer = ({
             {/* subtasks */}
             <SubTasks task={task} />
 
-            <Textarea
-              position='relative'
-              placeholder='Add note...'
-              fontSize='0.9em'
-              resize='none'
-              // border='1px 0 1px 0'
-              // borderTop='1px'
-              // borderBottom='1px'
-              borderRadius='0'
-              borderColor='gray.200'
-              variant='unstyled'
-              name='description'
-              height='300px'
-              value={fields.description}
-              onChange={handleChanges}
-              onBlur={(e) =>
-                updateHandler({ ...fields, description: e.target.value })
-              }
-              hidden={!show}
-            />
-            {/* <Divider /> */}
+            {/* custom textarea for description  */}
+            <Flex justifyContent='flex-start' w='full'>
+              <MyEditable
+                onSubmit={descUpdated}
+                placeholder='Add note...'
+                name='description'
+              >
+                {fields.description}
+              </MyEditable>
+            </Flex>
           </VStack>
+
           {/* actions with the task & the window */}
           <Flex
             position='absolute'
             bottom='0'
             left='0'
             right='0'
-            // bg='gray.100'
             borderTop='1px'
             borderColor='gray.200'
             justifyContent='space-between'

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
   Flex,
@@ -27,11 +27,7 @@ import {
 
 const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
   const { toggle, toggleStar } = useContext(TasksContext)
-  const {
-    isOpen: isModalOpen,
-    onOpen: onModalOpen,
-    onClose: onModalClose,
-  } = useDisclosure()
+  const { onClose: onModalClose } = useDisclosure()
 
   const toggleDone = () => toggle(task.id)
 
