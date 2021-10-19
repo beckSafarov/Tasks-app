@@ -8,7 +8,6 @@ import {
   MenuGroup,
   MenuDivider,
   IconButton,
-  Container,
   Box,
   Spacer,
   Flex,
@@ -17,6 +16,7 @@ import {
   EditablePreview,
   HStack,
   Tooltip,
+  useToast,
 } from '@chakra-ui/react'
 import SearchTask from './SearchTask'
 import {
@@ -50,17 +50,36 @@ const TaskHeader = ({
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
   const tagEditInput = useRef(null)
-  const { update: updateTag } = useContext(TagsContext)
+  const { update: updateTag, tags } = useContext(TagsContext)
   const { updateMany: updateTaskTags } = useContext(TasksContext)
+  const toast = useToast()
 
   useEffect(() => {
     if (title !== tagName) setTagName(title)
   }, [title])
 
-  const tagUpdated = (value) => {
-    if (tagName) {
-      updateTag(title, value)
-      updateTaskTags(title, value)
+  const validated = (newTitle) => {
+    if (!tagName || newTitle === title) {
+      return false
+    } else if (tags[newTitle]) {
+      toast({
+        title: 'Duplicate tag names are not allowed',
+        position: 'bottom-right',
+        description: `The tag name "${newTitle}" already exists.`,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        variant: 'subtle',
+      })
+      return false
+    }
+    return true
+  }
+
+  const tagUpdated = (newTitle) => {
+    if (validated(newTitle)) {
+      updateTag(title, newTitle)
+      updateTaskTags(title, newTitle)
     } else {
       setTagName(title)
     }

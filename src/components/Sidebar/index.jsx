@@ -4,10 +4,10 @@ import {
   VStack,
   Box,
   useDisclosure,
-  Collapse,
   Icon,
-  Text,
   Flex,
+  Collapse,
+  Text,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
@@ -35,7 +35,7 @@ const Sidebar = () => {
     onClose: onAddTagModalClosed,
   } = useDisclosure()
 
-  const [caret, setCaret] = useState(false)
+  const [caret, setCaret] = useState(prefs.sidebarTagsToggle)
   const [newTag, setNewTag] = useState('')
   const { tags, add: addTag } = useContext(TagsContext)
 
@@ -47,8 +47,8 @@ const Sidebar = () => {
   }, [tags])
 
   const toggleClicked = (e) => {
-    onToggle(e)
     setCaret(!caret)
+    onToggle()
     sidebarTagsToggle()
   }
 
@@ -136,7 +136,6 @@ const Sidebar = () => {
               <Box
                 p={1}
                 paddingLeft={'20px'}
-                // _hover={{ cursor: 'pointer', color: 'blue.200', background: 'light.sidebar_hover' }}
                 _hover={{ ...menuOptionHover, color: 'blue.200' }}
                 w='full'
                 borderRadius='10px'
@@ -162,18 +161,6 @@ const Sidebar = () => {
             Test
           </Box>
         </Link>
-
-        {/* <Box
-          cursor='pointer'
-          position='fixed'
-          bottom='20px'
-          width='100%'
-          fontSize='1rem'
-        >
-          <Text fontWeight='700' onClick={onAddTagModalOpen}>
-            + New Tag
-          </Text>
-        </Box> */}
       </VStack>
     </Container>
   )

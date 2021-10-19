@@ -92,7 +92,7 @@ const TasksScreen = ({ store, tag, title }) => {
         position: 'bottom-right',
         description: `No result found for ${keyword}`,
         status: 'error',
-        duration: 5000,
+        duration: 4000,
         isClosable: true,
         variant: 'subtle',
       })
