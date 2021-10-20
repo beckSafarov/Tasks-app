@@ -207,44 +207,41 @@ const TaskHeader = ({
                 </MenuItem>
                 {/* sort by creation date */}
                 <MenuItem
-                  onClick={() => onSort('creation_date')}
+                  onClick={() => onSort('creationDate')}
                   icon={<Icon as={FaRegCalendarPlus} />}
                 >
                   <Flex>
                     <Box>Creation Date</Box>
                     <Spacer />
                     <Box>
-                      <Icon
-                        hidden={sortType !== 'creation_date'}
-                        as={FaCheck}
-                      />
+                      <Icon hidden={sortType !== 'creationDate'} as={FaCheck} />
                     </Box>
                   </Flex>
                 </MenuItem>
                 {/* sort by due date */}
                 <MenuItem
-                  onClick={() => onSort('due_date')}
+                  onClick={() => onSort('dueDate')}
                   icon={<Icon as={FaRegCalendarAlt} />}
                 >
                   <Flex>
                     <Box>Due Date</Box>
                     <Spacer />
                     <Box>
-                      <Icon hidden={sortType !== 'due_date'} as={FaCheck} />
+                      <Icon hidden={sortType !== 'dueDate'} as={FaCheck} />
                     </Box>
                   </Flex>
                 </MenuItem>
 
                 {/* sort by importance */}
                 <MenuItem
-                  onClick={() => onSort('importance')}
+                  onClick={() => onSort('starred')}
                   icon={<Icon as={FaRegStar} />}
                 >
                   <Flex>
                     <Box>Importance</Box>
                     <Spacer />
                     <Box>
-                      <Icon hidden={sortType !== 'importance'} as={FaCheck} />
+                      <Icon hidden={sortType !== 'starred'} as={FaCheck} />
                     </Box>
                   </Flex>
                 </MenuItem>

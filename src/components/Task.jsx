@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
   Flex,
@@ -24,8 +24,14 @@ import {
   FaStar as FullStar,
   FaRegStar as EmptyStar,
 } from 'react-icons/fa'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { formatTaskTime as format } from '../helpers/tasksHelpers'
+dayjs.extend(localizedFormat)
+dayjs.extend(relativeTime)
 
-const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
+const Task = ({ task, onOpen, completed, onDelete, isMainPage, sortType }) => {
   const { update: updateTask } = useContext(TasksContext)
   const { onClose: onModalClose } = useDisclosure()
 
@@ -49,6 +55,7 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
         borderRadius='10px'
         fontSize='lg'
       >
+        {/* task completion circle icon */}
         <Flex justifyContent='center' alignItems='center' mr='10px'>
           <Box cursor='pointer'>
             {!completed ? (
@@ -58,6 +65,8 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
             )}
           </Box>
         </Flex>
+
+        {/* task text */}
         <Flex
           alignItems='flex-start'
           flexDirection='column'
@@ -76,6 +85,20 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
           <Text mt='0' hidden={!isMainPage} fontSize='0.8rem' color='gray.500'>
             {task.tag}
           </Text>
+        </Flex>
+
+        {/* --- due date --- */}
+        <Flex
+          w='full'
+          alignItems='center'
+          justifyContent='flex-end'
+          fontSize='0.7em'
+          color='gray.500'
+          pr='20px'
+          cursor='pointer'
+          onClick={() => onOpen(task)}
+        >
+          <Text>{task.dueDate ? format(task.dueDate) : 'Someday'}</Text>
         </Flex>
 
         {/* --- importance star */}
@@ -141,6 +164,7 @@ Task.defaultProps = {
   },
   onOpen: () => void 0,
   onDelete: () => void 0,
+  sortType: 'created_date',
   completed: false,
 }
 

@@ -4,6 +4,11 @@ import SearchTask from '../components/SearchTask'
 import TagDropdown from '../components/Sidebar/TagDropdown'
 import ReactDatePicker from 'react-datepicker'
 import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { formatTaskTime } from '../helpers/tasksHelpers'
+dayjs.extend(localizedFormat)
+dayjs.extend(relativeTime)
 
 // const subtasks = [
 //   { id: '1', text: 'task 1', done: false },
@@ -20,6 +25,10 @@ const TestScreen = () => {
   const toggleFoo = (e) => {
     console.log(e.target)
     setFoo((v) => !v)
+  }
+
+  const format = {
+    daysSince: (date = '2021-10-10') => dayjs(date).diff(new Date(), 'days'),
   }
 
   return (
@@ -51,6 +60,10 @@ const TestScreen = () => {
           Click to toggle foo
         </button>
 
+        <br />
+        <p>Past Date: {format.daysSince('2021-10-18')}</p>
+        <br />
+
         <Box mt='30px'>
           {/* <Input type='date' />
           <input type='date' onChange={(e) => console.log(e.target.value)} />
@@ -66,7 +79,10 @@ const TestScreen = () => {
             showTimeInput
           />
           <br />
-          <p>Selected date: {dayjs(date).format('MMM D, YYYY h:mm A')}</p>
+          <p>Yesterday: {formatTaskTime('2021-10-19 10:55')}</p>
+          <p>Today: {formatTaskTime('2021-10-20 19:30')}</p>
+          <p>Tomorrow: {formatTaskTime('2021-10-21 17:30')}</p>
+          <p>After tomorrow: {formatTaskTime('2021-10-22 17:30')}</p>
         </Box>
       </div>
     </>

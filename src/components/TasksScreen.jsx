@@ -42,7 +42,7 @@ const TasksScreen = ({ store, tag, title }) => {
 
   const toast = useToast()
   const history = useHistory()
-  const sortType = prefs.sorts[tag || title] || 'creation_date'
+  const sortType = prefs.sorts[tag || title] || 'creationDate'
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -170,6 +170,7 @@ const TasksScreen = ({ store, tag, title }) => {
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
               isMainPage={!tag ? true : false}
+              sortType={sortType}
             />
           ))}
         </VStack>
@@ -195,6 +196,7 @@ const TasksScreen = ({ store, tag, title }) => {
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
               isMainPage={!tag ? true : false}
+              sortType={sortType}
               completed
             />
           ))}
