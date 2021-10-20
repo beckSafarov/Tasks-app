@@ -1,21 +1,19 @@
 import { useEffect, useState, useCallback, useContext } from 'react'
-import {
-  Box,
-  Heading,
-  HStack,
-  VStack,
-  Text,
-  Divider,
-  Flex,
-} from '@chakra-ui/layout'
+import { Box, Heading, HStack, VStack, Divider, Flex } from '@chakra-ui/layout'
 import { Icon } from '@chakra-ui/icon'
 import { Select } from '@chakra-ui/select'
 import { TasksContext } from '../Context/TasksContext'
 import { Collapse } from '@chakra-ui/transition'
 import SubTasks from './SubTasks'
-import { FaChevronRight, FaTimes, FaTrash } from 'react-icons/fa'
+import {
+  FaChevronRight,
+  FaTag,
+  FaRegCalendarAlt,
+  FaTrash,
+} from 'react-icons/fa'
 import { Tooltip } from '@chakra-ui/tooltip'
 import MyEditable from './MyEditable'
+import ReactDatePicker from 'react-datepicker'
 
 const TaskDrawer = ({
   show,
@@ -43,26 +41,17 @@ const TaskDrawer = ({
     }
   }, [show, task, fields])
 
-  const handleChanges = (e) => {
+  const handleChanges = (name, value, shouldUpdate = false) => {
     updated = { ...fields }
-    updated[e.target.name] = e.target.value
+    updated[name] = value
     setFields(updated)
+    if (shouldUpdate) update(updated)
   }
 
   const outsideClicked = (e) => {
     if (show && e.target.id.match(/main|container|completed_tasks_flex/)) {
       onClose(fields)
     }
-  }
-
-  const descUpdated = (description) => {
-    setFields({ ...fields, description })
-    update({ ...fields, description })
-  }
-
-  const nameUpdated = (name) => {
-    setFields({ ...fields, name })
-    update({ ...fields, name })
   }
 
   return (
@@ -84,10 +73,12 @@ const TaskDrawer = ({
       >
         <Box py={7} px='20px'>
           <Heading size='md' w='full'>
-            <MyEditable onSubmit={nameUpdated}>{fields.name}</MyEditable>
+            <MyEditable onSubmit={(n) => handleChanges('name', n, true)}>
+              {fields.name}
+            </MyEditable>
           </Heading>
           <Divider mt={2} />
-          <VStack pt={8} spacing={8}>
+          <VStack pt={8} spacing={8} fontSize='0.8em'>
             <HStack
               display='flex'
               alignItems='center'
@@ -95,19 +86,19 @@ const TaskDrawer = ({
               w='full'
               spacing={5}
             >
-              <Text whiteSpace='nowrap'>Tag: </Text>
+              {/* <Text whiteSpace='nowrap'>Tag </Text> */}
+              <Tooltip label='Tag'>
+                <Box aria-label='Tag Icon'>
+                  <Icon as={FaTag} />
+                </Box>
+              </Tooltip>
               <Select
-                variant='filled'
-                background='gray.100'
+                variant='outline'
                 size='sm'
-                borderRadius='10px'
+                borderRadius='5px'
                 value={fields.tag}
                 name='tag'
-                onChange={(e) => {
-                  handleChanges(e)
-                  update({ ...fields, tag: e.target.value })
-                }}
-                _focus={{ borderColor: 'transparent' }}
+                onChange={(e) => handleChanges('tag', e.target.value, true)}
                 isTruncated
               >
                 {Object.keys(tags).map((tag, i) => (
@@ -117,13 +108,43 @@ const TaskDrawer = ({
                 ))}
               </Select>
             </HStack>
+
+            {/* date picker */}
+            <HStack w='full' spacing={5}>
+              {/* <Text whiteSpace='nowrap'>Due Date</Text> */}
+              <Tooltip label='Due Date'>
+                <Box aria-label='Due Date Icon'>
+                  <Icon as={FaRegCalendarAlt} />
+                </Box>
+              </Tooltip>
+              <ReactDatePicker
+                id='datePicker'
+                name='dueDate'
+                placeholderText='Add Due Date'
+                className='calendar'
+                selected={
+                  fields && fields.dueDate ? new Date(fields.dueDate) : null
+                }
+                onChange={(v) => handleChanges('dueDate', v, true)}
+                timeInputLabel='Time:'
+                dateFormat='MM/dd/yyyy h:mm aa'
+                shouldCloseOnSelect={false}
+                minDate={new Date()}
+                showTimeInput
+                isClearable
+              />
+            </HStack>
+
             {/* subtasks */}
-            <SubTasks task={task} />
+            <SubTasks
+              task={task}
+              onChange={(v) => handleChanges('subtasks', v, true)}
+            />
 
             {/* custom textarea for description  */}
             <Flex justifyContent='flex-start' w='full'>
               <MyEditable
-                onSubmit={descUpdated}
+                onSubmit={(d) => handleChanges('description', d, true)}
                 placeholder='Add note...'
                 name='description'
               >

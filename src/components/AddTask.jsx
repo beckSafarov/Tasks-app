@@ -8,39 +8,26 @@ import {
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { Formik, Form, Field } from 'formik'
-import { TasksContext } from '../Context/TasksContext'
+import { taskSchema, TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { v4 as uuid4 } from 'uuid'
-
-const focusStyle = {
-  borderColor: 'light.placeholder',
-}
 
 const AddTask = ({ tag }) => {
   const { add: addTask } = useContext(TasksContext)
   const { tags, add: addTag } = useContext(TagsContext)
 
   const submitHandler = (todo, onSubmitProps) => {
-    todo.id = uuid4()
-    addTask({ ...todo, tag: tag || 'untagged' })
+    addTask({ ...todo, id: uuid4(), tag })
     if (!tags.untagged) addTag('untagged')
     onSubmitProps.resetForm()
     onSubmitProps.setSubmitting(false)
   }
 
-  const validate = (vals) => {
-    if (vals.name === '') return { name: 'empty' }
-  }
+  const validate = (v) => (!v.name ? { name: 'empty' } : {})
 
   return (
     <Formik
-      initialValues={{
-        name: '',
-        tag,
-        done: false,
-        subtasks: [],
-        description: '',
-      }}
+      initialValues={taskSchema}
       onSubmit={submitHandler}
       validate={validate}
     >
@@ -60,7 +47,7 @@ const AddTask = ({ tag }) => {
                     placeholder='Add task'
                     type='text'
                     variant='flushed'
-                    _focus={focusStyle}
+                    _focus={{ borderColor: 'light.placeholder' }}
                   />
                 </InputGroup>
               </FormControl>

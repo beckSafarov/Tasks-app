@@ -27,14 +27,20 @@ const theme = extendTheme({
         },
       },
     },
+    Tooltip: {
+      baseStyle: {
+        borderRadius: 'md',
+      },
+    },
+
     // Input: InputStyles,
     // Select: SelectStyles,
   },
 })
 
-// console.log(Object.keys(theme.components))
+console.log(Object.keys(theme.components))
 // console.log(Object.keys(theme.components.Editable.baseStyle.preview))
-// console.log(theme.components.Textarea.variants)
-// console.log(Object.keys(theme.components.Textarea.baseStyle))
+console.log(theme.components.Tooltip)
+// console.log(Object.keys(theme.componen1ts.Textarea.baseStyle))
 
 export default theme

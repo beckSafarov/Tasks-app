@@ -1,74 +1,67 @@
-import { Box, Flex, VStack } from '@chakra-ui/layout'
-import { useState, useEffect, useCallback, useContext } from 'react'
-import Icon from '@chakra-ui/icon'
+// methods & libraries
+import { useState, useEffect } from 'react'
 import { v4 as uuid4 } from 'uuid'
-import produce from 'immer'
-import { Editable, EditableInput, EditablePreview } from '@chakra-ui/editable'
-import { FormControl } from '@chakra-ui/form-control'
-import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
+import produce, { current } from 'immer'
+import { Field, Form, Formik } from 'formik'
+
+// UI components and icons
+import {
+  Text,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  FormControl,
+  Icon,
+  Box,
+  Flex,
+  VStack,
+} from '@chakra-ui/react'
 import {
   FaPlus,
   FaRegCircle as EmptyCircle,
   FaCheckCircle as FullCircle,
   FaTimes,
 } from 'react-icons/fa'
-import { Field, Form, Formik } from 'formik'
-import { TasksContext } from '../Context/TasksContext'
 import MyEditable from './MyEditable'
 
 const initialValue = { text: '', done: false }
 
-const SubTasks = ({ task }) => {
+const SubTasks = ({ task, onChange, fontSize, color }) => {
   const [subTasks, setSubTasks] = useState([])
-  const { addSubtask, removeSubtask, updateSubtask } = useContext(TasksContext)
+
   useEffect(() => {
     setSubTasks(task.subtasks)
   }, [task])
 
-  const addHandler = (v, onSubmitProps) => {
-    v.id = uuid4()
-    setSubTasks([...subTasks, v])
-    addSubtask(task.id, v)
-    onSubmitProps.resetForm()
-    onSubmitProps.setSubmitting(false)
+  const handleAdd = (v, { resetForm, setSubmitting }) => {
+    const updated = [...subTasks, { ...v, id: uuid4() }]
+    setSubTasks(updated)
+    onChange(updated)
+    resetForm()
+    setSubmitting(false)
   }
 
-  const toggleHandler = useCallback((id) => {
+  const handleUpdate = (id, prop, value) => {
     setSubTasks(
       produce((draft) => {
         const task = draft.find((t) => t.id === id)
-        task.done = !task.done
+        task[prop] = value
+        onChange(current(draft))
       })
     )
-  }, [])
-
-  const updateHandler = (id, newText) => {
-    setSubTasks(
-      produce((draft) => {
-        const task = draft.find((t) => t.id === id)
-        task.text = newText
-      })
-    )
-    updateSubtask(task.id, {
-      ...subTasks.find((t) => t.id === id),
-      text: newText,
-    })
   }
 
-  const removeHandler = (id) => {
-    removeSubtask(task.id, { id })
-    setSubTasks(subTasks.filter((t) => t.id !== id))
+  const handleRemove = (id) => {
+    const updated = subTasks.filter((t) => t.id !== id)
+    setSubTasks(updated)
+    onChange(updated)
   }
 
-  const subTaskValidate = (value) => {
-    const error = {}
-    if (!value.text) error.text = 'Please enter a value'
-    return error
-  }
+  const validate = (v) => (!v.text ? { text: 'empty' } : {})
 
   return (
     <VStack w='full' aria-label='sub-tasks list'>
-      <Box w='full' pb='10px' fontSize='0.9em' color='gray.700'>
+      <Box w='full' pb='10px' fontSize={fontSize} color={color}>
         {subTasks &&
           subTasks.map((task) => (
             <Flex
@@ -83,16 +76,21 @@ const SubTasks = ({ task }) => {
                 <Icon
                   cursor='pointer'
                   mr='5px'
-                  onClick={() => toggleHandler(task.id)}
+                  onClick={() => handleUpdate(task.id, 'done', !task.done)}
                   as={task.done ? FullCircle : EmptyCircle}
                 />
-                <MyEditable onSubmit={(v) => updateHandler(task.id, v)}>
-                  {task.text || ''}
+                <MyEditable onSubmit={(v) => handleUpdate(task.id, 'text', v)}>
+                  <Text
+                    as={task.done ? 's' : ''}
+                    color={task.done ? 'gray.500' : ''}
+                  >
+                    {task.text || ''}
+                  </Text>
                 </MyEditable>
               </Flex>
               {/* delete subtask icon */}
               <Flex
-                onClick={() => removeHandler(task.id)}
+                onClick={() => handleRemove(task.id)}
                 cursor='pointer'
                 flex='1'
                 justifyContent='flex-end'
@@ -105,8 +103,8 @@ const SubTasks = ({ task }) => {
       {/* add subtask formik */}
       <Formik
         initialValues={initialValue}
-        onSubmit={addHandler}
-        validate={subTaskValidate}
+        onSubmit={handleAdd}
+        validate={validate}
       >
         <Form style={{ width: '100%' }}>
           <Field name='text'>
@@ -117,6 +115,7 @@ const SubTasks = ({ task }) => {
                     pointerEvents='none'
                     children={<Icon as={FaPlus} />}
                     fontSize='0.8em'
+                    zIndex='0'
                   />
                   <Input
                     {...field}
@@ -138,6 +137,9 @@ const SubTasks = ({ task }) => {
 
 SubTasks.defaultProps = {
   task: { subtasks: [] },
+  fontSize: 'inherit',
+  color: 'inherit',
+  onChange: () => void 0,
 }
 
 export default SubTasks

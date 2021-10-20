@@ -1,12 +1,12 @@
 import { ChakraProvider, Box } from '@chakra-ui/react'
 import theme from './themes'
 import './index.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import Sidebar from './components/Sidebar'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import TagScreen from './screens/TagScreen'
 import TestScreen from './screens/TestScreen'
 import ContextProviders from './Context/ContextProviders'
-import TodayScreen from './screens/TodayScreen'
 import AllTasksScreen from './screens/AllTasksScreen'
 
 const App = () => {

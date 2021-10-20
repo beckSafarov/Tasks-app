@@ -26,14 +26,15 @@ import {
 } from 'react-icons/fa'
 
 const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
-  const { toggle, toggleStar } = useContext(TasksContext)
+  const { update: updateTask } = useContext(TasksContext)
   const { onClose: onModalClose } = useDisclosure()
 
-  const toggleDone = () => toggle(task.id)
+  const toggleDone = () => updateTask({ ...task, done: !task.done })
 
-  const handleToggleStar = () => toggleStar(task.id)
+  const toggleStar = () =>
+    updateTask({ ...task, starred: task.starred ? null : { date: new Date() } })
 
-  const removeTaskHandler = (e) => {
+  const handleRemoveTask = (e) => {
     onDelete(task)
     onModalClose(e)
   }
@@ -82,7 +83,7 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
           <Icon
             cursor='pointer'
             as={task.starred ? FullStar : EmptyStar}
-            onClick={handleToggleStar}
+            onClick={toggleStar}
           />
         </Box>
 
@@ -121,7 +122,7 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
               <MenuItem
                 fontSize='sm'
                 icon={<Icon color='gray.800' as={FaTrash}></Icon>}
-                onClick={removeTaskHandler}
+                onClick={handleRemoveTask}
               >
                 Delete Task
               </MenuItem>
