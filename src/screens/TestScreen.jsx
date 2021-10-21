@@ -6,7 +6,7 @@ import ReactDatePicker from 'react-datepicker'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { formatTaskTime } from '../helpers/tasksHelpers'
+import { taskTimeHandler } from '../helpers/tasksHelpers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
@@ -18,9 +18,22 @@ dayjs.extend(relativeTime)
 //   { id: '5', text: 'task 5', done: false },
 // ]
 
+/**
+ * <p>Yesterday: {formatTaskTime('2021-10-19 10:55')}</p>
+          <p>Today: {formatTaskTime('2021-10-20 19:30')}</p>
+          <p>Tomorrow: {formatTaskTime('2021-10-21 17:30')}</p>
+          <p>After tomorrow: {formatTaskTime('2021-10-22 17:30')}</p>
+ */
+
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
   const [date, setDate] = useState(new Date())
+  const pastDate = taskTimeHandler('2021-10-18')
+  const today = taskTimeHandler('2021-10-21')
+  const recentFuture = taskTimeHandler('2021-10-22')
+  const future = taskTimeHandler('2021-10-23')
+
+  const colorify = (v) => (new Date() > v ? 'red' : 'inherit')
 
   const toggleFoo = (e) => {
     console.log(e.target)
@@ -79,10 +92,12 @@ const TestScreen = () => {
             showTimeInput
           />
           <br />
-          <p>Yesterday: {formatTaskTime('2021-10-19 10:55')}</p>
-          <p>Today: {formatTaskTime('2021-10-20 19:30')}</p>
-          <p>Tomorrow: {formatTaskTime('2021-10-21 17:30')}</p>
-          <p>After tomorrow: {formatTaskTime('2021-10-22 17:30')}</p>
+          {/* <p style={{ color: pastDate.color }}>Past Date: {pastDate.date}</p>
+          <p style={{ color: today.color }}>Today: {today.date}</p>
+          <p style={{ color: recentFuture.color }}>
+            Recent future:{recentFuture.date}
+          </p>
+          <p style={{ color: future.color }}>Future: {future.date}</p> */}
         </Box>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
   Flex,
@@ -27,13 +27,14 @@ import {
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { formatTaskTime as format } from '../helpers/tasksHelpers'
+import { taskTimeHandler } from '../helpers/tasksHelpers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
-const Task = ({ task, onOpen, completed, onDelete, isMainPage, sortType }) => {
+const Task = ({ task, onOpen, completed, onDelete, isMainPage }) => {
   const { update: updateTask } = useContext(TasksContext)
   const { onClose: onModalClose } = useDisclosure()
+  const taskTime = taskTimeHandler(task.dueDate)
 
   const toggleDone = () => updateTask({ ...task, done: !task.done })
 
@@ -93,12 +94,12 @@ const Task = ({ task, onOpen, completed, onDelete, isMainPage, sortType }) => {
           alignItems='center'
           justifyContent='flex-end'
           fontSize='0.7em'
-          color='gray.500'
+          color={taskTime.color}
           pr='20px'
           cursor='pointer'
           onClick={() => onOpen(task)}
         >
-          <Text>{task.dueDate ? format(task.dueDate) : 'Someday'}</Text>
+          <Text>{taskTime.date}</Text>
         </Flex>
 
         {/* --- importance star */}

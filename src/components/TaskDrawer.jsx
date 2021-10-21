@@ -127,10 +127,9 @@ const TaskDrawer = ({
                 }
                 onChange={(v) => handleChanges('dueDate', v, true)}
                 timeInputLabel='Time:'
-                dateFormat='MM/dd/yyyy h:mm aa'
+                dateFormat='MM/dd/yyyy'
                 shouldCloseOnSelect={false}
                 minDate={new Date()}
-                showTimeInput
                 isClearable
               />
             </HStack>
