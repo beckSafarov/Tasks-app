@@ -8,6 +8,9 @@ import TagScreen from './screens/TagScreen'
 import TestScreen from './screens/TestScreen'
 import ContextProviders from './Context/ContextProviders'
 import AllTasksScreen from './screens/AllTasksScreen'
+import TodayScreen from './screens/TodayScreen'
+import TomorrowScreen from './screens/TomorrowScreen'
+import UpcomingScreen from './screens/UpcomingScreen'
 
 const App = () => {
   return (
@@ -27,6 +30,9 @@ const App = () => {
           </Box>
           <Box ml='220px' pb='100px' id='main'>
             <Route path='/' component={AllTasksScreen} exact />
+            <Route path='/today' component={TodayScreen} exact />
+            <Route path='/tomorrow' component={TomorrowScreen} exact />
+            <Route path='/upcoming' component={UpcomingScreen} exact />
             <Route path='/tag/:name' component={TagScreen} />
             <Route path='/test' component={TestScreen} />
           </Box>

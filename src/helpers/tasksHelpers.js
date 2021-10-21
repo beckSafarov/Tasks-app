@@ -71,6 +71,30 @@ export const humanizeDate = (date) => {
 }
 
 /**
+ * @param: d:String
+ * @returns: true|false:Boolean
+ */
+export const IsToday = (d) => {
+  const date = new Date(d)
+  const today = new Date()
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  )
+}
+
+/**
+ * @param: d:String|Date
+ * @returns: true|false:Boolean
+ * @summary: checks whether the date is later than tomorrow
+ */
+export const isUpcoming = (d) => {
+  const tomorrow = dayjs().add(1, 'day')
+  return dayjs(tomorrow).isBefore(dayjs(d))
+}
+
+/**
  * @param: p:Object
  * @returns: Today|Tomorrow|Past|Future:String
  */
@@ -81,7 +105,7 @@ const when = (d) => {
     ? 'Today'
     : date.isTomorrow()
     ? 'Tomorrow'
-    : dayjs(new Date()).isAfter(date, 'd')
+    : dayjs().isAfter(date, 'd')
     ? 'Past'
     : 'Future'
 }
@@ -102,3 +126,19 @@ export const taskTimeHandler = (dueDate) => {
     return { date: 'Someday', color: 'gray.500' }
   }
 }
+/**
+ * @param: Today|Tomorrow|Upcoming|...: String|null
+ * @returns: Object|null
+ */
+export const textToDate = (text) => {
+  const rand = () => Math.floor(Math.random() * 6 + 2)
+  const cases = {
+    Today: () => new Date(),
+    Tomorrow: () => dayjs().add(1, 'day').$d,
+    Upcoming: () => dayjs().add(rand(), 'day').$d,
+    default: null,
+  }
+  return cases[text]() || cases.default
+}
+
+console.log(dayjs().day(3))

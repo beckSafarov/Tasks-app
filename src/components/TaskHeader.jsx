@@ -42,10 +42,10 @@ const TaskHeader = ({
   onSearchClear,
   showCompTasks,
   toggleCompTasks,
-  isMainPage,
   sortType,
   onSort,
   removeTasksByTag,
+  isTagPage,
 }) => {
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
@@ -107,7 +107,7 @@ const TaskHeader = ({
             value={tagName}
             onSubmit={tagUpdated}
             onCancel={tagUpdated}
-            isDisabled={isMainPage}
+            isDisabled={!isTagPage} //disabled in non-tag pages
             startWithEditView={tagEditMode}
           >
             <EditablePreview
@@ -160,14 +160,14 @@ const TaskHeader = ({
 
                 <MenuItem
                   onClick={() => tagEditInput.current.focus()}
-                  hidden={isMainPage}
+                  hidden={!isTagPage} //hidden in non-tag pages
                   icon={<Icon as={FaEdit} />}
                 >
                   Rename tag
                 </MenuItem>
                 <MenuItem
                   onClick={() => removeTasksByTag()}
-                  hidden={isMainPage}
+                  hidden={!isTagPage} //hidden in non-tag pages
                   icon={<Icon as={FaTrash} />}
                 >
                   Delete tag
@@ -194,7 +194,7 @@ const TaskHeader = ({
                 </MenuItem>
                 <MenuItem
                   onClick={() => onSort('tag')}
-                  hidden={!isMainPage}
+                  hidden={isTagPage} //tag pages can't sort by tag
                   icon={<Icon as={FaTag} />}
                 >
                   <Flex>
@@ -261,7 +261,7 @@ TaskHeader.defaultProps = {
   onSearchClear: () => void 0,
   toggleCompTasks: () => void 0,
   showCompTasks: false,
-  isMainPage: true,
+  isTagPage: false,
   sortType: 'none',
   onSort: () => void 0,
   removeTasksByTag: () => void 0,

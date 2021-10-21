@@ -25,7 +25,7 @@ import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
 
-const TasksScreen = ({ store, tag, title }) => {
+const TasksScreen = ({ store, title, tag, defaultDate }) => {
   const {
     preferences: prefs,
     toggleShowCompletedTasks,
@@ -56,6 +56,8 @@ const TasksScreen = ({ store, tag, title }) => {
     onProceed: () => void 0,
     proceedTitle: 'Delete',
   })
+
+  console.log(tag)
 
   useEffect(() => {
     setTasks(sortTasks(undones, sortType, tags))
@@ -155,12 +157,12 @@ const TasksScreen = ({ store, tag, title }) => {
         toggleCompTasks={toggleCompTasks}
         sortType={sortType}
         onSort={sortTypeHandler}
-        isMainPage={!tag ? true : false}
+        isTagPage={tag || false}
         removeTasksByTag={removeTasksByTag}
       />
       <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
-          <AddTask tag={tag} />
+          <AddTask defaultTag={tag || 'untagged'} defaultDate={defaultDate} />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           {tasks.map((task, i) => (
@@ -169,8 +171,7 @@ const TasksScreen = ({ store, tag, title }) => {
               task={task}
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
-              isMainPage={!tag ? true : false}
-              sortType={sortType}
+              isTagPage={tag ? true : false}
             />
           ))}
         </VStack>
@@ -195,8 +196,7 @@ const TasksScreen = ({ store, tag, title }) => {
               task={t}
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
-              isMainPage={!tag ? true : false}
-              sortType={sortType}
+              isTagPage={tag ? true : false}
               completed
             />
           ))}
@@ -216,7 +216,6 @@ const TasksScreen = ({ store, tag, title }) => {
 
 TasksScreen.defaultProps = {
   store: [],
-  tag: '',
   title: 'All tasks',
 }
 

@@ -11,13 +11,19 @@ import { Formik, Form, Field } from 'formik'
 import { taskSchema, TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { v4 as uuid4 } from 'uuid'
+import { textToDate } from '../helpers/tasksHelpers'
 
-const AddTask = ({ tag }) => {
+const AddTask = ({ defaultTag, defaultDate }) => {
   const { add: addTask } = useContext(TasksContext)
   const { tags, add: addTag } = useContext(TagsContext)
 
   const submitHandler = (todo, onSubmitProps) => {
-    addTask({ ...todo, id: uuid4(), tag })
+    addTask({
+      ...todo,
+      id: uuid4(),
+      tag: defaultTag,
+      dueDate: textToDate(defaultDate),
+    })
     if (!tags.untagged) addTag('untagged')
     onSubmitProps.resetForm()
     onSubmitProps.setSubmitting(false)
@@ -60,7 +66,8 @@ const AddTask = ({ tag }) => {
 }
 
 AddTask.defaultProps = {
-  tag: 'untagged',
+  defaultDate: null,
+  defaultTag: 'untagged',
 }
 
 export default AddTask

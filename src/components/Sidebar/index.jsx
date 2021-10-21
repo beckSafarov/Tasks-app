@@ -88,6 +88,51 @@ const Sidebar = () => {
             All Tasks
           </Box>
         </Link>
+        {/* today's tasks link */}
+        <Link to='/today' style={{ width: '100%' }}>
+          <Box
+            p={2}
+            position='relative'
+            display='flex'
+            alignItems='flex-start'
+            fontSize={18}
+            fontWeight='600'
+            _hover={menuOptionHover}
+            borderRadius='10px'
+          >
+            Today
+          </Box>
+        </Link>
+        {/* tomorrow's tasks link */}
+        <Link to='/tomorrow' style={{ width: '100%' }}>
+          <Box
+            p={2}
+            position='relative'
+            display='flex'
+            alignItems='flex-start'
+            fontSize={18}
+            fontWeight='600'
+            _hover={menuOptionHover}
+            borderRadius='10px'
+          >
+            Tomorrow
+          </Box>
+        </Link>
+        {/* tomorrow's tasks link */}
+        <Link to='/upcoming' style={{ width: '100%' }}>
+          <Box
+            p={2}
+            position='relative'
+            display='flex'
+            alignItems='flex-start'
+            fontSize={18}
+            fontWeight='600'
+            _hover={menuOptionHover}
+            borderRadius='10px'
+          >
+            Upcoming
+          </Box>
+        </Link>
         {/* tags toggle */}
         <Box
           p={2}
