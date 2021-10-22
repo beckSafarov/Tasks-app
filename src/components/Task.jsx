@@ -31,11 +31,10 @@ import { taskTimeHandler } from '../helpers/tasksHelpers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
-const Task = ({ task, onOpen, completed, onDelete, isTagPage }) => {
+const Task = ({ task, onOpen, completed, onDelete, page }) => {
   const { update: updateTask } = useContext(TasksContext)
   const { onClose: onModalClose } = useDisclosure()
   const taskTime = taskTimeHandler(task.dueDate)
-  console.log(isTagPage)
   const toggleDone = () => updateTask({ ...task, done: !task.done })
 
   const toggleStar = () =>
@@ -83,7 +82,12 @@ const Task = ({ task, onOpen, completed, onDelete, isTagPage }) => {
           >
             {task.name}
           </Text>
-          <Text mt='0' hidden={isTagPage} fontSize='0.8rem' color='gray.500'>
+          <Text
+            mt='0'
+            hidden={page === 'tag'}
+            fontSize='0.8rem'
+            color='gray.500'
+          >
             {task.tag}
           </Text>
         </Flex>
@@ -166,7 +170,7 @@ Task.defaultProps = {
   onOpen: () => void 0,
   onDelete: () => void 0,
   completed: false,
-  isTagPage: false,
+  page: 'home',
 }
 
 export default Task

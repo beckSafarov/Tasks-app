@@ -14,11 +14,11 @@ import ConfirmModal from './ConfirmModal'
 
 // --- library methods ---
 import { useEffect, useState, useContext } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 
 // --- helper methods ---
 import { groupByBinaryProp as group, rgxSearch } from '../helpers'
-import { sortTasks } from '../helpers/tasksHelpers'
+import { sortTasks, getPage } from '../helpers/tasksHelpers'
 
 // --- context stuff ---
 import { TasksContext } from '../Context/TasksContext'
@@ -40,10 +40,6 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   const { removeAllByTag, remove: removeTask } = useContext(TasksContext)
   const { positives: dones, negatives: undones } = group(store)
 
-  const toast = useToast()
-  const history = useHistory()
-  const sortType = prefs.sorts[tag || title] || 'creationDate'
-
   // hooks
   const [tasks, setTasks] = useState([])
   const [compTasks, setCompTasks] = useState([])
@@ -56,12 +52,18 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
     onProceed: () => void 0,
     proceedTitle: 'Delete',
   })
+  const [page, setPage] = useState('')
 
-  console.log(tag)
+  // variables
+  const toast = useToast()
+  const history = useHistory()
+  const sortType = prefs.sorts[page] || 'creationDate'
+  const path = useLocation().pathname
 
   useEffect(() => {
     setTasks(sortTasks(undones, sortType, tags))
     setCompTasks(sortTasks(dones, sortType, tags))
+    setPage(getPage(path, 'All Tasks'))
   }, [prefs, store, tag, title])
 
   // when a task is clicked, it opens the taskDrawer
@@ -126,7 +128,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
     if (sortType !== type) {
-      setSortType(tag || title, type)
+      setSortType(page, type)
       setTasks(sortTasks(undones, type, tags))
     }
   }
@@ -157,7 +159,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
         toggleCompTasks={toggleCompTasks}
         sortType={sortType}
         onSort={sortTypeHandler}
-        isTagPage={tag || false}
+        page={page}
         removeTasksByTag={removeTasksByTag}
       />
       <Container id='container' maxW='container.md' pt={10}>
@@ -171,7 +173,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
               task={task}
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
-              isTagPage={tag ? true : false}
+              page={page}
             />
           ))}
         </VStack>
@@ -196,7 +198,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
               task={t}
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
-              isTagPage={tag ? true : false}
+              page={page}
               completed
             />
           ))}

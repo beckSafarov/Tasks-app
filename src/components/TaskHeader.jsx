@@ -45,7 +45,7 @@ const TaskHeader = ({
   sortType,
   onSort,
   removeTasksByTag,
-  isTagPage,
+  page,
 }) => {
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
@@ -107,7 +107,7 @@ const TaskHeader = ({
             value={tagName}
             onSubmit={tagUpdated}
             onCancel={tagUpdated}
-            isDisabled={!isTagPage} //disabled in non-tag pages
+            isDisabled={page !== 'tag'} //disabled in non-tag pages
             startWithEditView={tagEditMode}
           >
             <EditablePreview
@@ -160,14 +160,14 @@ const TaskHeader = ({
 
                 <MenuItem
                   onClick={() => tagEditInput.current.focus()}
-                  hidden={!isTagPage} //hidden in non-tag pages
+                  hidden={page !== 'tag'} //hidden in non-tag pages
                   icon={<Icon as={FaEdit} />}
                 >
                   Rename tag
                 </MenuItem>
                 <MenuItem
                   onClick={() => removeTasksByTag()}
-                  hidden={!isTagPage} //hidden in non-tag pages
+                  hidden={page !== 'tag'} //hidden in non-tag pages
                   icon={<Icon as={FaTrash} />}
                 >
                   Delete tag
@@ -194,7 +194,7 @@ const TaskHeader = ({
                 </MenuItem>
                 <MenuItem
                   onClick={() => onSort('tag')}
-                  hidden={isTagPage} //tag pages can't sort by tag
+                  hidden={page === 'tag'} //tag pages can't sort by tag
                   icon={<Icon as={FaTag} />}
                 >
                   <Flex>
@@ -222,6 +222,7 @@ const TaskHeader = ({
                 <MenuItem
                   onClick={() => onSort('dueDate')}
                   icon={<Icon as={FaRegCalendarAlt} />}
+                  hidden={page.match(/today|tomorrow/)}
                 >
                   <Flex>
                     <Box>Due Date</Box>
@@ -261,10 +262,10 @@ TaskHeader.defaultProps = {
   onSearchClear: () => void 0,
   toggleCompTasks: () => void 0,
   showCompTasks: false,
-  isTagPage: false,
   sortType: 'none',
   onSort: () => void 0,
   removeTasksByTag: () => void 0,
+  page: 'home',
 }
 
 export default TaskHeader

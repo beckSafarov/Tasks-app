@@ -8,6 +8,7 @@ dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
 
 export const sortTasks = (list = [], type = 'none', tags) => {
+  if (list.length < 1) return list
   switch (type) {
     case 'alphabetically':
       return objSort(list, 'name')
@@ -29,6 +30,15 @@ export const sortTasks = (list = [], type = 'none', tags) => {
     default:
       return list
   }
+}
+
+// /**
+//  * @param: loc:String
+//  * @returns: matching page name among the options
+//  */
+export const getPage = (loc, fallBack = 'home') => {
+  const matches = loc.match(/tag|today|tomorrow|upcoming/)
+  return matches ? matches[0] : fallBack
 }
 
 // --- DATE RELATED HELPERS ---
