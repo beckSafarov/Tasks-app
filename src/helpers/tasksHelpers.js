@@ -90,8 +90,7 @@ export const IsToday = (d) => {
  * @summary: checks whether the date is later than tomorrow
  */
 export const isUpcoming = (d) => {
-  const tomorrow = dayjs().add(1, 'day')
-  return dayjs(tomorrow).isBefore(dayjs(d))
+  return dayjs(d).diff(new Date(), 'days') > 1
 }
 
 /**
@@ -140,5 +139,3 @@ export const textToDate = (text) => {
   }
   return cases[text]() || cases.default
 }
-
-console.log(dayjs().day(3))
