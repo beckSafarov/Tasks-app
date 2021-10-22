@@ -4,13 +4,9 @@ import './index.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import Sidebar from './components/Sidebar'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import TagScreen from './screens/TagScreen'
 import TestScreen from './screens/TestScreen'
 import ContextProviders from './Context/ContextProviders'
-import AllTasksScreen from './screens/AllTasksScreen'
-import TodayScreen from './screens/TodayScreen'
-import TomorrowScreen from './screens/TomorrowScreen'
-import UpcomingScreen from './screens/UpcomingScreen'
+import AllTaskScreens from './screens/AllTaskScreens'
 
 const App = () => {
   return (
@@ -28,12 +24,13 @@ const App = () => {
           >
             <Sidebar />
           </Box>
+
           <Box ml='220px' pb='100px' id='main'>
-            <Route path='/' component={AllTasksScreen} exact />
-            <Route path='/today' component={TodayScreen} exact />
-            <Route path='/tomorrow' component={TomorrowScreen} exact />
-            <Route path='/upcoming' component={UpcomingScreen} exact />
-            <Route path='/tag/:name' component={TagScreen} />
+            <Route path='/' component={AllTaskScreens} exact />
+            <Route path='/today' component={AllTaskScreens} exact />
+            <Route path='/tomorrow' component={AllTaskScreens} exact />
+            <Route path='/upcoming' component={AllTaskScreens} exact />
+            <Route path='/tag/:name' component={AllTaskScreens} />
             <Route path='/test' component={TestScreen} />
           </Box>
         </Router>
