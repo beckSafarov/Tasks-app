@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { taskTimeHandler } from '../helpers/tasksHelpers'
+import AddTask2 from '../components/AddTask2'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
@@ -84,11 +85,6 @@ const TestScreen = () => {
         <br />
 
         <Box mt='30px'>
-          {/* <Input type='date' />
-          <input type='date' onChange={(e) => console.log(e.target.value)} />
-          <br />
-          <input type='time' name='timePicker' id='' />
-          <Input type='time' /> */}
           <ReactDatePicker
             selected={date}
             onChange={(d) => setDate(d)}
@@ -98,16 +94,7 @@ const TestScreen = () => {
             showTimeInput
           />
           <br />
-          <p>
-            Difference between 2021-10-18 10:00 and 2021-10-21 9:00 is{' '}
-            {`${getDiff('2021-10-18 10:00', '2021-10-21 9:00')}`}
-          </p>
-          {/* <p style={{ color: pastDate.color }}>Past Date: {pastDate.date}</p>
-          <p style={{ color: today.color }}>Today: {today.date}</p>
-          <p style={{ color: recentFuture.color }}>
-            Recent future:{recentFuture.date}
-          </p>
-          <p style={{ color: future.color }}>Future: {future.date}</p> */}
+          <AddTask2 defaultDate='Someday' page='All Tasks' />
         </Box>
       </div>
     </>

@@ -5,7 +5,7 @@ import { getStore as getTasks } from '../helpers/lcs'
 const initialState = { tasks: getTasks() }
 export const taskSchema = {
   name: '',
-  tag: 'untagged',
+  tag: '',
   done: false,
   subtasks: [],
   description: '',

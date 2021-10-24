@@ -147,5 +147,5 @@ export const textToDate = (text) => {
     Upcoming: () => dayjs().add(rand(), 'day').$d,
     default: null,
   }
-  return cases[text]() || cases.default
+  return cases[text] ? cases[text]() : cases.default
 }

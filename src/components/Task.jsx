@@ -12,6 +12,7 @@ import {
   MenuItem,
   useDisclosure,
   Box,
+  Tooltip,
 } from '@chakra-ui/react'
 import { TasksContext } from '../Context/TasksContext'
 import CircleIcon from './CircleIcon'
@@ -23,6 +24,7 @@ import {
   FaEdit,
   FaStar as FullStar,
   FaRegStar as EmptyStar,
+  FaRegCircle,
 } from 'react-icons/fa'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -57,13 +59,14 @@ const Task = ({ task, onOpen, completed, onDelete, page }) => {
       >
         {/* task completion circle icon */}
         <Flex justifyContent='center' alignItems='center' mr='10px'>
-          <Box cursor='pointer'>
-            {!completed ? (
-              <CircleIcon onClick={toggleDone} color='#808080' />
-            ) : (
-              <CheckCircleIcon onClick={toggleDone} color='blue.200' />
-            )}
-          </Box>
+          <Tooltip label={completed ? 'Uncomplete task' : 'Complete task'}>
+            <Box cursor='pointer'>
+              <Icon
+                color={completed ? 'blue.200' : 'gray.500'}
+                as={completed ? FaCheckCircle : FaRegCircle}
+              />
+            </Box>
+          </Tooltip>
         </Flex>
 
         {/* task text */}

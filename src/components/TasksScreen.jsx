@@ -24,6 +24,7 @@ import { sortTasks, getPage } from '../helpers/tasksHelpers'
 import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
+import AddTask2 from './AddTask2'
 
 const TasksScreen = ({ store, title, tag, defaultDate }) => {
   const {
@@ -164,7 +165,12 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
       />
       <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
-          <AddTask defaultTag={tag || 'untagged'} defaultDate={defaultDate} />
+          {/* <AddTask defaultTag={tag || 'untagged'} defaultDate={defaultDate} /> */}
+          <AddTask2
+            defaultTag={tag || 'untagged'}
+            defaultDate={defaultDate}
+            page={page}
+          />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           {tasks.map((task, i) => (
