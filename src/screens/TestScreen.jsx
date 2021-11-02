@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Input } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import TagDropdown from '../components/Sidebar/TagDropdown'
@@ -8,23 +8,18 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { taskTimeHandler } from '../helpers/tasksHelpers'
 import AddTask2 from '../components/AddTask2'
+import { app } from '../firebase/config'
+import {
+  addNew,
+  getFromDB,
+  getTasks,
+  getTasksByTag,
+  removeFromDB,
+  updateInDB,
+} from '../firebase/controllers'
+import { signIn } from '../firebase/oath'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
-
-// const subtasks = [
-//   { id: '1', text: 'task 1', done: false },
-//   { id: '2', text: 'task 2', done: false },
-//   { id: '3', text: 'task 3', done: false },
-//   { id: '4', text: 'task 4', done: false },
-//   { id: '5', text: 'task 5', done: false },
-// ]
-
-/**
- * <p>Yesterday: {formatTaskTime('2021-10-19 10:55')}</p>
-          <p>Today: {formatTaskTime('2021-10-20 19:30')}</p>
-          <p>Tomorrow: {formatTaskTime('2021-10-21 17:30')}</p>
-          <p>After tomorrow: {formatTaskTime('2021-10-22 17:30')}</p>
- */
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
@@ -33,6 +28,19 @@ const TestScreen = () => {
   const today = taskTimeHandler('2021-10-21 9:00')
   const recentFuture = taskTimeHandler('2021-10-22')
   const future = taskTimeHandler('2021-10-23')
+  // console.log(
+  //   addTask({
+  //     name: 'Test',
+  //     description: 'to test',
+  //     tag: 'untagged',
+  //   })
+  // )
+
+  // getTasks()
+  useEffect(() => {
+    // ;(async () => {
+    // })()
+  }, [])
 
   const colorify = (v) => (new Date() > v ? 'red' : 'inherit')
 
@@ -40,6 +48,14 @@ const TestScreen = () => {
     console.log(e.target)
     setFoo((v) => !v)
   }
+
+  const signInManager = () => {
+    if (localStorage && !localStorage.getItem('auth')) {
+      signIn()
+      localStorage && localStorage.setItem('auth', 'true')
+    }
+  }
+  // signInManager()
 
   const format = {
     daysSince: (date = '2021-10-10') => dayjs(date).diff(new Date(), 'days'),
