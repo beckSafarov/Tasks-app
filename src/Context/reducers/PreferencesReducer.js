@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { setStore } from '../helpers/lcs'
+import { setStore } from '../../helpers/lcs'
 
 const PreferencesReducer = produce((draft, action) => {
   let { showCompletedTasks, sidebarTagsToggle } = draft.preferences

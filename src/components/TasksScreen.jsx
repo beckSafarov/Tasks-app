@@ -25,6 +25,8 @@ import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import AddTask2 from './AddTask2'
+import { UserContext } from '../Context/UserContext'
+import { logout } from '../firebase/auth'
 
 const TasksScreen = ({ store, title, tag, defaultDate }) => {
   const {
@@ -39,6 +41,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   } = useDisclosure()
   const { tags, remove: removeTag } = useContext(TagsContext)
   const { removeAllByTag, remove: removeTask } = useContext(TasksContext)
+  const { resetUser } = useContext(UserContext)
   const { positives: dones, negatives: undones } = group(store)
 
   // hooks
@@ -126,6 +129,11 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
     }
   }
 
+  const logoutHandler = async () => {
+    const loggedOut = await logout()
+    if (loggedOut) resetUser()
+  }
+
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
     if (sortType !== type) {
@@ -160,6 +168,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
         toggleCompTasks={toggleCompTasks}
         sortType={sortType}
         onSort={sortTypeHandler}
+        onLogout={logoutHandler}
         page={page}
         removeTasksByTag={removeTasksByTag}
       />

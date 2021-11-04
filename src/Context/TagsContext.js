@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from 'react'
 import { getStore } from '../helpers/lcs'
 import { v1 as uuidv1 } from 'uuid'
-import TagsReducer from './TagsReducer'
+import TagsReducer from './reducers/TagsReducer'
 
 const initialState = { tags: getStore({}, 'tags') }
 export const TagsContext = createContext(initialState)

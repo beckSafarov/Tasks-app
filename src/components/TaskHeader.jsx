@@ -17,6 +17,7 @@ import {
   HStack,
   Tooltip,
   useToast,
+  Button,
 } from '@chakra-ui/react'
 import SearchTask from './SearchTask'
 import {
@@ -44,6 +45,7 @@ const TaskHeader = ({
   toggleCompTasks,
   sortType,
   onSort,
+  onLogout,
   removeTasksByTag,
   page,
 }) => {
@@ -130,6 +132,9 @@ const TaskHeader = ({
 
         {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
+          <Button colorScheme='gray' mr='20px' onClick={onLogout}>
+            Logout
+          </Button>
           <Menu>
             <Tooltip label='Menu'>
               <MenuButton
@@ -264,6 +269,7 @@ TaskHeader.defaultProps = {
   showCompTasks: false,
   sortType: 'none',
   onSort: () => void 0,
+  onLogout: () => void 0,
   removeTasksByTag: () => void 0,
   page: 'home',
 }

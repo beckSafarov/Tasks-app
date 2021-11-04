@@ -1,6 +1,6 @@
 import produce from 'immer'
-import { updateArr } from '../helpers'
-import { setStore as setTasks } from '../helpers/lcs'
+import { updateArr } from '../../helpers'
+import { setStore as setTasks } from '../../helpers/lcs'
 
 const TasksReducer = produce((draft, action) => {
   let { tasks } = draft

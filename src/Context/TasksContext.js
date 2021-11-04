@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from 'react'
-import TasksReducer from './TasksReducer'
+import TasksReducer from './reducers/TasksReducer'
 import { getStore as getTasks } from '../helpers/lcs'
 
 const initialState = { tasks: getTasks() }

@@ -12,14 +12,14 @@ import {
 const db = getFirestore()
 
 /**
- * @param task: Obj
- * @param dbName: String
+ * @param listName: String
+ * @param value: Obj
  * @returns Obj|false
  */
-const addToDB = async (task = {}, listName) => {
+const addToDB = async (listName = 'tasks', value = {}) => {
   if (listName) {
     try {
-      const docRef = await addDoc(collection(db, listName), task)
+      const docRef = await addDoc(collection(db, listName), value)
       return docRef
     } catch (err) {
       return false

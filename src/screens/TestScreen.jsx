@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Box, Input } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import TagDropdown from '../components/Sidebar/TagDropdown'
@@ -17,7 +17,8 @@ import {
   removeFromDB,
   updateInDB,
 } from '../firebase/controllers'
-import { signIn } from '../firebase/oath'
+import { signIn } from '../firebase/auth'
+import { UserContext } from '../Context/UserContext'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
@@ -28,13 +29,8 @@ const TestScreen = () => {
   const today = taskTimeHandler('2021-10-21 9:00')
   const recentFuture = taskTimeHandler('2021-10-22')
   const future = taskTimeHandler('2021-10-23')
-  // console.log(
-  //   addTask({
-  //     name: 'Test',
-  //     description: 'to test',
-  //     tag: 'untagged',
-  //   })
-  // )
+  const context = useContext(UserContext)
+  // console.log(context)
 
   // getTasks()
   useEffect(() => {

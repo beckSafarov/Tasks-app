@@ -74,7 +74,7 @@ const Sidebar = () => {
         color='light.sidebar_text'
       >
         {/* all tasks link */}
-        <Link to='/' style={{ width: '100%' }}>
+        <Link to='/all-tasks' style={{ width: '100%' }}>
           <Box
             p={2}
             position='relative'

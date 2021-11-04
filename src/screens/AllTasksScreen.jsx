@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import Auth from '../components/Auth'
 import TasksScreen from '../components/TasksScreen'
 import { TasksContext } from '../Context/TasksContext'
 

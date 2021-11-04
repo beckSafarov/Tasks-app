@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react'
 import { getStore } from '../helpers/lcs'
-import PreferencesReducer from './PreferencesReducer'
+import PreferencesReducer from './reducers/PreferencesReducer'
 
 const defaultPrefs = {
   showCompletedTasks: false,
