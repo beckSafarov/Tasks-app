@@ -108,6 +108,8 @@ const TestScreen = () => {
           <br />
           <AddTask2 defaultDate='Someday' page='All Tasks' />
         </Box>
+        {/* <img src='/light_2x.png' alt='2x did not show' />
+        <img src='/light_1x.png' alt='1x did not show' /> */}
       </div>
     </>
   )

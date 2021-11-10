@@ -12,18 +12,16 @@ import TodayScreen from './screens/TodayScreen'
 import TomorrowScreen from './screens/TomorrowScreen'
 import TagScreen from './screens/TagScreen'
 import UpcomingScreen from './screens/UpcomingScreen'
-import { getAuth, onAuthStateChanged } from '@firebase/auth'
-import { UserContext } from './Context/UserContext'
 import LandingScreen from './screens/LandingScreen'
-import Auth from './components/Auth'
-const auth = getAuth()
+import SignUp from './screens/SignUp'
+import Login from './screens/Login'
 
 const App = () => {
   const loc = window?.location?.href?.split('/')[3] || ''
   const [isLanding, setIsLanding] = useState(true)
 
   useEffect(() => {
-    setIsLanding(loc.length < 2)
+    setIsLanding(loc.length < 2 || loc.match(/signup|login/))
   }, [loc])
 
   return (
@@ -43,6 +41,8 @@ const App = () => {
           </Box>
 
           <Route path='/' component={LandingScreen} exact />
+          <Route path='/signup' component={SignUp} />
+          <Route path='/login' component={Login} />
           <Box ml='220px' pb={isLanding ? '' : '100px'} id='main'>
             <Route path='/all-tasks' component={AllTasksScreen} exact />
             <Route path='/today' component={TodayScreen} />
