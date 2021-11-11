@@ -372,3 +372,14 @@ export const findPropByVal = (obj = {}, val) => {
   }
   return false
 }
+
+/**
+ * @param sizes:Array, e.g. [1, 2, 3]
+ * @returns Array
+ */
+export const getScreenWidths = (sizes = []) => {
+  const width = window?.screen?.availWidth || 1440
+  const sum = sizes.reduce((a, c) => (a += c), 0)
+  const div = width / sum
+  return sizes.map((s) => Math.floor(div * s))
+}

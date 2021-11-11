@@ -12,10 +12,10 @@ import {
 import { FaEnvelope } from 'react-icons/fa'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
-import { emailSignUp } from '../firebase/auth'
-import { updateCurrUser } from '../firebase/controllers'
-import FormBuild from '../components/FormBuild'
-import ShowAlert from '../components/ShowAlert'
+import { emailSignUp } from '../../firebase/auth'
+import { updateCurrUser } from '../../firebase/controllers'
+import FormBuild from '../../components/FormBuild'
+import ShowAlert from '../../components/ShowAlert'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
