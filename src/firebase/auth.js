@@ -2,17 +2,41 @@ import {
   getAuth,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signinWithPopup,
   signInWithRedirect,
+  signInWithEmailAndPassword,
   getRedirectResult,
+  createUserWithEmailAndPassword,
   signOut,
 } from 'firebase/auth'
-import { app } from './config'
 
 const provider = new GoogleAuthProvider()
 const auth = getAuth()
 
 const signIn = () => signInWithRedirect(auth, provider)
+
+const emailSignUp = ({ email, password }) =>
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user
+      return { success: true, user }
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      return { success: false, errorCode, errorMessage }
+    })
+
+const emailSignIn = ({ email, password }) =>
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user
+      return { success: true, user }
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      return { success: false, errorCode, errorMessage }
+    })
 
 const logout = async () => {
   try {
@@ -45,18 +69,4 @@ onAuthStateChanged(auth, (user) => {
   }
 })
 
-export { signIn, logout }
-
-/**
-   * signinWithPopup(auth, provider).then(res=>{
-    const credential = GoogleAuthProvider.credentialFromResult(result)
-    const token = credential.accessToken
-    const user = result.user
-    console.log(user)
-  }).catch(error=>{
-    const errorCode = error.code
-    const errorMessage = error.message
-    const email = error.email
-    const credential = GoogleAuthProvider.credentialFromError(error)
-  })
-   */
+export { signIn, emailSignUp, emailSignIn, logout }

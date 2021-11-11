@@ -1,3 +1,4 @@
+import { getAuth, updateProfile } from '@firebase/auth'
 import {
   addDoc,
   collection,
@@ -10,6 +11,7 @@ import {
   runTransaction,
 } from 'firebase/firestore'
 const db = getFirestore()
+const auth = getAuth()
 
 /**
  * @param listName: String
@@ -50,6 +52,19 @@ const updateInDB = async (listName, id, predicate = {}) => {
 }
 
 /**
+ * @param updates:Object
+ * @returns Object
+ */
+const updateCurrUser = (updates = {}) =>
+  updateProfile(auth.currentUser, updates)
+    .then(() => ({
+      success: true,
+    }))
+    .catch((message) => ({
+      success: false,
+      message,
+    }))
+/**
  * @param id:String
  * @returns <Promise>
  */
@@ -83,4 +98,11 @@ const getTasksByTag = async (tag) => {
   return res
 }
 
-export { addToDB, getFromDB, updateInDB, getTasksByTag, removeFromDB }
+export {
+  addToDB,
+  getFromDB,
+  updateInDB,
+  getTasksByTag,
+  removeFromDB,
+  updateCurrUser,
+}

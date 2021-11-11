@@ -4,20 +4,17 @@ import {
   Img,
   Text,
   HStack,
-  Divider,
-  FormControl,
-  FormLabel,
-  Input,
   Icon,
   Flex,
   VStack,
   Heading,
-  Box,
 } from '@chakra-ui/react'
 import { FaEnvelope } from 'react-icons/fa'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
+import { emailSignUp } from '../firebase/auth'
+import { updateCurrUser } from '../firebase/controllers'
+import FormBuild from '../components/FormBuild'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -27,29 +24,24 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Please enter a valid email')
     .required('Please enter your email'),
-  password: Yup.string('Password should include text')
+  password: Yup.string()
     .min(6, 'Too Short')
     .max(32, 'Too Long!')
     .required('Please enter your password'),
 })
 
-const SignUp = () => {
+const SignUp = ({ history }) => {
   const [showForm, setShowForm] = useState(false)
 
-  const submitHandler = (values, props) => {
-    console.log(values)
+  const submitHandler = async (values, props) => {
     props.resetForm()
     props.setSubmitting(false)
-  }
-
-  const getBColor = ({ touched, error }) => {
-    return touched && error ? 'red.500' : 'gray.300'
-  }
-
-  const handleBorderFocus = ({ error }) => {
-    return {
-      borderColor: error ? 'red.500' : 'blue.500',
-      borderWidth: '2px',
+    const res = await emailSignUp(values)
+    if (res.success) {
+      await updateCurrUser({ displayName: values.name })
+      history.replace('/all-tasks')
+    } else {
+      console.log(res)
     }
   }
 
@@ -57,7 +49,7 @@ const SignUp = () => {
     <Flex justifyContent='center' pt='150px' height='100vh'>
       <Flex
         flexDir='column'
-        // bg='gray.50'
+        bg='#FFFEFC'
         width='450px'
         pt='20px'
         pb='50px'
@@ -112,8 +104,8 @@ const SignUp = () => {
               <Text color='gray.600'>Email</Text>
             </HStack>
           </Button>
-          <Text textAlign='center' py='5'>
-            Already have account?{' '}
+          <Text fontSize='0.8em' textAlign='center' py='5'>
+            Already have an account?{' '}
             <Text as='span' color='blue.500'>
               <Link to='/login'>Sign in</Link>
             </Text>
@@ -121,104 +113,13 @@ const SignUp = () => {
         </VStack>
 
         {/* --- Sign up Form --- */}
-        <div style={{ display: !showForm ? 'none' : 'block' }}>
-          <Formik
-            initialValues={{ name: '', email: '', password: '' }}
-            onSubmit={submitHandler}
-            validationSchema={validationSchema}
-          >
-            <Form style={{ width: '100%' }}>
-              <Box mt='2'>
-                <Field name='name'>
-                  {({ field, meta }) => (
-                    <>
-                      <FormLabel fontSize='0.8em' color='gray.500'>
-                        Name
-                      </FormLabel>
-                      <Input
-                        {...field}
-                        type='text'
-                        variant='outline'
-                        borderColor={getBColor(meta)}
-                        _focus={handleBorderFocus(meta)}
-                      />
-                    </>
-                  )}
-                </Field>
-                <ErrorMessage name='name'>
-                  {(msg) => <Text color='red.400'>{msg}</Text>}
-                </ErrorMessage>
-              </Box>
-              <Box mt='2'>
-                <Field name='email'>
-                  {({ field, meta }) => (
-                    <>
-                      <FormLabel fontSize='0.8em' color='gray.500'>
-                        Email
-                      </FormLabel>
-                      <Input
-                        {...field}
-                        type='email'
-                        variant='outline'
-                        borderColor={getBColor(meta)}
-                        _focus={handleBorderFocus(meta)}
-                      />
-                    </>
-                  )}
-                </Field>
-                <ErrorMessage name='email'>
-                  {(msg) => <Text color='red.400'>{msg}</Text>}
-                </ErrorMessage>
-              </Box>
-
-              <Box mt='2'>
-                <Field name='password'>
-                  {({ field, meta }) => (
-                    <>
-                      <FormLabel fontSize='0.8em' color='gray.500'>
-                        Password
-                      </FormLabel>
-                      <Input
-                        {...field}
-                        type='password'
-                        variant='outline'
-                        borderColor={getBColor(meta)}
-                        _focus={handleBorderFocus(meta)}
-                      />
-                    </>
-                  )}
-                </Field>
-                <ErrorMessage name='password'>
-                  {(msg) => <Text color='red.400'>{msg}</Text>}
-                </ErrorMessage>
-              </Box>
-              {/* cancel and submit buttons */}
-              <Flex spacing={2} mt='5'>
-                <Box px={2} flex='1'>
-                  <Button
-                    type='reset'
-                    onClick={() => setShowForm(false)}
-                    w='full'
-                    colorScheme='gray'
-                    boxShadow='md'
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-                <Box px={2} flex='1'>
-                  <Button
-                    type='submit'
-                    boxShadow='md'
-                    w='full'
-                    colorScheme='blue'
-                  >
-                    Submit
-                  </Button>
-                </Box>
-              </Flex>
-            </Form>
-          </Formik>
-        </div>
+        <FormBuild
+          show={showForm}
+          onCancel={() => setShowForm(false)}
+          onSubmit={submitHandler}
+          validationSchema={validationSchema}
+          initialValues={{ name: '', email: '', password: '' }}
+        />
       </Flex>
     </Flex>
   )

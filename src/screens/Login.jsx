@@ -4,10 +4,6 @@ import {
   Img,
   Text,
   HStack,
-  Divider,
-  FormControl,
-  FormLabel,
-  Input,
   Icon,
   Flex,
   VStack,
@@ -15,9 +11,9 @@ import {
   Box,
 } from '@chakra-ui/react'
 import { FaEnvelope } from 'react-icons/fa'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
+import FormBuild from '../components/FormBuild'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -38,19 +34,8 @@ const Login = () => {
     props.setSubmitting(false)
   }
 
-  const getBColor = ({ touched, error }) => {
-    return touched && error ? 'red.500' : 'gray.300'
-  }
-
-  const handleBorderFocus = ({ error }) => {
-    return {
-      borderColor: error ? 'red.500' : 'blue.500',
-      borderWidth: '2px',
-    }
-  }
-
   return (
-    <Flex justifyContent='center' pt='150px' height='100vh'>
+    <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
       <Flex
         flexDir='column'
         // bg='gray.50'
@@ -108,92 +93,34 @@ const Login = () => {
               <Text color='gray.600'>Email</Text>
             </HStack>
           </Button>
-          <Text textAlign='center' py='5'>
-            Do not have account?{' '}
+          <Text fontSize='0.8em' textAlign='center' py='5'>
+            Do not have an account?{' '}
             <Text as='span' color='blue.500'>
               <Link to='/signup'>Create one</Link>
             </Text>
           </Text>
         </VStack>
 
-        {/* --- Sign up Form --- */}
-        <div style={{ display: !showForm ? 'none' : 'block' }}>
-          <Formik
-            initialValues={{ email: '', password: '' }}
-            onSubmit={submitHandler}
-            validationSchema={validationSchema}
-          >
-            <Form style={{ width: '100%' }}>
-              <Box mt='2'>
-                <Field name='email'>
-                  {({ field, meta }) => (
-                    <>
-                      <FormLabel fontSize='0.8em' color='gray.500'>
-                        Email
-                      </FormLabel>
-                      <Input
-                        {...field}
-                        type='email'
-                        variant='outline'
-                        borderColor={getBColor(meta)}
-                        _focus={handleBorderFocus(meta)}
-                      />
-                    </>
-                  )}
-                </Field>
-                <ErrorMessage name='email'>
-                  {(msg) => <Text color='red.400'>{msg}</Text>}
-                </ErrorMessage>
-              </Box>
+        {/* --- Login Form --- */}
+        <FormBuild
+          show={showForm}
+          onCancel={() => setShowForm(false)}
+          onSubmit={submitHandler}
+          validationSchema={validationSchema}
+          initialValues={{ email: '', password: '' }}
+        />
 
-              <Box mt='2'>
-                <Field name='password'>
-                  {({ field, meta }) => (
-                    <>
-                      <FormLabel fontSize='0.8em' color='gray.500'>
-                        Password
-                      </FormLabel>
-                      <Input
-                        {...field}
-                        type='password'
-                        variant='outline'
-                        borderColor={getBColor(meta)}
-                        _focus={handleBorderFocus(meta)}
-                      />
-                    </>
-                  )}
-                </Field>
-                <ErrorMessage name='password'>
-                  {(msg) => <Text color='red.400'>{msg}</Text>}
-                </ErrorMessage>
-              </Box>
-              {/* cancel and submit buttons */}
-              <Flex spacing={2} mt='5'>
-                <Box px={2} flex='1'>
-                  <Button
-                    type='reset'
-                    onClick={() => setShowForm(false)}
-                    w='full'
-                    colorScheme='gray'
-                    boxShadow='md'
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-                <Box px={2} flex='1'>
-                  <Button
-                    type='submit'
-                    boxShadow='md'
-                    w='full'
-                    colorScheme='blue'
-                  >
-                    Submit
-                  </Button>
-                </Box>
-              </Flex>
-            </Form>
-          </Formik>
-        </div>
+        {/* forgot password link */}
+        <Box textAlign='center' py='5' hidden={!showForm}>
+          <Text
+            fontSize='0.8em'
+            color='gray.600'
+            cursor='pointer'
+            _hover={{ color: 'blue.400', textDecor: 'underline' }}
+          >
+            Forgot Password?
+          </Text>
+        </Box>
       </Flex>
     </Flex>
   )

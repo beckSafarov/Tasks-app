@@ -13,7 +13,7 @@ const LandingScreen = ({ history }) => {
     <Flex
       height='100vh'
       w='full'
-      background='whitesmoke'
+      background='#FFFEFC'
       justifyContent='center'
       alignItems='center'
     >
