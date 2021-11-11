@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import {
   Button,
   Img,
@@ -14,6 +14,8 @@ import { FaEnvelope } from 'react-icons/fa'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
 import FormBuild from '../components/FormBuild'
+import { emailSignIn } from '../firebase/auth'
+import ShowAlert from '../components/ShowAlert'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -25,28 +27,30 @@ const validationSchema = Yup.object().shape({
     .required('Please enter your password'),
 })
 
-const Login = () => {
+const LoginScreen = ({ history }) => {
   const [showForm, setShowForm] = useState(false)
+  const [error, setError] = useState('')
 
-  const submitHandler = (values, props) => {
-    console.log(values)
+  const submitHandler = async (values, props) => {
     props.resetForm()
     props.setSubmitting(false)
+    const res = await emailSignIn(values)
+    res.success ? history.replace('/all-tasks') : setError(res.errorMessage)
   }
 
   return (
     <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
-      <Flex
-        flexDir='column'
-        // bg='gray.50'
-        width='450px'
-        pt='20px'
-        pb='50px'
-        px='30px'
-      >
+      <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
         <Heading mb='30px' size='2xl' textAlign='center'>
           Login
         </Heading>
+        <ShowAlert
+          show={error ? 1 : 0}
+          title='Login Error!'
+          onClose={() => setError('')}
+        >
+          {error}
+        </ShowAlert>
         <VStack w='full' py='20px' hidden={showForm}>
           <Button
             background='white'
@@ -126,4 +130,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginScreen

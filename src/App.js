@@ -13,8 +13,8 @@ import TomorrowScreen from './screens/TomorrowScreen'
 import TagScreen from './screens/TagScreen'
 import UpcomingScreen from './screens/UpcomingScreen'
 import LandingScreen from './screens/LandingScreen'
-import SignUp from './screens/SignUp'
-import Login from './screens/Login'
+import SignUpScreen from './screens/SignUpScreen'
+import LoginScreen from './screens/LoginScreen'
 
 const App = () => {
   const loc = window?.location?.href?.split('/')[3] || ''
@@ -41,8 +41,8 @@ const App = () => {
           </Box>
 
           <Route path='/' component={LandingScreen} exact />
-          <Route path='/signup' component={SignUp} />
-          <Route path='/login' component={Login} />
+          <Route path='/signup' component={SignUpScreen} />
+          <Route path='/login' component={LoginScreen} />
           <Box ml='220px' pb={isLanding ? '' : '100px'} id='main'>
             <Route path='/all-tasks' component={AllTasksScreen} exact />
             <Route path='/today' component={TodayScreen} />

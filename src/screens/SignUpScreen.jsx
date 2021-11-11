@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom'
 import { emailSignUp } from '../firebase/auth'
 import { updateCurrUser } from '../firebase/controllers'
 import FormBuild from '../components/FormBuild'
+import ShowAlert from '../components/ShowAlert'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -30,8 +31,9 @@ const validationSchema = Yup.object().shape({
     .required('Please enter your password'),
 })
 
-const SignUp = ({ history }) => {
+const SignUpScreen = ({ history }) => {
   const [showForm, setShowForm] = useState(false)
+  const [error, setError] = useState('')
 
   const submitHandler = async (values, props) => {
     props.resetForm()
@@ -41,6 +43,7 @@ const SignUp = ({ history }) => {
       await updateCurrUser({ displayName: values.name })
       history.replace('/all-tasks')
     } else {
+      setError(res.errorMessage)
       console.log(res)
     }
   }
@@ -58,6 +61,13 @@ const SignUp = ({ history }) => {
         <Heading mb='30px' size='2xl' textAlign='center'>
           Sign up
         </Heading>
+        <ShowAlert
+          show={error ? 1 : 0}
+          title='Sign up Error!'
+          onClose={() => setError('')}
+        >
+          {error}
+        </ShowAlert>
         <VStack w='full' py='20px' hidden={showForm}>
           <Button
             background='white'
@@ -125,4 +135,4 @@ const SignUp = ({ history }) => {
   )
 }
 
-export default SignUp
+export default SignUpScreen
