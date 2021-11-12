@@ -1,31 +1,37 @@
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { UserContext } from '../Context/UserContext'
+import Loading from './Loading'
 const auth = getAuth()
 
-const Auth = ({ children, reverse }) => {
+const Auth = ({ children, redirect, unloggedOnly }) => {
   const [permit, setPermit] = useState(false)
   const history = useHistory()
-  const { user } = useContext(UserContext)
 
   useEffect(() => {
-    let logged = user.uid ? true : false
-    onAuthStateChanged(auth, (newUser) => {
-      logged = newUser ? true : false
-    })
-
-    if (!reverse) {
-      logged ? setPermit(true) : console.log('go home')
+    if (!unloggedOnly) {
+      auth.currentUser
+        ? setPermit(true)
+        : onAuthStateChanged(auth, (user) => {
+            user ? setPermit(true) : history.replace(redirect)
+          })
     } else {
-      logged ? console.log('go home') : setPermit(true)
+      auth.currentUser
+        ? history.replace(redirect)
+        : onAuthStateChanged(auth, (user) => {
+            user ? history.replace(redirect) : setPermit(true)
+          })
     }
-  }, [user, reverse])
+  }, [auth, redirect, unloggedOnly])
 
-  return <>{permit && children}</>
+  return <>{!permit ? <Loading /> : children}</>
 }
 
-Auth.defaultProps = { reverse: false }
+Auth.defaultProps = {
+  unloggedOnly: false,
+  redirect: '/',
+  children: <h1>Welcome to Auth Component</h1>,
+}
 
 export default Auth
 // history.push('/test')

@@ -10,21 +10,23 @@ const AllTasksScreen = () => {
   const { tasks } = useContext(TasksContext)
   const sidebarWidth = getScreenWidths([1, 5])[0]
   return (
-    <Box width='full' height='100vh'>
-      <Box
-        position='fixed'
-        left='0'
-        right='0'
-        w={sidebarWidth}
-        height='full'
-        backgroundColor='light.sidebar'
-      >
-        <Sidebar />
+    <Auth redirect='/login'>
+      <Box width='full' height='100vh'>
+        <Box
+          position='fixed'
+          left='0'
+          right='0'
+          w={sidebarWidth}
+          height='full'
+          backgroundColor='light.sidebar'
+        >
+          <Sidebar />
+        </Box>
+        <Box ml={sidebarWidth} id='main' pb='100px'>
+          <TasksScreen store={tasks} title='All Tasks' />
+        </Box>
       </Box>
-      <Box ml={sidebarWidth} id='main' pb='100px'>
-        <TasksScreen store={tasks} title='All Tasks' />
-      </Box>
-    </Box>
+    </Auth>
   )
 }
 

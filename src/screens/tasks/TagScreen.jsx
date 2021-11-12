@@ -5,6 +5,7 @@ import { TasksContext } from '../../Context/TasksContext'
 import { findPropByVal, getScreenWidths } from '../../helpers'
 import { Box } from '@chakra-ui/layout'
 import Sidebar from '../../components/Sidebar'
+import Auth from '../../components/Auth'
 
 const TagScreen = ({ history, location }) => {
   const { tags } = useContext(TagsContext)
@@ -18,25 +19,27 @@ const TagScreen = ({ history, location }) => {
   }, [tags, tag, history])
 
   return (
-    <Box width='full' height='100vh'>
-      <Box
-        position='fixed'
-        left='0'
-        right='0'
-        w={sidebarWidth}
-        height='full'
-        backgroundColor='light.sidebar'
-      >
-        <Sidebar />
+    <Auth redirect='/login'>
+      <Box width='full' height='100vh'>
+        <Box
+          position='fixed'
+          left='0'
+          right='0'
+          w={sidebarWidth}
+          height='full'
+          backgroundColor='light.sidebar'
+        >
+          <Sidebar />
+        </Box>
+        <Box ml={sidebarWidth} id='main' pb='100px'>
+          <TasksScreen
+            store={tasks.filter((t) => t.tag === tag)}
+            tag={tag}
+            title={tag}
+          />
+        </Box>
       </Box>
-      <Box ml={sidebarWidth} id='main' pb='100px'>
-        <TasksScreen
-          store={tasks.filter((t) => t.tag === tag)}
-          tag={tag}
-          title={tag}
-        />
-      </Box>
-    </Box>
+    </Auth>
   )
 }
 

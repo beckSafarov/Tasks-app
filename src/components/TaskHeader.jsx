@@ -36,6 +36,8 @@ import {
 import { useState, useEffect, useContext, useRef } from 'react'
 import { TagsContext } from '../Context/TagsContext'
 import { TasksContext } from '../Context/TasksContext'
+import { logout } from '../firebase/auth'
+import { useHistory } from 'react-router'
 
 const TaskHeader = ({
   title,
@@ -45,7 +47,6 @@ const TaskHeader = ({
   toggleCompTasks,
   sortType,
   onSort,
-  onLogout,
   removeTasksByTag,
   page,
 }) => {
@@ -54,6 +55,7 @@ const TaskHeader = ({
   const tagEditInput = useRef(null)
   const { update: updateTag, tags } = useContext(TagsContext)
   const { updateMany: updateTaskTags } = useContext(TasksContext)
+  const history = useHistory()
   const toast = useToast()
 
   useEffect(() => {
@@ -88,19 +90,23 @@ const TaskHeader = ({
     setTagEditMode(false)
   }
 
+  const handleLogout = async () => {
+    const loggedOut = await logout()
+    if (loggedOut) history.replace('/')
+  }
+
   return (
     <Box
       position='sticky'
       bg='#fff'
       pt='20px'
       pb='10px'
-      top='10px'
+      top='0'
       ml='20px'
       mr='20px'
-      boxShadow='base'
-      right='5px'
-      left='5px'
-      rounded='md'
+      right='0'
+      left='0'
+      borderBottom='1px solid #f4f4f4'
       zIndex={10}
     >
       <HStack px='50px' display='flex'>
@@ -132,7 +138,7 @@ const TaskHeader = ({
 
         {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
-          <Button colorScheme='gray' mr='20px' onClick={onLogout}>
+          <Button colorScheme='gray' mr='20px' onClick={handleLogout}>
             Logout
           </Button>
           <Menu>
@@ -269,7 +275,6 @@ TaskHeader.defaultProps = {
   showCompTasks: false,
   sortType: 'none',
   onSort: () => void 0,
-  onLogout: () => void 0,
   removeTasksByTag: () => void 0,
   page: 'home',
 }

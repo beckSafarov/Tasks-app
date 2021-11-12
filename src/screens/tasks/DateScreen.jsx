@@ -8,6 +8,7 @@ import { isUpcoming } from '../../helpers/tasksHelpers'
 import { capitalize, getScreenWidths } from '../../helpers'
 import { Box } from '@chakra-ui/layout'
 import Sidebar from '../../components/Sidebar'
+import Auth from '../../components/Auth'
 dayjs.extend(isTomorrow)
 
 const DateScreen = ({ location }) => {
@@ -26,21 +27,23 @@ const DateScreen = ({ location }) => {
   const tasks = lookUp[dateName.toLowerCase()]()
 
   return (
-    <Box width='full' height='100vh'>
-      <Box
-        position='fixed'
-        left='0'
-        right='0'
-        w={sidebarWidth}
-        height='full'
-        backgroundColor='light.sidebar'
-      >
-        <Sidebar />
+    <Auth redirect='/login'>
+      <Box width='full' height='100vh'>
+        <Box
+          position='fixed'
+          left='0'
+          right='0'
+          w={sidebarWidth}
+          height='full'
+          backgroundColor='light.sidebar'
+        >
+          <Sidebar />
+        </Box>
+        <Box ml={sidebarWidth} id='main' pb='100px'>
+          <TasksScreen store={tasks} title={dateName} defaultDate={dateName} />
+        </Box>
       </Box>
-      <Box ml={sidebarWidth} id='main' pb='100px'>
-        <TasksScreen store={tasks} title={dateName} defaultDate={dateName} />
-      </Box>
-    </Box>
+    </Auth>
   )
 }
 

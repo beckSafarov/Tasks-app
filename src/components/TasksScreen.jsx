@@ -129,11 +129,6 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
     }
   }
 
-  const logoutHandler = async () => {
-    const loggedOut = await logout()
-    if (loggedOut) resetUser()
-  }
-
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => {
     if (sortType !== type) {
@@ -168,7 +163,6 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
         toggleCompTasks={toggleCompTasks}
         sortType={sortType}
         onSort={sortTypeHandler}
-        onLogout={logoutHandler}
         page={page}
         removeTasksByTag={removeTasksByTag}
       />

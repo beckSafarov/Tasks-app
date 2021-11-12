@@ -38,6 +38,14 @@ const emailSignIn = ({ email, password }) =>
       return { success: false, errorCode, errorMessage }
     })
 
+const getCurrUser = () => {
+  if (auth.currentUser) return auth.currentUser
+  onAuthStateChanged(auth, (user) => {
+    console.log(user)
+    return user ? user : false
+  })
+}
+
 const logout = async () => {
   try {
     await signOut(auth)
@@ -61,12 +69,12 @@ getRedirectResult(auth)
     const credential = GoogleAuthProvider.credentialFromError(error)
   })
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log(user)
-  } else {
-    console.log('not logged')
-  }
-})
+// onAuthStateChanged(auth, (user) => {
+//   if (user) {
+//     console.log(user)
+//   } else {
+//     console.log('not logged')
+//   }
+// })
 
-export { signIn, emailSignUp, emailSignIn, logout }
+export { signIn, emailSignUp, emailSignIn, getCurrUser, logout }

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import {
   Button,
   Img,
@@ -36,36 +36,29 @@ const SignUpScreen = ({ history }) => {
   const [error, setError] = useState('')
 
   const submitHandler = async (values, props) => {
-    props.resetForm()
-    props.setSubmitting(false)
     const res = await emailSignUp(values)
     if (res.success) {
+      props.resetForm()
+      props.setSubmitting(false)
       await updateCurrUser({ displayName: values.name })
       history.replace('/all-tasks')
     } else {
-      setError(res.errorMessage)
+      res.errorCode.match(/email-already-in-use/)
+        ? setError(
+            'Account with such email already exists. Please log in to continue'
+          )
+        : setError(res.errorMessage)
       console.log(res)
     }
   }
 
   return (
-    <Flex justifyContent='center' pt='150px' height='100vh'>
-      <Flex
-        flexDir='column'
-        bg='#FFFEFC'
-        width='450px'
-        pt='20px'
-        pb='50px'
-        px='30px'
-      >
+    <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
+      <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
         <Heading mb='30px' size='2xl' textAlign='center'>
           Sign up
         </Heading>
-        <ShowAlert
-          show={error ? 1 : 0}
-          title='Sign up Error!'
-          onClose={() => setError('')}
-        >
+        <ShowAlert show={error ? 1 : 0} onClose={() => setError('')}>
           {error}
         </ShowAlert>
         <VStack w='full' py='20px' hidden={showForm}>
