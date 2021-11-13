@@ -9,10 +9,10 @@ import {
   signOut,
 } from 'firebase/auth'
 
-const provider = new GoogleAuthProvider()
+const google = new GoogleAuthProvider()
 const auth = getAuth()
 
-const signIn = () => signInWithRedirect(auth, provider)
+const signInWithGoogle = () => signInWithRedirect(auth, google)
 
 const emailSignUp = ({ email, password }) =>
   createUserWithEmailAndPassword(auth, email, password)
@@ -40,10 +40,11 @@ const emailSignIn = ({ email, password }) =>
 
 const getCurrUser = () => {
   if (auth.currentUser) return auth.currentUser
-  onAuthStateChanged(auth, (user) => {
-    console.log(user)
-    return user ? user : false
+  let user = null
+  onAuthStateChanged(auth, (u) => {
+    user = u ? u : false
   })
+  return user
 }
 
 const logout = async () => {
@@ -56,25 +57,4 @@ const logout = async () => {
   }
 }
 
-getRedirectResult(auth)
-  .then((result) => {
-    const credential = GoogleAuthProvider.credentialFromResult(result)
-    const token = credential.accessToken
-    const user = result.user
-  })
-  .catch((error) => {
-    const errorCode = error.code
-    const errorMessage = error.message
-    const email = error.email
-    const credential = GoogleAuthProvider.credentialFromError(error)
-  })
-
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     console.log(user)
-//   } else {
-//     console.log('not logged')
-//   }
-// })
-
-export { signIn, emailSignUp, emailSignIn, getCurrUser, logout }
+export { signInWithGoogle, emailSignUp, emailSignIn, getCurrUser, logout }

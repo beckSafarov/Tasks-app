@@ -17,7 +17,7 @@ import {
   removeFromDB,
   updateInDB,
 } from '../firebase/controllers'
-import { signIn } from '../firebase/auth'
+import { signInWithGoogle } from '../firebase/auth'
 import { UserContext } from '../Context/UserContext'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
@@ -47,7 +47,7 @@ const TestScreen = () => {
 
   const signInManager = () => {
     if (localStorage && !localStorage.getItem('auth')) {
-      signIn()
+      signInWithGoogle()
       localStorage && localStorage.setItem('auth', 'true')
     }
   }

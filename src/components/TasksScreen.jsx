@@ -6,7 +6,6 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import AddTask from './AddTask'
 import Task from './Task'
 import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
@@ -26,7 +25,6 @@ import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import AddTask2 from './AddTask2'
 import { UserContext } from '../Context/UserContext'
-import { logout } from '../firebase/auth'
 
 const TasksScreen = ({ store, title, tag, defaultDate }) => {
   const {
