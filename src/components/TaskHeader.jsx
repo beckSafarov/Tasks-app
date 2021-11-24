@@ -17,11 +17,9 @@ import {
   HStack,
   Tooltip,
   useToast,
-  Button,
 } from '@chakra-ui/react'
 import SearchTask from './SearchTask'
 import {
-  FaEllipsisH,
   FaEye,
   FaEyeSlash,
   FaEdit,
@@ -32,12 +30,11 @@ import {
   FaTrash,
   FaSortAlphaDown,
   FaRegCalendarPlus,
+  FaCog,
 } from 'react-icons/fa'
 import { useState, useEffect, useContext, useRef } from 'react'
 import { TagsContext } from '../Context/TagsContext'
 import { TasksContext } from '../Context/TasksContext'
-import { logout } from '../firebase/auth'
-import { useHistory } from 'react-router'
 
 const TaskHeader = ({
   title,
@@ -55,7 +52,6 @@ const TaskHeader = ({
   const tagEditInput = useRef(null)
   const { update: updateTag, tags } = useContext(TagsContext)
   const { updateMany: updateTaskTags } = useContext(TasksContext)
-  const history = useHistory()
   const toast = useToast()
 
   useEffect(() => {
@@ -88,11 +84,6 @@ const TaskHeader = ({
       setTagName(title)
     }
     setTagEditMode(false)
-  }
-
-  const handleLogout = async () => {
-    const loggedOut = await logout()
-    if (loggedOut) history.replace('/')
   }
 
   return (
@@ -138,15 +129,12 @@ const TaskHeader = ({
 
         {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
-          <Button colorScheme='gray' mr='20px' onClick={handleLogout}>
-            Logout
-          </Button>
           <Menu>
-            <Tooltip label='Menu'>
+            <Tooltip label='Settings'>
               <MenuButton
                 as={IconButton}
                 aria-label='Menu'
-                icon={<Icon as={FaEllipsisH} />}
+                icon={<Icon as={FaCog} />}
                 variant='flushed'
                 _focus={{ borderColor: 'none' }}
                 borderRadius={'50%'}

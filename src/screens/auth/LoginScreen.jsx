@@ -12,10 +12,9 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Please enter a valid email')
     .required('Please enter your email'),
-  password: Yup.string('Password should include text')
-    .min(6, 'Too Short')
-    .max(32, 'Too Long!')
-    .required('Please enter your password'),
+  password: Yup.string('Password should include text').required(
+    'Please enter your password'
+  ),
 })
 
 const LoginScreen = ({ history }) => {

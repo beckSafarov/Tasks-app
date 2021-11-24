@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import {
   Container,
+  HStack,
   VStack,
   Box,
   useDisclosure,
@@ -8,6 +9,7 @@ import {
   Flex,
   Collapse,
   Text,
+  Image,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
@@ -15,6 +17,9 @@ import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
 import { useHistory } from 'react-router'
 import { PreferencesContext } from '../../Context/PreferencesContext'
+import CustomAvatar from '../CustomAvatar'
+import { getCurrUser } from '../../firebase/auth'
+import AccountModal from '../AccountModal'
 
 const menuOptionHover = {
   background: 'light.sidebar_hover',
@@ -37,7 +42,9 @@ const Sidebar = () => {
 
   const [caret, setCaret] = useState(prefs.sidebarTagsToggle)
   const [newTag, setNewTag] = useState('')
+  const [accountModal, setAccountModal] = useState(false)
   const { tags, add: addTag } = useContext(TagsContext)
+  const user = getCurrUser()
 
   useEffect(() => {
     if (newTag && tags[newTag]) {
@@ -66,10 +73,38 @@ const Sidebar = () => {
         onClose={onAddTagModalClosed}
         tags={tags}
       />
+      {/* profile info button place */}
+      <HStack
+        spacing={2}
+        color='#fff'
+        p='2'
+        _hover={menuOptionHover}
+        borderRadius='md'
+        onClick={() => setAccountModal(true)}
+      >
+        {user.photoURL ? (
+          <Image
+            borderRadius='full'
+            boxSize='40px'
+            src={user.photoURL}
+            alt='Avatar'
+          />
+        ) : (
+          <CustomAvatar fullName={user.displayName} width='40' />
+        )}
+        <Text isTruncated>{user.displayName}</Text>
+      </HStack>
+
+      <AccountModal
+        show={accountModal}
+        onClose={() => setAccountModal(false)}
+      />
+
+      {/* page links */}
       <VStack
         w='full'
         alignItems='flex-start'
-        mt={10}
+        pt='3'
         spacing={0}
         color='light.sidebar_text'
       >
@@ -83,7 +118,7 @@ const Sidebar = () => {
             fontSize={18}
             fontWeight='600'
             _hover={menuOptionHover}
-            borderRadius='10px'
+            borderRadius='md'
           >
             All Tasks
           </Box>
@@ -98,7 +133,7 @@ const Sidebar = () => {
             fontSize={18}
             fontWeight='600'
             _hover={menuOptionHover}
-            borderRadius='10px'
+            borderRadius='md'
           >
             Today
           </Box>
@@ -113,7 +148,7 @@ const Sidebar = () => {
             fontSize={18}
             fontWeight='600'
             _hover={menuOptionHover}
-            borderRadius='10px'
+            borderRadius='md'
           >
             Tomorrow
           </Box>
@@ -128,7 +163,7 @@ const Sidebar = () => {
             fontSize={18}
             fontWeight='600'
             _hover={menuOptionHover}
-            borderRadius='10px'
+            borderRadius='md'
           >
             Upcoming
           </Box>
@@ -142,7 +177,7 @@ const Sidebar = () => {
           w={'full'}
           fontSize={18}
           fontWeight='600'
-          borderRadius='10px'
+          borderRadius='md'
           onClick={toggleClicked}
           _hover={menuOptionHover}
         >

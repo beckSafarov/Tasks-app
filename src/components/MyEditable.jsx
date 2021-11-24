@@ -9,6 +9,8 @@ const MyEditable = ({
   fontSize,
   placeholder,
   name,
+  isEditableOnClick,
+  isEditable: editStatus,
 }) => {
   const [value, setValue] = useState('')
   const [isEditable, setEditable] = useState(false)
@@ -18,7 +20,8 @@ const MyEditable = ({
   useEffect(() => {
     if (children !== value) setValue(children)
     if (isEditable) editInput.current.focus()
-  }, [children, isEditable])
+    if (!isEditableOnClick) setEditable(editStatus)
+  }, [children, isEditable, editStatus])
 
   const submitHandler = (e) => {
     const updated = e.target.textContent
@@ -30,12 +33,14 @@ const MyEditable = ({
   const changeHandler = (e) =>
     e.keyCode === 27 ? submitHandler(e) : onChange(e)
 
+  const clickHandler = () => {
+    if (isEditableOnClick) setEditable(true)
+  }
+
   return (
     <>
       <div
-        onClick={() => {
-          setEditable(true)
-        }}
+        onClick={clickHandler}
         className={isEditable ? 'hidden' : ''}
         name={name}
         style={{ ...style }}
@@ -63,6 +68,8 @@ MyEditable.defaultProps = {
   width: 'inherit',
   onSubmit: () => void 0,
   onChange: () => void 0,
+  isEditableOnClick: true,
+  isEditable: false,
   children: '',
   color: 'inherit',
   fontSize: 'inherit',

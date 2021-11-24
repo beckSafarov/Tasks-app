@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { Box, Input } from '@chakra-ui/react'
+import { Box, Input, Image, Button } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import TagDropdown from '../components/Sidebar/TagDropdown'
 import ReactDatePicker from 'react-datepicker'
@@ -15,10 +15,13 @@ import {
   getTasks,
   getTasksByTag,
   removeFromDB,
+  updateCurrUser,
   updateInDB,
 } from '../firebase/controllers'
 import { signInWithGoogle } from '../firebase/auth'
 import { UserContext } from '../Context/UserContext'
+import CustomAvatar from '../components/CustomAvatar'
+import AccountModal from '../components/AccountModal'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
@@ -40,9 +43,11 @@ const TestScreen = () => {
 
   const colorify = (v) => (new Date() > v ? 'red' : 'inherit')
 
-  const toggleFoo = (e) => {
-    console.log(e.target)
-    setFoo((v) => !v)
+  const toggleFoo = async (e) => {
+    // console.log(e.target)
+    // setFoo((v) => !v)
+    const res = await updateCurrUser({ password: 'jojoba' })
+    console.log(res)
   }
 
   const signInManager = () => {
@@ -96,6 +101,8 @@ const TestScreen = () => {
         <p>Past Date: {format.daysSince('2021-10-18')}</p>
         <br />
 
+        {/* <AccountModal show /> */}
+
         <Box mt='30px'>
           <ReactDatePicker
             selected={date}
@@ -108,8 +115,6 @@ const TestScreen = () => {
           <br />
           <AddTask2 defaultDate='Someday' page='All Tasks' />
         </Box>
-        {/* <img src='/light_2x.png' alt='2x did not show' />
-        <img src='/light_1x.png' alt='1x did not show' /> */}
       </div>
     </>
   )

@@ -1,6 +1,22 @@
-import { Box, FormLabel, Input, Flex, Button, Text } from '@chakra-ui/react'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import {
+  Box,
+  FormLabel,
+  Input,
+  Flex,
+  Button,
+  FormErrorMessage,
+  FormControl,
+} from '@chakra-ui/react'
+import { Formik, Form, Field } from 'formik'
 import { capitalize } from '../helpers'
+
+const lookUp = {
+  name: { type: 'text', label: 'Name' },
+  email: { type: 'email', label: 'Email' },
+  password: { type: 'password', label: 'Password' },
+  confirmpass: { type: 'password', label: 'Confirm Password' },
+  newPass: { type: 'password', label: 'New Password' },
+}
 
 const FormBuild = ({
   show,
@@ -20,29 +36,22 @@ const FormBuild = ({
           {Object.keys(initialValues).map((prop, i) => (
             <Box mt='2' key={i}>
               <Field name={prop}>
-                {({ field, meta }) => (
-                  <>
-                    <FormLabel fontSize='0.8em' color='gray.500'>
-                      {capitalize(prop)}
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors[prop] && form.touched[prop]}
+                  >
+                    <FormLabel htmlFor={prop} fontSize='0.8em' color='gray.500'>
+                      {lookUp[prop].label}
                     </FormLabel>
                     <Input
                       {...field}
-                      type={prop === 'name' ? 'text' : prop}
+                      type={lookUp[prop].type}
                       variant='outline'
-                      borderColor={
-                        meta.touched && meta.error ? 'red.500' : 'gray.300'
-                      }
-                      _focus={{
-                        borderColor: meta.error ? 'red.500' : 'blue.500',
-                        borderWidth: '2px',
-                      }}
                     />
-                  </>
+                    <FormErrorMessage>{form.errors[prop]}</FormErrorMessage>
+                  </FormControl>
                 )}
               </Field>
-              <ErrorMessage name={prop}>
-                {(msg) => <Text color='red.400'>{msg}</Text>}
-              </ErrorMessage>
             </Box>
           ))}
 

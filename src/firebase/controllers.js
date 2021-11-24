@@ -1,4 +1,4 @@
-import { getAuth, updateProfile } from '@firebase/auth'
+import { getAuth, updateProfile, updatePassword } from '@firebase/auth'
 import {
   addDoc,
   collection,
@@ -10,6 +10,7 @@ import {
   deleteDoc,
   runTransaction,
 } from 'firebase/firestore'
+import { updateEmail } from 'firebase/auth'
 const db = getFirestore()
 const auth = getAuth()
 
@@ -52,18 +53,50 @@ const updateInDB = async (listName, id, predicate = {}) => {
 }
 
 /**
- * @param updates:Object
+ * @desc updates the current user
+ * @param up:Object
  * @returns Object
  */
-const updateCurrUser = (updates = {}) =>
-  updateProfile(auth.currentUser, updates)
-    .then(() => ({
-      success: true,
-    }))
-    .catch((message) => ({
-      success: false,
-      message,
-    }))
+const updateCurrUser = async (up = {}) => {
+  const updates = { ...up }
+  const successRes = { success: true }
+  const errorRes = (e) => ({ success: false, message: e.message })
+
+  const emailUpdate = () =>
+    updateEmail(auth.currentUser, updates.email)
+      .then(() => successRes)
+      .catch((e) => errorRes(e))
+
+  const passUpdate = () =>
+    updatePassword(auth.currentUser, updates.password)
+      .then(() => successRes)
+      .catch((e) => errorRes(e))
+
+  const profileUpdate = () => {
+    updateProfile(auth.currentUser, updates)
+      .then(() => successRes)
+      .catch((e) => errorRes(e))
+  }
+
+  if (updates.email) {
+    const res = await emailUpdate()
+    if (!res.success) return res
+    delete updates.email
+  }
+  if (updates.password) {
+    const res = await passUpdate()
+    if (!res.success) return res
+    delete updates.password
+  }
+  if (Object.keys(updates).length > 1) {
+    const res = await profileUpdate()
+    if (!res.success) return res
+  }
+  return successRes
+}
+
+const reAuthenticate = (params) => {}
+
 /**
  * @param id:String
  * @returns <Promise>
