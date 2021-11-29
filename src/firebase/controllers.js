@@ -1,55 +1,22 @@
 import { getAuth, updateProfile, updatePassword } from '@firebase/auth'
-import {
-  addDoc,
-  collection,
-  getDocs,
-  getFirestore,
-  query,
-  where,
-  doc,
-  deleteDoc,
-  runTransaction,
-} from 'firebase/firestore'
+import { getDoc, setDoc, getFirestore, doc } from 'firebase/firestore'
 import { updateEmail } from 'firebase/auth'
-const db = getFirestore()
+import { app, dataSchema } from './config'
+const db = getFirestore(app)
 const auth = getAuth()
 
-/**
- * @param listName: String
- * @param value: Obj
- * @returns Obj|false
- */
-const addToDB = async (listName = 'tasks', value = {}) => {
-  if (listName) {
-    try {
-      const docRef = await addDoc(collection(db, listName), value)
-      return docRef
-    } catch (err) {
-      return false
-    }
-  }
-}
+const succRes = (data) => ({ success: true, data })
+const errRes = (error) => ({ success: false, error })
 
 /**
- * @param listName:String
- * @param id:String
- * @param predicate:Object
- * @returns Object
+ * @desc method to get the logged user's info
+ * @param (optional) fallBack:Object
+ * @returns object with data or empty object
  */
-const updateInDB = async (listName, id, predicate = {}) => {
-  const sfDocRef = doc(db, listName, id)
-  try {
-    await runTransaction(db, async (transaction) => {
-      const sfDoc = await transaction.get(sfDocRef)
-      if (!sfDoc.exists()) {
-        return { success: false, msg: 'Does not exist!' }
-      }
-      transaction.update(sfDocRef, predicate)
-      return { success: true }
-    })
-  } catch (e) {
-    return { success: false, msg: e }
-  }
+const getUserData = async (fallBack = {}) => {
+  const docRef = doc(db, 'tasks', auth.currentUser.uid)
+  const docSnap = await getDoc(docRef)
+  return docSnap.exists() ? docSnap.data() : fallBack
 }
 
 /**
@@ -95,47 +62,50 @@ const updateCurrUser = async (up = {}) => {
   return successRes
 }
 
-const reAuthenticate = (params) => {}
-
 /**
- * @param id:String
- * @returns <Promise>
+ * @desc update prefs
+ * @param predicate -- Object with changed prefs
+ * @returns updated prefs object
  */
-const removeFromDB = async (id) => await deleteDoc(doc(db, 'tasks', id))
-
-/**
- * @param listName:String
- * @returns res:Array
- */
-const getFromDB = async (listName = 'tasks') => {
-  let res = []
-  const querySnapshot = await getDocs(collection(db, listName))
-  querySnapshot.forEach((doc) => {
-    res.push({
-      ...doc.data(),
-      id: doc._key.path.toString().split('/')[1],
-    })
-  })
-  return res
+const updatePrefs = async (predicate = {}) => {
+  const data = await getUserData(dataSchema)
+  const updated = { ...predicate }
+  if (updated.sorts) {
+    data.preferences.sorts = { ...data.preferences.sorts, ...updated.sorts }
+    delete updated.sorts
+  }
+  data.preferences = { ...data.preferences, ...updated }
+  await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
+  return data.preferences
 }
 
 /**
- * @param tag:String
- * @returns res:Array
+ * @desc removes a task or a tag from the db, by default a task
+ * @param key - identifier, such as id or tag value of the object
+ * @param group - tasks|tags
+ * @param prop - prop by which the object should be deleted: id|tag
+ * @returns Object - {success: Boolean, error/tasks}
  */
-const getTasksByTag = async (tag) => {
-  let res = []
-  const q = query(collection(db, 'tasks'), where('tag', '==', tag))
-
-  await getDocs(q).forEach((doc) => res.push(doc.data()))
-  return res
+const removeTaskOrTag = async (key, group = 'tasks', prop = 'id') => {
+  const data = await getUserData()
+  const initSize = data[group].length
+  data[group] = data[group].filter((t) => t[prop] !== key)
+  if (data[group].length === initSize) {
+    return errRes(
+      `${
+        group === 'tasks' ? 'Task' : 'Tag'
+      } with the ${prop} of "${key}" not found`
+    )
+  }
+  await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
+  return succRes(data[group])
 }
 
 export {
-  addToDB,
-  getFromDB,
-  updateInDB,
-  getTasksByTag,
-  removeFromDB,
+  succRes,
+  errRes,
+  getUserData,
   updateCurrUser,
+  updatePrefs,
+  removeTaskOrTag,
 }

@@ -14,4 +14,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-export { app, db }
+// schema for a user information that's tied to the user id
+const dataSchema = {
+  tasks: [],
+  tags: [],
+  preferences: {
+    showCompletedTasks: false,
+    sidebarTagsToggle: false,
+    sorts: { 'All Tasks': 'creation_date' },
+  },
+}
+
+export { app, db, dataSchema }

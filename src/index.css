@@ -18,6 +18,16 @@ code {
     monospace;
 }
 
+.btn {
+  border: none;
+  background-color: #f4f4f4;
+  color: #808080;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .calendar-popper-dark {
   background-color: darkblue;
   color: #fff;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { Box, Input, Image, Button } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
 import TagDropdown from '../components/Sidebar/TagDropdown'
 import ReactDatePicker from 'react-datepicker'
@@ -8,64 +8,49 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { taskTimeHandler } from '../helpers/tasksHelpers'
 import AddTask2 from '../components/AddTask2'
-import { app } from '../firebase/config'
-import {
-  addNew,
-  getFromDB,
-  getTasks,
-  getTasksByTag,
-  removeFromDB,
-  updateCurrUser,
-  updateInDB,
-} from '../firebase/controllers'
+import { getFromDB } from '../firebase/controllers'
 import { signInWithGoogle } from '../firebase/auth'
 import { UserContext } from '../Context/UserContext'
-import CustomAvatar from '../components/CustomAvatar'
-import AccountModal from '../components/AccountModal'
+import { taskSchema } from '../Context/TasksContext'
+import { getUserData } from '../firebase/controllers'
+import {
+  addTagToDB,
+  removeTag,
+  updateTagName,
+} from '../firebase/tagsControllers'
+import {
+  addTaskToDB,
+  removeTasksByTag,
+  updateTask,
+  updateTaskTags,
+} from '../firebase/tasksControllers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
   const [date, setDate] = useState(new Date())
-  const pastDate = taskTimeHandler('2021-10-18 10:00')
-  const today = taskTimeHandler('2021-10-21 9:00')
-  const recentFuture = taskTimeHandler('2021-10-22')
-  const future = taskTimeHandler('2021-10-23')
-  const context = useContext(UserContext)
-  // console.log(context)
-
-  // getTasks()
-  useEffect(() => {
-    // ;(async () => {
-    // })()
-  }, [])
-
-  const colorify = (v) => (new Date() > v ? 'red' : 'inherit')
 
   const toggleFoo = async (e) => {
     // console.log(e.target)
     // setFoo((v) => !v)
-    const res = await updateCurrUser({ password: 'jojoba' })
-    console.log(res)
+    // const db = await getFromDB('tasks')
+    // console.log(db[1].id)
+    console.log(await getUserData())
   }
 
-  const signInManager = () => {
-    if (localStorage && !localStorage.getItem('auth')) {
-      signInWithGoogle()
-      localStorage && localStorage.setItem('auth', 'true')
-    }
+  const addTask = async () => {
+    // const addTask = await addTaskToDB({
+    //   ...taskSchema,
+    //   id: 'third_data',
+    //   tag: 'tag_2',
+    // })
+    const updateTasks = updateTaskTags('tag_2', 'tag_1')
+    console.log(updateTasks)
   }
-  // signInManager()
 
   const format = {
     daysSince: (date = '2021-10-10') => dayjs(date).diff(new Date(), 'days'),
-  }
-
-  const getDiff = (d1, d2) => {
-    const date1 = dayjs(d1)
-    const date2 = dayjs(d2)
-    return date1.diff(date, 'days')
   }
 
   return (
@@ -95,6 +80,9 @@ const TestScreen = () => {
           onClick={toggleFoo}
         >
           Click to toggle foo
+        </button>
+        <button className='btn' onClick={addTask}>
+          Add Task
         </button>
 
         <br />

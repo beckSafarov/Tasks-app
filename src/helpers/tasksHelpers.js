@@ -32,10 +32,10 @@ export const sortTasks = (list = [], type = 'none', tags) => {
   }
 }
 
-// /**
-//  * @param: loc:String
-//  * @returns: matching page name among the options
-//  */
+/**
+ * @param: loc:String
+ * @returns: matching page name among the options
+ */
 export const getPage = (loc, fallBack = 'home') => {
   const matches = loc.match(/tag|today|tomorrow|upcoming/)
   return matches ? matches[0] : fallBack
@@ -95,9 +95,9 @@ export const IsToday = (d) => {
 }
 
 /**
+ * @desc: checks whether the date is later than tomorrow
  * @param: d:String|Date
  * @returns: true|false:Boolean
- * @summary: checks whether the date is later than tomorrow
  */
 export const isUpcoming = (d) => {
   return dayjs(d).diff(new Date(), 'days') > 1

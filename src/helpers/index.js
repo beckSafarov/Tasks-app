@@ -126,15 +126,13 @@ export const nthProp = (obj = {}, n) => Object.keys(obj)[n]
  * @return: index of the object in the array
  */
 const findIndex = (arr, predicate = {}) => {
-  let index = -1
-  const prop = Array.from(Object.keys(predicate))[0]
+  const prop = Object.keys(predicate)[0]
   for (let i = 0; i < arr.length; i++) {
     if (arr[i][prop] === predicate[prop]) {
-      index = i
-      break
+      return i
     }
   }
-  return index
+  return -1
 }
 
 export const without = (arr, val) => {
@@ -168,8 +166,8 @@ const withoutFirst = (arr, val) => {
 }
 
 /**
- * @WARNING: mutates the array
- * @info: removes all the occurrences of a value
+ * @WARNING mutates the array
+ * @desc: removes all the occurrences of a value
  * @param: array of int|string, value to be inserted, position
  * @return: mutated array
  */
