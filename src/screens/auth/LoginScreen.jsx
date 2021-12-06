@@ -7,6 +7,7 @@ import { emailSignIn } from '../../firebase/auth'
 import ShowAlert from '../../components/ShowAlert'
 import Auth from '../../components/Auth'
 import AuthProviders from '../../components/AuthProviders'
+import { useAppContext } from '../../hooks/ContextHooks'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -20,12 +21,14 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = ({ history }) => {
   const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState('')
+  const { setUser } = useAppContext()
 
   const submitHandler = async (values, props) => {
     const res = await emailSignIn(values)
     if (res.success) {
-      props.resetForm()
-      props.setSubmitting(false)
+      setUser(res.user)
+      props && props.resetForm()
+      props && props.setSubmitting(false)
       history.replace('/all-tasks')
     } else {
       setError(res.errorMessage)
@@ -34,7 +37,7 @@ const LoginScreen = ({ history }) => {
   }
 
   return (
-    <Auth redirect='/all-tasks' unloggedOnly>
+    <>
       <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
         <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
           <Heading mb='30px' size='2xl' textAlign='center'>
@@ -80,7 +83,7 @@ const LoginScreen = ({ history }) => {
           </Box>
         </Flex>
       </Flex>
-    </Auth>
+    </>
   )
 }
 

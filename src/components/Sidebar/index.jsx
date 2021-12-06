@@ -20,6 +20,8 @@ import { PreferencesContext } from '../../Context/PreferencesContext'
 import CustomAvatar from '../CustomAvatar'
 import { getCurrUser } from '../../firebase/auth'
 import AccountModal from '../AccountModal'
+import { useAppContext } from '../../hooks/ContextHooks'
+import { getAuth } from '@firebase/auth'
 
 const menuOptionHover = {
   background: 'light.sidebar_hover',
@@ -44,7 +46,9 @@ const Sidebar = () => {
   const [newTag, setNewTag] = useState('')
   const [accountModal, setAccountModal] = useState(false)
   const { tags, add: addTag } = useContext(TagsContext)
-  const user = getCurrUser()
+  const context = useAppContext()
+  const user = context?.user || getAuth().currentUser
+  console.log(user)
 
   useEffect(() => {
     if (newTag && tags[newTag]) {

@@ -1,8 +1,6 @@
 import React, { createContext, useReducer } from 'react'
 import TasksReducer from './reducers/TasksReducer'
-import { getStore as getTasks } from '../helpers/lcs'
 
-const initialState = { tasks: getTasks() }
 export const taskSchema = {
   name: '',
   tag: '',
@@ -11,6 +9,8 @@ export const taskSchema = {
   description: '',
   // dueDate: {}
 }
+
+const initialState = { data: [] }
 export const TasksContext = createContext(initialState)
 
 export const TasksProvider = ({ children }) => {
@@ -18,24 +18,42 @@ export const TasksProvider = ({ children }) => {
 
   const add = (task) => dispatch({ type: 'add', task })
 
-  const update = (newTask) => dispatch({ type: 'updateOne', newTask })
+  const set = (data = {}) => dispatch({ type: 'set', data })
 
-  const updateMany = (oldTag, newTag) =>
-    dispatch({ type: 'updateMany', oldTag, newTag })
+  const updateById = (updatedTask) => {
+    dispatch({
+      type: 'update',
+      prop: 'id',
+      propVal: updatedTask.id,
+      updates: updatedTask,
+    })
+  }
 
-  const remove = (id) => dispatch({ type: 'remove', id })
+  const updateTag = (currTag, newTag) => {
+    dispatch({
+      type: 'update',
+      prop: 'tag',
+      propVal: currTag,
+      updates: { tag: newTag },
+    })
+  }
 
-  const removeAllByTag = (tag) => dispatch({ type: 'removeAllByTag', tag })
+  const removeById = (id) =>
+    dispatch({ type: 'remove', prop: 'id', propVal: id })
+
+  const removeByTag = (tagName) =>
+    dispatch({ type: 'remove', prop: 'tag', propVal: tagName })
 
   return (
     <TasksContext.Provider
       value={{
-        tasks: state.tasks,
+        data: state.data,
+        set,
         add,
-        update,
-        updateMany,
-        remove,
-        removeAllByTag,
+        updateById,
+        updateTag,
+        removeById,
+        removeByTag,
       }}
     >
       {children}

@@ -11,10 +11,14 @@ const auth = getAuth()
  * @returns updated array of tasks
  */
 const addTaskToDB = async (task = {}) => {
-  const data = await getUserData(dataSchema)
-  data.tasks.push(task)
-  await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
-  return data.tasks
+  try {
+    const data = await getUserData(dataSchema)
+    data.tasks.push(task)
+    await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
+    return data.tasks
+  } catch (error) {
+    return error
+  }
 }
 
 /**
@@ -31,9 +35,9 @@ const updateOneOrMore = async (prop, propVal, predicate = {}) => {
       t[prop] === propVal ? { ...t, ...predicate } : t
     )
     await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
-    return succRes(data.tasks)
+    return data.tasks
   } catch (err) {
-    return errRes(err)
+    return err
   }
 }
 
@@ -44,7 +48,11 @@ const updateOneOrMore = async (prop, propVal, predicate = {}) => {
  * @returns Object: {success: Boolean, message/tasks: ''/[]}
  */
 const updateTask = async (id, predicate = {}) => {
-  return await updateOneOrMore('id', id, predicate)
+  try {
+    return await updateOneOrMore('id', id, predicate)
+  } catch (err) {
+    return err
+  }
 }
 
 /**
@@ -54,7 +62,11 @@ const updateTask = async (id, predicate = {}) => {
  * @returns {success: Boolean, error/data: }
  */
 const updateTaskTags = async (currTag, newTag) => {
-  return await updateOneOrMore('tag', currTag, { tag: newTag })
+  try {
+    return await updateOneOrMore('tag', currTag, { tag: newTag })
+  } catch (err) {
+    return err
+  }
 }
 
 /**
@@ -62,15 +74,26 @@ const updateTaskTags = async (currTag, newTag) => {
  * @param id: String id of the task
  * @returns Object {success, tasks}
  */
-const removeTask = async (id) => await removeTaskOrTag(id)
+const removeTask = async (id) => {
+  try {
+    return await removeTaskOrTag(id)
+  } catch (err) {
+    return err
+  }
+}
 
 /**
  * @desc removes tasks by tag
  * @param tag to be deleted by
  * @returns Object with results
  */
-const removeTasksByTag = async (tagName) =>
-  await removeTaskOrTag(tagName, 'tasks', 'tag')
+const removeTasksByTag = async (tagName) => {
+  try {
+    return await removeTaskOrTag(tagName, 'tasks', 'tag')
+  } catch (err) {
+    return err
+  }
+}
 
 export {
   addTaskToDB,

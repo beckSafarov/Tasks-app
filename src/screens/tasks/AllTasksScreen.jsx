@@ -1,16 +1,15 @@
 import { Box } from '@chakra-ui/layout'
-import { useContext } from 'react'
-import Auth from '../../components/Auth'
+import { useContext, useEffect } from 'react'
 import Sidebar from '../../components/Sidebar'
 import TasksScreen from '../../components/TasksScreen'
 import { TasksContext } from '../../Context/TasksContext'
 import { getScreenWidths } from '../../helpers'
 
 const AllTasksScreen = () => {
-  const { tasks } = useContext(TasksContext)
+  const { data: tasks } = useContext(TasksContext)
   const sidebarWidth = getScreenWidths([1, 5])[0]
   return (
-    <Auth redirect='/login'>
+    <>
       <Box width='full' height='100vh'>
         <Box
           position='fixed'
@@ -26,7 +25,7 @@ const AllTasksScreen = () => {
           <TasksScreen store={tasks} title='All Tasks' />
         </Box>
       </Box>
-    </Auth>
+    </>
   )
 }
 

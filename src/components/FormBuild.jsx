@@ -25,11 +25,17 @@ const FormBuild = ({
   validationSchema,
   initialValues,
 }) => {
+  const handleSubmit = (values, onSubmitProps) => {
+    onSubmitProps.resetForm()
+    onSubmitProps.setSubmitting(false)
+    onSubmit(values)
+  }
+
   return (
     <div style={{ display: !show ? 'none' : 'block' }}>
       <Formik
         initialValues={initialValues}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
         <Form style={{ width: '100%' }}>

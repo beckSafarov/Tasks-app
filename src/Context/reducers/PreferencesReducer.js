@@ -1,9 +1,11 @@
 import produce from 'immer'
-import { setStore } from '../../helpers/lcs'
 
-const PreferencesReducer = produce((draft, action) => {
+const PreferencesReducer = produce(async (draft, action) => {
   let { showCompletedTasks, sidebarTagsToggle } = draft.preferences
   switch (action.type) {
+    case 'set':
+      draft.preferences = { ...draft.preferences, ...action.preferences }
+      break
     case 'showCompletedTasks':
       draft.preferences.showCompletedTasks = !showCompletedTasks
       break
@@ -16,7 +18,6 @@ const PreferencesReducer = produce((draft, action) => {
     default:
       return draft
   }
-  setStore(draft.preferences, 'preferences')
 })
 
 export default PreferencesReducer

@@ -1,4 +1,6 @@
 import React, { createContext, useReducer } from 'react'
+import { dataSchema } from '../firebase/config'
+import { getUserData } from '../firebase/controllers'
 import { getStore } from '../helpers/lcs'
 import PreferencesReducer from './reducers/PreferencesReducer'
 
@@ -11,13 +13,15 @@ const defaultPrefs = {
 }
 
 const initialState = {
-  preferences: getStore(defaultPrefs, 'preferences'),
+  preferences: defaultPrefs,
 }
 
 export const PreferencesContext = createContext(initialState)
 
 export const PreferencesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(PreferencesReducer, initialState)
+
+  const set = (preferences = {}) => dispatch({ type: 'set', preferences })
 
   const toggleShowCompletedTasks = () =>
     dispatch({ type: 'showCompletedTasks' })
@@ -31,6 +35,7 @@ export const PreferencesProvider = ({ children }) => {
     <PreferencesContext.Provider
       value={{
         preferences: state.preferences,
+        set,
         toggleShowCompletedTasks,
         setSortType,
         sidebarTagsToggle,

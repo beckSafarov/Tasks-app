@@ -1,33 +1,28 @@
 import produce from 'immer'
-import { updateArr } from '../../helpers'
-import { setStore as setTasks } from '../../helpers/lcs'
 
 const TasksReducer = produce((draft, action) => {
-  let { tasks } = draft
   switch (action.type) {
+    case 'set':
+      draft.data = { ...draft.data, ...action.data }
+      break
     case 'add':
-      tasks.push(action.task)
+      draft.data.push(action.task)
       break
-    case 'updateOne':
-      tasks = updateArr(tasks, action.newTask)
-      break
-    case 'updateMany':
-      tasks.forEach((task) => {
-        if (task.tag === action.oldTag) {
-          task.tag = action.newTag
-        }
-      })
+    case 'update':
+      draft.data = draft.data.map((t) =>
+        t[action.prop] === action[action.propVal]
+          ? { ...t, ...action.updates }
+          : t
+      )
       break
     case 'remove':
-      draft.tasks = tasks.filter((t) => t.id !== action.id)
-      break
-    case 'removeAllByTag':
-      draft.tasks = tasks.filter((t) => t.tag !== action.tag)
+      draft.data = draft.data.filter(
+        (t) => t[action.prop] !== action[action.propVal]
+      )
       break
     default:
       return draft
   }
-  setTasks(draft.tasks)
 })
 
 export default TasksReducer

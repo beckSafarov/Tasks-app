@@ -2,14 +2,14 @@ import React from 'react'
 import { PreferencesProvider } from './PreferencesContext'
 import { TagsProvider } from './TagsContext'
 import { TasksProvider } from './TasksContext'
-import { UserProvider } from './UserContext'
+import { AppProvider } from './AppContext'
 
 const ContextProviders = ({ children }) => {
   return (
     <TasksProvider>
       <TagsProvider>
         <PreferencesProvider>
-          <UserProvider>{children}</UserProvider>
+          <AppProvider>{children}</AppProvider>
         </PreferencesProvider>
       </TagsProvider>
     </TasksProvider>

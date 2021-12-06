@@ -2,16 +2,15 @@ import { useContext, useEffect } from 'react'
 import TasksScreen from '../../components/TasksScreen'
 import { TagsContext } from '../../Context/TagsContext'
 import { TasksContext } from '../../Context/TasksContext'
-import { findPropByVal, getScreenWidths } from '../../helpers'
+import { getScreenWidths } from '../../helpers'
 import { Box } from '@chakra-ui/layout'
 import Sidebar from '../../components/Sidebar'
-import Auth from '../../components/Auth'
 
 const TagScreen = ({ history, location }) => {
   const { tags } = useContext(TagsContext)
   const { tasks } = useContext(TasksContext)
   const tagId = location.pathname.split('/').slice(-1)[0]
-  const tag = findPropByVal(tags, tagId)
+  const tag = tags.find((t) => t.id === tagId)?.name || ''
   const sidebarWidth = getScreenWidths([1, 5])[0]
 
   useEffect(() => {
@@ -19,7 +18,7 @@ const TagScreen = ({ history, location }) => {
   }, [tags, tag, history])
 
   return (
-    <Auth redirect='/login'>
+    <>
       <Box width='full' height='100vh'>
         <Box
           position='fixed'
@@ -39,7 +38,7 @@ const TagScreen = ({ history, location }) => {
           />
         </Box>
       </Box>
-    </Auth>
+    </>
   )
 }
 

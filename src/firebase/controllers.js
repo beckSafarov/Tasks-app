@@ -2,9 +2,10 @@ import { getAuth, updateProfile, updatePassword } from '@firebase/auth'
 import { getDoc, setDoc, getFirestore, doc } from 'firebase/firestore'
 import { updateEmail } from 'firebase/auth'
 import { app, dataSchema } from './config'
+import { getCurrUser } from './auth'
+import { onAuthStateChanged } from 'firebase/auth'
 const db = getFirestore(app)
 const auth = getAuth()
-
 const succRes = (data) => ({ success: true, data })
 const errRes = (error) => ({ success: false, error })
 
@@ -13,10 +14,34 @@ const errRes = (error) => ({ success: false, error })
  * @param (optional) fallBack:Object
  * @returns object with data or empty object
  */
-const getUserData = async (fallBack = {}) => {
-  const docRef = doc(db, 'tasks', auth.currentUser.uid)
+const getUserData = async (fallBack = {}, uid) => {
+  console.log('received request')
+  console.log(uid)
+  const docRef = doc(db, 'tasks', uid || auth.currentUser.uid)
   const docSnap = await getDoc(docRef)
+  console.log(docSnap.exists())
   return docSnap.exists() ? docSnap.data() : fallBack
+}
+
+/**
+ * @desc update the whole current user data
+ * @param newData -- Object containing the updates. E.g. {tasks: []}
+ * @param currData -- (optional) current user data. If passed it will save time from requesting data again from the db
+ * @returns updated user data Object
+ */
+const setUserData = async (newData = {}, currData) => {
+  const data = currData || (await getUserData())
+  const updatedData = { ...data, ...newData }
+  await setDoc(doc(db, 'tasks', auth.currentUser.uid), updatedData)
+  return updatedData
+}
+
+const setStore = async (newList, store = 'tasks') => {
+  if (!newList) return false
+  const data = await getUserData()
+  data[store] = newList
+  await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
+  return data[store]
 }
 
 /**
@@ -67,7 +92,7 @@ const updateCurrUser = async (up = {}) => {
  * @param predicate -- Object with changed prefs
  * @returns updated prefs object
  */
-const updatePrefs = async (predicate = {}) => {
+const setPrefs = async (predicate = {}) => {
   const data = await getUserData(dataSchema)
   const updated = { ...predicate }
   if (updated.sorts) {
@@ -87,18 +112,22 @@ const updatePrefs = async (predicate = {}) => {
  * @returns Object - {success: Boolean, error/tasks}
  */
 const removeTaskOrTag = async (key, group = 'tasks', prop = 'id') => {
-  const data = await getUserData()
-  const initSize = data[group].length
-  data[group] = data[group].filter((t) => t[prop] !== key)
-  if (data[group].length === initSize) {
-    return errRes(
-      `${
-        group === 'tasks' ? 'Task' : 'Tag'
-      } with the ${prop} of "${key}" not found`
-    )
+  try {
+    const data = await getUserData()
+    const initSize = data[group].length
+    data[group] = data[group].filter((t) => t[prop] !== key)
+    if (data[group].length === initSize) {
+      return errRes(
+        `${
+          group === 'tasks' ? 'Task' : 'Tag'
+        } with the ${prop} of "${key}" not found`
+      )
+    }
+    await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
+    return data[group]
+  } catch (err) {
+    return err
   }
-  await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
-  return succRes(data[group])
 }
 
 export {
@@ -106,6 +135,8 @@ export {
   errRes,
   getUserData,
   updateCurrUser,
-  updatePrefs,
+  setPrefs,
   removeTaskOrTag,
+  setUserData,
+  setStore,
 }

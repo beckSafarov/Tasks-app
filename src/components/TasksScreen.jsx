@@ -24,9 +24,9 @@ import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import AddTask2 from './AddTask2'
-import { UserContext } from '../Context/UserContext'
 
 const TasksScreen = ({ store, title, tag, defaultDate }) => {
+  console.log(store)
   const {
     preferences: prefs,
     toggleShowCompletedTasks,
@@ -39,8 +39,9 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   } = useDisclosure()
   const { tags, remove: removeTag } = useContext(TagsContext)
   const { removeAllByTag, remove: removeTask } = useContext(TasksContext)
-  const { resetUser } = useContext(UserContext)
-  const { positives: dones, negatives: undones } = group(store)
+  // const { positives: dones, negatives: undones } = group(store)
+  let dones = []
+  let undones = []
 
   // hooks
   const [tasks, setTasks] = useState([])

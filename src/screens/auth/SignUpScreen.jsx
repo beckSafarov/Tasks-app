@@ -8,6 +8,7 @@ import FormBuild from '../../components/FormBuild'
 import ShowAlert from '../../components/ShowAlert'
 import Auth from '../../components/Auth'
 import AuthProviders from '../../components/AuthProviders'
+import { useAppContext } from '../../hooks/ContextHooks'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -26,6 +27,7 @@ const validationSchema = Yup.object().shape({
 const SignUpScreen = ({ history }) => {
   const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState('')
+  const { setUser } = useAppContext()
 
   const emailSignIn = async (values, props) => {
     const res = await emailSignUp(values)
@@ -33,6 +35,7 @@ const SignUpScreen = ({ history }) => {
       props.resetForm()
       props.setSubmitting(false)
       await updateCurrUser({ displayName: values.name })
+      setUser({ ...res.user, displayName: values.name })
       history.replace('/all-tasks')
     } else {
       res.errorCode.match(/email-already-in-use/)

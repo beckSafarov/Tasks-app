@@ -1,18 +1,18 @@
 import React, { createContext, useReducer } from 'react'
-import { getStore } from '../helpers/lcs'
 import { v1 as uuidv1 } from 'uuid'
 import TagsReducer from './reducers/TagsReducer'
 
-const initialState = { tags: getStore({}, 'tags') }
+const initialState = { tags: [] }
 export const TagsContext = createContext(initialState)
 
 export const TagsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(TagsReducer, initialState)
 
-  // @param: tag: String
+  const set = (tags = {}) => dispatch({ type: 'set', tags })
+
   const add = (tag) => {
     const id = uuidv1()
-    dispatch({ type: 'add', id, tag })
+    dispatch({ type: 'add', tag: { id, name: tag } })
   }
 
   const update = (currTag, newTag) =>
@@ -24,6 +24,7 @@ export const TagsProvider = ({ children }) => {
     <TagsContext.Provider
       value={{
         tags: state.tags,
+        set,
         add,
         update,
         remove,

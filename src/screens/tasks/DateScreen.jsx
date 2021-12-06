@@ -9,25 +9,28 @@ import { capitalize, getScreenWidths } from '../../helpers'
 import { Box } from '@chakra-ui/layout'
 import Sidebar from '../../components/Sidebar'
 import Auth from '../../components/Auth'
+import { useLocation } from 'react-router'
+
 dayjs.extend(isTomorrow)
 
-const DateScreen = ({ location }) => {
-  const { tasks: store } = useContext(TasksContext)
-  const loc = location.pathname
+const DateScreen = () => {
+  const { tasks } = useContext(TasksContext) || { tasks: [] }
+
+  const loc = useLocation().pathname
   const dateName = capitalize(loc.split('/').pop())
   const sidebarWidth = getScreenWidths([1, 5])[0]
 
-  const lookUp = {
-    today: () => store.filter((t) => t.dueDate && isToday(t.dueDate)),
-    tomorrow: () =>
-      store.filter((t) => t.dueDate && dayjs(t.dueDate).isTomorrow()),
-    upcoming: () => store.filter((t) => t.dueDate && isUpcoming(t.dueDate)),
-  }
+  // const lookUp = {
+  //   today: () => store.filter((t) => t.dueDate && isToday(t.dueDate)),
+  //   tomorrow: () =>
+  //     store.filter((t) => t.dueDate && dayjs(t.dueDate).isTomorrow()),
+  //   upcoming: () => store.filter((t) => t.dueDate && isUpcoming(t.dueDate)),
+  // }
 
-  const tasks = lookUp[dateName.toLowerCase()]()
+  // const tasks = lookUp[dateName.toLowerCase()]()
 
   return (
-    <Auth redirect='/login'>
+    <>
       <Box width='full' height='100vh'>
         <Box
           position='fixed'
@@ -43,7 +46,7 @@ const DateScreen = ({ location }) => {
           <TasksScreen store={tasks} title={dateName} defaultDate={dateName} />
         </Box>
       </Box>
-    </Auth>
+    </>
   )
 }
 

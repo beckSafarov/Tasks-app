@@ -10,8 +10,7 @@ import { taskTimeHandler } from '../helpers/tasksHelpers'
 import AddTask2 from '../components/AddTask2'
 import { getFromDB } from '../firebase/controllers'
 import { signInWithGoogle } from '../firebase/auth'
-import { UserContext } from '../Context/UserContext'
-import { taskSchema } from '../Context/TasksContext'
+import { taskSchema, TasksContext } from '../Context/TasksContext'
 import { getUserData } from '../firebase/controllers'
 import {
   addTagToDB,
@@ -24,29 +23,47 @@ import {
   updateTask,
   updateTaskTags,
 } from '../firebase/tasksControllers'
+import { AppContext } from '../Context/AppContext'
+import Auth from '../components/Auth'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
   const [date, setDate] = useState(new Date())
+  const [tasks, setTasks] = useState([])
+  const {
+    loading: updateLoading,
+    add: addTaskToDB,
+    data: updatedData,
+    error,
+  } = useContext(TasksContext)
+  const {
+    loading: appLoading,
+    getData,
+    data,
+    error: appErr,
+  } = useContext(AppContext)
+  const loading = updateLoading || appLoading
+  // console.log('Loading: ' + loading)
+
+  // console.log('tasks below')
+  // console.log(tasks)
+  // console.log('appcontext data')
+  // console.log(data)
+  // console.log('updated data')
+  // console.log(updatedData)
+  // console.log(appErr)
+  useEffect(() => {
+    if (data.tasks) setTasks(data.tasks)
+  }, [data.tasks])
 
   const toggleFoo = async (e) => {
-    // console.log(e.target)
-    // setFoo((v) => !v)
-    // const db = await getFromDB('tasks')
-    // console.log(db[1].id)
-    console.log(await getUserData())
+    await getData()
   }
 
   const addTask = async () => {
-    // const addTask = await addTaskToDB({
-    //   ...taskSchema,
-    //   id: 'third_data',
-    //   tag: 'tag_2',
-    // })
-    const updateTasks = updateTaskTags('tag_2', 'tag_1')
-    console.log(updateTasks)
+    await addTaskToDB({ ...taskSchema, id: 'sixth_data', tag: 'tag_2' })
   }
 
   const format = {
@@ -54,7 +71,13 @@ const TestScreen = () => {
   }
 
   return (
-    <>
+    <Auth redirect='/login'>
+      <div>
+        {loading ? 'Loading...' : ''}
+        {/* {data && console.log(data)}
+        {error && console.log(error)} */}
+      </div>
+      <br />
       <div
         style={{
           width: '100%',
@@ -104,7 +127,7 @@ const TestScreen = () => {
           <AddTask2 defaultDate='Someday' page='All Tasks' />
         </Box>
       </div>
-    </>
+    </Auth>
   )
 }
 

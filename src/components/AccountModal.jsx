@@ -61,7 +61,7 @@ const AccountModal = ({ show, onClose }) => {
     password: '',
     newPass: '',
   }
-  console.log(user)
+  // console.log(user.uid)
 
   const handleLogout = async () => {
     const loggedOut = await logout()
