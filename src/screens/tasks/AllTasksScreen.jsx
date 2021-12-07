@@ -1,13 +1,33 @@
 import { Box } from '@chakra-ui/layout'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import Sidebar from '../../components/Sidebar'
 import TasksScreen from '../../components/TasksScreen'
-import { TasksContext } from '../../Context/TasksContext'
 import { getScreenWidths } from '../../helpers'
+import {
+  useAppContext,
+  usePrefsContext,
+  useTagsContext,
+  useTasksContext,
+} from '../../hooks/ContextHooks'
+import { isEmpty } from '../../helpers'
 
 const AllTasksScreen = () => {
-  const { data: tasks } = useContext(TasksContext)
+  const { data: tasks, set: setTasks } = useTasksContext()
+  const { set: setTags, tags } = useTagsContext()
+  const { set: setPrefs } = usePrefsContext()
+  const { data: userData, getData } = useAppContext()
   const sidebarWidth = getScreenWidths([1, 5])[0]
+
+  useEffect(async () => {
+    if (isEmpty(userData)) await getData()
+
+    if (!isEmpty(userData) && tags.length < 1 && tasks.length < 1) {
+      setTags(userData.tags)
+      setTasks(userData.tasks)
+      setPrefs(userData.preferences)
+    }
+  }, [tasks, userData])
+
   return (
     <>
       <Box width='full' height='100vh'>

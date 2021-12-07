@@ -3,7 +3,7 @@ import produce from 'immer'
 const TasksReducer = produce((draft, action) => {
   switch (action.type) {
     case 'set':
-      draft.data = { ...draft.data, ...action.data }
+      draft.data = action.data
       break
     case 'add':
       draft.data.push(action.task)

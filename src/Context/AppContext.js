@@ -33,7 +33,6 @@ export const AppProvider = ({ children }) => {
   const getData = async (uid) => {
     dispatch({ type: 'request_loading' })
     try {
-      console.log(state.user?.uid || 'no user uid found')
       const data = await getUserData(dataSchema, uid)
       dispatch({ type: 'setData', data })
     } catch (error) {

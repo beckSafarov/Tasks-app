@@ -1,10 +1,7 @@
 import React, { createContext, useReducer } from 'react'
-import { dataSchema } from '../firebase/config'
-import { getUserData } from '../firebase/controllers'
-import { getStore } from '../helpers/lcs'
 import PreferencesReducer from './reducers/PreferencesReducer'
 
-const defaultPrefs = {
+export const defaultPrefs = {
   showCompletedTasks: false,
   sidebarTagsToggle: false,
   sorts: {
@@ -12,9 +9,7 @@ const defaultPrefs = {
   },
 }
 
-const initialState = {
-  preferences: defaultPrefs,
-}
+const initialState = { preferences: defaultPrefs }
 
 export const PreferencesContext = createContext(initialState)
 

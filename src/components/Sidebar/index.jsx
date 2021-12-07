@@ -16,7 +16,10 @@ import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
 import { useHistory } from 'react-router'
-import { PreferencesContext } from '../../Context/PreferencesContext'
+import {
+  defaultPrefs,
+  PreferencesContext,
+} from '../../Context/PreferencesContext'
 import CustomAvatar from '../CustomAvatar'
 import { getCurrUser } from '../../firebase/auth'
 import AccountModal from '../AccountModal'
@@ -48,7 +51,6 @@ const Sidebar = () => {
   const { tags, add: addTag } = useContext(TagsContext)
   const context = useAppContext()
   const user = context?.user || getAuth().currentUser
-  console.log(user)
 
   useEffect(() => {
     if (newTag && tags[newTag]) {

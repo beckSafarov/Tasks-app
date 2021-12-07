@@ -1,6 +1,6 @@
-import produce from 'immer'
+import produce, { current } from 'immer'
 
-const PreferencesReducer = produce(async (draft, action) => {
+const PreferencesReducer = produce((draft, action) => {
   let { showCompletedTasks, sidebarTagsToggle } = draft.preferences
   switch (action.type) {
     case 'set':

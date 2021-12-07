@@ -15,11 +15,11 @@ const errRes = (error) => ({ success: false, error })
  * @returns object with data or empty object
  */
 const getUserData = async (fallBack = {}, uid) => {
-  console.log('received request')
-  console.log(uid)
+  // console.log('received request')
+  // console.log(uid)
   const docRef = doc(db, 'tasks', uid || auth.currentUser.uid)
   const docSnap = await getDoc(docRef)
-  console.log(docSnap.exists())
+  // console.log(docSnap.exists())
   return docSnap.exists() ? docSnap.data() : fallBack
 }
 

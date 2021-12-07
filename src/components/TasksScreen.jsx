@@ -24,6 +24,7 @@ import { TasksContext } from '../Context/TasksContext'
 import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import AddTask2 from './AddTask2'
+import { usePrefsContext } from '../hooks/ContextHooks'
 
 const TasksScreen = ({ store, title, tag, defaultDate }) => {
   console.log(store)
@@ -31,7 +32,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
     preferences: prefs,
     toggleShowCompletedTasks,
     setSortType,
-  } = useContext(PreferencesContext)
+  } = usePrefsContext()
   const {
     isOpen: isConfOpen,
     onOpen: onConfOpen,
@@ -39,9 +40,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   } = useDisclosure()
   const { tags, remove: removeTag } = useContext(TagsContext)
   const { removeAllByTag, remove: removeTask } = useContext(TasksContext)
-  // const { positives: dones, negatives: undones } = group(store)
-  let dones = []
-  let undones = []
+  const { positives: dones, negatives: undones } = group(store)
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -60,7 +59,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   // variables
   const toast = useToast()
   const history = useHistory()
-  const sortType = prefs.sorts[page] || 'creationDate'
+  const sortType = prefs?.sorts?.[page] || 'creationDate'
   const path = useLocation().pathname
 
   useEffect(() => {
@@ -109,7 +108,7 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   // clears the search result and brings back the initial task list
   const onSearchClear = () => {
     setTasks(sortTasks(undones, sortType, tags))
-    setShowCompTasks(prefs.showCompletedTasks)
+    setShowCompTasks(prefs?.showCompletedTasks || true)
     setCompTasks(sortTasks(dones, sortType, tags))
   }
 
