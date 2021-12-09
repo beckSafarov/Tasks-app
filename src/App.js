@@ -15,15 +15,13 @@ import PublicRoute from './components/PublicRoute'
 import Loading from './components/Loading'
 import { useState, useEffect } from 'react'
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
-import { useAppContext } from './hooks/ContextHooks'
 const auth = getAuth()
 
 const App = () => {
   const [loading, setLoading] = useState(true)
   const [logged, setLogged] = useState(false)
-  const [user, setUser] = useState({})
 
-  useEffect(async () => {
+  useEffect(() => {
     if (auth.currentUser) {
       setLoading(false)
       setLogged(true)
@@ -37,7 +35,7 @@ const App = () => {
         }
       })
     }
-  }, [auth, user])
+  }, [])
 
   return (
     <ChakraProvider theme={theme}>
@@ -74,6 +72,9 @@ const App = () => {
           </PrivateRoute>
 
           {/* PlayGround screen route */}
+          {/* <PrivateRoute logged={logged} path='/test'>
+            <TestScreen />
+          </PrivateRoute> */}
           <Route path='/test' component={TestScreen} />
         </Router>
       )}

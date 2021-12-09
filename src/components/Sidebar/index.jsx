@@ -16,12 +16,8 @@ import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import { TagsContext } from '../../Context/TagsContext'
 import AddTagModal from '../AddTagModal'
 import { useHistory } from 'react-router'
-import {
-  defaultPrefs,
-  PreferencesContext,
-} from '../../Context/PreferencesContext'
+import { PreferencesContext } from '../../Context/PreferencesContext'
 import CustomAvatar from '../CustomAvatar'
-import { getCurrUser } from '../../firebase/auth'
 import AccountModal from '../AccountModal'
 import { useAppContext } from '../../hooks/ContextHooks'
 import { getAuth } from '@firebase/auth'
@@ -57,7 +53,7 @@ const Sidebar = () => {
       setNewTag('')
       history.push(`/tag/${tags[newTag]}`)
     }
-  }, [tags])
+  }, [tags, newTag, history])
 
   const toggleClicked = (e) => {
     setCaret(!caret)

@@ -3,7 +3,7 @@ import produce from 'immer'
 const TagsReducer = produce((draft, action) => {
   switch (action.type) {
     case 'set':
-      draft.tags = { ...draft.tags, ...action.tags }
+      draft.tags = [...draft.tags, ...action.tags]
       break
     case 'add':
       draft.tags.push(action.tag)

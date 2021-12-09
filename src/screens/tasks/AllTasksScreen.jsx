@@ -18,15 +18,18 @@ const AllTasksScreen = () => {
   const { data: userData, getData } = useAppContext()
   const sidebarWidth = getScreenWidths([1, 5])[0]
 
-  useEffect(async () => {
-    if (isEmpty(userData)) await getData()
+  useEffect(() => {
+    if (isEmpty(userData)) {
+      const fetchData = async () => await getData()
+      fetchData()
+    }
 
     if (!isEmpty(userData) && tags.length < 1 && tasks.length < 1) {
       setTags(userData.tags)
       setTasks(userData.tasks)
       setPrefs(userData.preferences)
     }
-  }, [tasks, userData])
+  }, [tasks, userData, getData, tags.length])
 
   return (
     <>

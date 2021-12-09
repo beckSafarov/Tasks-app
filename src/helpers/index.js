@@ -5,13 +5,6 @@ export const isEmpty = (obj) => Object.keys(obj).length < 1
 
 export const objSize = (obj) => Object.keys(obj).length
 
-export const objToArr = (obj) => {
-  let res = []
-  Object.keys(obj).map((tag) => res.push(...obj[tag]))
-
-  return res
-}
-
 export const categorize = (arr = []) => {
   let res = {}
   arr.forEach((curr) => {
@@ -26,6 +19,12 @@ export const categorize = (arr = []) => {
   return res
 }
 
+/**
+ * @desc groups an array of objects with a binary property
+ * @param Array containing objects
+ * @param String optional, property to group by
+ * @returns Object {positives: [], negatives: []}
+ */
 export const groupByBinaryProp = (arr = [], prop = 'done') => {
   const res = { positives: [], negatives: [] }
   arr.forEach((elem) => {
@@ -40,19 +39,6 @@ const objList = [
   { id: 3, done: true },
   { id: 4, done: false },
 ]
-
-// console.log(groupByBinaryProp(objList))
-
-// export const groupByProp = (arr = [], prop = 'tag') => {
-//   const res = {}
-//   let elemProp
-//   arr.forEach((elem) => {
-//     elemProp = elem[prop]
-//     if (!res[elemProp]) res[elemProp] = []
-//     res[elemProp].push(elem)
-//   })
-//   return res
-// }
 
 export const getTasksPerTag = (tags, tasks) => {
   const res = {}
@@ -114,9 +100,6 @@ export const updateArr = (arr = [], newVal, key = 'id') => {
   }
   return arr
 }
-
-export const hasProp = (obj = {}, prop) =>
-  Object.keys(obj).find((p) => p === prop) ? true : false
 
 export const nthProp = (obj = {}, n) => Object.keys(obj)[n]
 

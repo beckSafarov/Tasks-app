@@ -17,7 +17,7 @@ const DateScreen = () => {
   const { tasks } = useContext(TasksContext) || { tasks: [] }
 
   const loc = useLocation().pathname
-  const dateName = capitalize(loc.split('/').pop())
+  const dateName = loc.split('/').pop()
   const sidebarWidth = getScreenWidths([1, 5])[0]
 
   // const lookUp = {

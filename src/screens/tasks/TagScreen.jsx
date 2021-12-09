@@ -9,7 +9,7 @@ import Sidebar from '../../components/Sidebar'
 const TagScreen = ({ history, location }) => {
   const { tags } = useContext(TagsContext)
   const { tasks } = useContext(TasksContext)
-  const tagId = location.pathname.split('/').slice(-1)[0]
+  const tagId = location.pathname.split('/').pop()
   const tag = tags.find((t) => t.id === tagId)?.name || ''
   const sidebarWidth = getScreenWidths([1, 5])[0]
 
