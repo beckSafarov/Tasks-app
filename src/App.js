@@ -4,17 +4,15 @@ import './index.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import TestScreen from './screens/TestScreen'
-import AllTasksScreen from './screens/tasks/AllTasksScreen'
-import TagScreen from './screens/tasks/TagScreen'
 import LandingScreen from './screens/LandingScreen'
 import SignUpScreen from './screens/auth/SignUpScreen'
 import LoginScreen from './screens/auth/LoginScreen'
-import DateScreen from './screens/tasks/DateScreen'
 import PrivateRoute from './components/PrivateRoute'
 import PublicRoute from './components/PublicRoute'
 import Loading from './components/Loading'
 import { useState, useEffect } from 'react'
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
+import TasksScreen from './screens/TasksScreen'
 const auth = getAuth()
 
 const App = () => {
@@ -27,12 +25,8 @@ const App = () => {
       setLogged(true)
     } else {
       onAuthStateChanged(auth, (u) => {
-        if (u) {
-          setLoading(false)
-          setLogged(true)
-        } else {
-          setLoading(false)
-        }
+        if (u) setLogged(true)
+        setLoading(false)
       })
     }
   }, [])
@@ -56,25 +50,22 @@ const App = () => {
 
           {/* Private Routes */}
           <PrivateRoute logged={logged} path='/all-tasks'>
-            <AllTasksScreen />
+            <TasksScreen />
           </PrivateRoute>
           <PrivateRoute logged={logged} path='/today'>
-            <DateScreen />
+            <TasksScreen />
           </PrivateRoute>
           <PrivateRoute logged={logged} path='/tomorrow'>
-            <DateScreen />
+            <TasksScreen />
           </PrivateRoute>
           <PrivateRoute logged={logged} path='/upcoming'>
-            <DateScreen />
+            <TasksScreen />
           </PrivateRoute>
           <PrivateRoute logged={logged} path='/tag/:name'>
-            <TagScreen />
+            <TasksScreen />
           </PrivateRoute>
 
           {/* PlayGround screen route */}
-          {/* <PrivateRoute logged={logged} path='/test'>
-            <TestScreen />
-          </PrivateRoute> */}
           <Route path='/test' component={TestScreen} />
         </Router>
       )}

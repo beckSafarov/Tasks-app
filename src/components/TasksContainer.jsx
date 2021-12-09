@@ -25,8 +25,9 @@ import { TagsContext } from '../Context/TagsContext'
 import { PreferencesContext } from '../Context/PreferencesContext'
 import AddTask2 from './AddTask2'
 import { usePrefsContext } from '../hooks/ContextHooks'
+import SkeletonStack from './SkeletonStack'
 
-const TasksScreen = ({ store, title, tag, defaultDate }) => {
+const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
   console.log(store)
   const {
     preferences: prefs,
@@ -174,15 +175,17 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
           />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
-          {tasks.map((task, i) => (
-            <Task
-              key={i}
-              task={task}
-              onOpen={taskOpenHandle}
-              onDelete={taskDeleteHandler}
-              page={page}
-            />
-          ))}
+          <SkeletonStack show={loading} />
+          {!loading &&
+            tasks.map((task, i) => (
+              <Task
+                key={i}
+                task={task}
+                onOpen={taskOpenHandle}
+                onDelete={taskDeleteHandler}
+                page={page}
+              />
+            ))}
         </VStack>
         <TaskDrawer
           show={openTaskBar}
@@ -223,9 +226,9 @@ const TasksScreen = ({ store, title, tag, defaultDate }) => {
   )
 }
 
-TasksScreen.defaultProps = {
+TasksContainer.defaultProps = {
   store: [],
   title: 'All tasks',
 }
 
-export default TasksScreen
+export default TasksContainer

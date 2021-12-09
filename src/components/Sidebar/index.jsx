@@ -192,12 +192,8 @@ const Sidebar = () => {
         <Box color='light.sidebar_text' w='full'>
           <Collapse in={isOpen} animateOpacity>
             <VStack spacing={0}>
-              {Object.keys(tags).map((tag, i) => (
-                <Link
-                  key={i}
-                  to={`/tag/${tags[tag]}`}
-                  style={{ width: '100%' }}
-                >
+              {tags.map((tag, i) => (
+                <Link key={i} to={`/tag/${tag.id}`} style={{ width: '100%' }}>
                   <Box
                     p={1}
                     paddingLeft={'20px'}
@@ -210,7 +206,7 @@ const Sidebar = () => {
                       justifyContent='space-between'
                       pr='5px'
                     >
-                      <Text isTruncated>{tag}</Text>{' '}
+                      <Text isTruncated>{tag.tag}</Text>{' '}
                     </Flex>
                   </Box>
                 </Link>

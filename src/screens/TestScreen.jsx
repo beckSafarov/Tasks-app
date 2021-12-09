@@ -9,8 +9,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import AddTask2 from '../components/AddTask2'
 import { taskSchema, TasksContext } from '../Context/TasksContext'
 import { AppContext } from '../Context/AppContext'
-import Auth from '../components/Auth'
 import usePageData from '../hooks/usePageData'
+import SkeletonStack from '../components/SkeletonStack'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
@@ -31,10 +31,10 @@ const TestScreen = () => {
     error: appErr,
   } = useContext(AppContext)
 
-  const pageData = usePageData({
-    pathname: 'http://localhost:3000/',
-  })
-  console.log(pageData)
+  // const pageData = usePageData({
+  //   pathname: 'http://localhost:3000/tag/mcd',
+  // })
+  // console.log(pageData)
 
   const loading = updateLoading || appLoading
 
@@ -51,11 +51,12 @@ const TestScreen = () => {
   }
 
   return (
-    <Auth redirect='/login'>
+    <>
       <div>
         {loading ? 'Loading...' : ''}
         {/* {data && console.log(data)}
         {error && console.log(error)} */}
+        {/* <SkeletonStack /> */}
       </div>
       <br />
       <div
@@ -107,7 +108,7 @@ const TestScreen = () => {
           <AddTask2 defaultDate='Someday' page='All Tasks' />
         </Box>
       </div>
-    </Auth>
+    </>
   )
 }
 
