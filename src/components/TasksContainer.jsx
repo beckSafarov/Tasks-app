@@ -20,15 +20,15 @@ import { groupByBinaryProp as group, rgxSearch } from '../helpers'
 import { sortTasks, getPage } from '../helpers/tasksHelpers'
 
 // --- context stuff ---
-import { TasksContext } from '../Context/TasksContext'
-import { TagsContext } from '../Context/TagsContext'
-import { PreferencesContext } from '../Context/PreferencesContext'
 import AddTask2 from './AddTask2'
-import { usePrefsContext } from '../hooks/ContextHooks'
+import {
+  usePrefsContext,
+  useTagsContext,
+  useTasksContext,
+} from '../hooks/ContextHooks'
 import SkeletonStack from './SkeletonStack'
 
 const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
-  console.log(store)
   const {
     preferences: prefs,
     toggleShowCompletedTasks,
@@ -39,8 +39,8 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
     onOpen: onConfOpen,
     onClose: onConfClose,
   } = useDisclosure()
-  const { tags, remove: removeTag } = useContext(TagsContext)
-  const { removeAllByTag, remove: removeTask } = useContext(TasksContext)
+  const { tags, remove: removeTag } = useTagsContext()
+  const { removeAllByTag, remove: removeTask } = useTasksContext()
   const { positives: dones, negatives: undones } = group(store)
 
   // hooks

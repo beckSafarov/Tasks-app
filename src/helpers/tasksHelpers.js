@@ -24,7 +24,9 @@ export const sortTasks = (list = [], type = 'none', tags) => {
       return [...positives, ...negatives]
     case 'dueDate':
       const { positives: p, negatives: n } = group(list, 'dueDate')
-      p.sort((x, y) => new Date(x.dueDate) - new Date(y.dueDate))
+      p.sort(
+        (x, y) => new Date(x.dueDate.toDate()) - new Date(y.dueDate.toDate())
+      )
       return [...p, ...n]
     case 'creationDate':
     default:

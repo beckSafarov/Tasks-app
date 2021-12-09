@@ -29,11 +29,6 @@ const AddTask2 = ({ defaultTag, defaultDate, page }) => {
         id: uuid4(),
         dueDate: textToDate(defaultDate),
       })
-      console.log({
-        ...todo,
-        id: uuid4(),
-        dueDate: textToDate(defaultDate),
-      })
       if (!tags.untagged) addTag('untagged')
       resetForm()
       setSubmitting(false)
@@ -73,9 +68,9 @@ const AddTask2 = ({ defaultTag, defaultDate, page }) => {
             hidden={page === 'tag'}
             isTruncated
           >
-            {Object.keys(tags).map((tag, i) => (
-              <option key={i} value={tag}>
-                {tag}
+            {tags.map((t, i) => (
+              <option key={t.id} value={t.tag}>
+                {t.tag}
               </option>
             ))}
           </Select>

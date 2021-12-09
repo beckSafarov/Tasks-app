@@ -101,9 +101,9 @@ const TaskDrawer = ({
                 onChange={(e) => handleChanges('tag', e.target.value, true)}
                 isTruncated
               >
-                {Object.keys(tags).map((tag, i) => (
-                  <option key={i} value={tag}>
-                    {tag}
+                {tags.map((t) => (
+                  <option key={t.id} value={t.tag}>
+                    {t.tag}
                   </option>
                 ))}
               </Select>
@@ -123,7 +123,9 @@ const TaskDrawer = ({
                 placeholderText='Add Due Date'
                 className='calendar'
                 selected={
-                  fields && fields.dueDate ? new Date(fields.dueDate) : null
+                  fields && fields.dueDate
+                    ? new Date(fields.dueDate.toDate())
+                    : null
                 }
                 onChange={(v) => handleChanges('dueDate', v, true)}
                 timeInputLabel='Time:'

@@ -36,7 +36,7 @@ dayjs.extend(relativeTime)
 const Task = ({ task, onOpen, completed, onDelete, page }) => {
   const { update: updateTask } = useContext(TasksContext)
   const { onClose: onModalClose } = useDisclosure()
-  const taskTime = taskTimeHandler(task.dueDate)
+  const taskTime = taskTimeHandler(task?.dueDate?.toDate() || '')
   const toggleDone = () => updateTask({ ...task, done: !task.done })
 
   const toggleStar = () =>
