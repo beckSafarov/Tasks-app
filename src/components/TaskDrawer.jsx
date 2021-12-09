@@ -24,7 +24,7 @@ const TaskDrawer = ({
   task,
   tags,
 }) => {
-  const { update } = useContext(TasksContext)
+  const { updateById: update } = useContext(TasksContext)
   const styles = document?.querySelector('#main')?.style || {}
   const [fields, setFields] = useState({ ...task })
   let updated = {}
@@ -52,6 +52,11 @@ const TaskDrawer = ({
     if (show && e.target.id.match(/main|container|completed_tasks_flex/)) {
       onClose(fields)
     }
+  }
+
+  const getDueDate = () => {
+    if (!fields || !fields.dueDate) return null
+    return fields.dueDate.toDate ? fields.dueDate.toDate() : fields.dueDate
   }
 
   return (
@@ -122,11 +127,7 @@ const TaskDrawer = ({
                 name='dueDate'
                 placeholderText='Add Due Date'
                 className='calendar'
-                selected={
-                  fields && fields.dueDate
-                    ? new Date(fields.dueDate.toDate())
-                    : null
-                }
+                selected={getDueDate()}
                 onChange={(v) => handleChanges('dueDate', v, true)}
                 timeInputLabel='Time:'
                 dateFormat='MM/dd/yyyy'

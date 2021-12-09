@@ -167,7 +167,6 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
       />
       <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
-          {/* <AddTask defaultTag={tag || 'untagged'} defaultDate={defaultDate} /> */}
           <AddTask2
             defaultTag={tag || 'untagged'}
             defaultDate={defaultDate}

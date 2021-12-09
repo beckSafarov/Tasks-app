@@ -1,5 +1,5 @@
 import { getAuth } from '@firebase/auth'
-import { setDoc, getFirestore, doc } from 'firebase/firestore'
+import { setDoc, getFirestore, doc, Timestamp } from 'firebase/firestore'
 import { app, dataSchema } from './config'
 import { succRes, errRes, getUserData, removeTaskOrTag } from './controllers'
 const db = getFirestore(app)
@@ -13,6 +13,9 @@ const auth = getAuth()
 const addTaskToDB = async (task = {}) => {
   try {
     const data = await getUserData(dataSchema)
+    if (task.dueDate) {
+      task.dueDate = Timestamp.fromDate(new Date(task.dueDate.toDate()))
+    }
     data.tasks.push(task)
     await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
     return data.tasks
@@ -31,6 +34,11 @@ const addTaskToDB = async (task = {}) => {
 const updateOneOrMore = async (prop, propVal, predicate = {}) => {
   try {
     const data = await getUserData()
+    if (predicate.dueDate) {
+      predicate.dueDate = Timestamp.fromDate(
+        new Date(predicate.dueDate.toDate())
+      )
+    }
     data.tasks = data.tasks.map((t) =>
       t[prop] === propVal ? { ...t, ...predicate } : t
     )

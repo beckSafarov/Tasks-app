@@ -45,8 +45,7 @@ const Sidebar = () => {
   const [newTag, setNewTag] = useState('')
   const [accountModal, setAccountModal] = useState(false)
   const { tags, add: addTag } = useContext(TagsContext)
-  const context = useAppContext()
-  const user = context?.user || getAuth().currentUser
+  const user = getAuth().currentUser
 
   useEffect(() => {
     if (newTag && tags[newTag]) {
