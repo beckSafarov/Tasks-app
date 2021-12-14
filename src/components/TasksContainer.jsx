@@ -10,14 +10,16 @@ import Task from './Task'
 import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
 import ConfirmModal from './ConfirmModal'
+import SkeletonStack from './SkeletonStack'
 
-// --- library methods ---
-import { useEffect, useState, useContext } from 'react'
-import { useHistory, useLocation } from 'react-router'
+// --- library methods & custom hooks ---
+import { useEffect, useState, useCallback } from 'react'
+import { useHistory } from 'react-router'
+import useTasksMethods from '../hooks/useTasksMethods'
 
 // --- helper methods ---
 import { groupByBinaryProp as group, rgxSearch } from '../helpers'
-import { sortTasks, getPage } from '../helpers/tasksHelpers'
+import { sortTasks } from '../helpers/tasksHelpers'
 
 // --- context stuff ---
 import AddTask2 from './AddTask2'
@@ -26,9 +28,25 @@ import {
   useTagsContext,
   useTasksContext,
 } from '../hooks/ContextHooks'
-import SkeletonStack from './SkeletonStack'
 
-const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
+// default props for error toasts
+const toastDefs = {
+  duration: 4000,
+  isClosable: true,
+  variant: 'subtle',
+  position: 'bottom-right',
+  status: 'error',
+}
+
+const TasksContainer = ({
+  loading,
+  store: tasksFromDB,
+  title,
+  tag,
+  defaultDate,
+  page,
+  error,
+}) => {
   const {
     preferences: prefs,
     toggleShowCompletedTasks,
@@ -40,8 +58,9 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
     onClose: onConfClose,
   } = useDisclosure()
   const { tags, remove: removeTag } = useTagsContext()
-  const { removeAllByTag, remove: removeTask } = useTasksContext()
-  const { positives: dones, negatives: undones } = group(store)
+  const { set: setTasksContext, backup } = useTasksContext()
+
+  const { positives: dones, negatives: undones } = group(tasksFromDB)
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -55,24 +74,59 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
     onProceed: () => void 0,
     proceedTitle: 'Delete',
   })
-  const [page, setPage] = useState('')
 
   // variables
   const toast = useToast()
   const history = useHistory()
   const sortType = prefs?.sorts?.[page] || 'creationDate'
-  const path = useLocation().pathname
+  const loadTasks =
+    tasksFromDB.length > 0 && tasks.length === 0 && compTasks.length === 0
 
   useEffect(() => {
-    setTasks(sortTasks(undones, sortType, tags))
-    setCompTasks(sortTasks(dones, sortType, tags))
-    setPage(getPage(path, 'All Tasks'))
-  }, [prefs, store, tag, title])
+    if (loadTasks) {
+      setTasks(undones)
+      setCompTasks(dones)
+    }
+
+    if (error)
+      toast({
+        ...toastDefs,
+        title: 'Firebase Error',
+        description: error,
+      })
+  }, [tasksFromDB, tag, error])
 
   // when a task is clicked, it opens the taskDrawer
   const taskOpenHandle = (task) => {
     setSelectedTask(task)
     setOpenTaskBar(true)
+  }
+
+  // backup updated tasks to the context and db
+  const runBackup = (newTasks, timer = 800) => {
+    setTimeout(() => {
+      setTasksContext(newTasks)
+      backup(newTasks)
+    }, timer)
+  }
+
+  const addTask = (t) => {
+    setTasks([...tasks, t])
+    runBackup([...tasks, t])
+  }
+
+  const updateTasks = (updates, prop, propVal) => {
+    const updatedTasks = tasks.map((t) =>
+      t[prop] === propVal ? { ...t, ...updates } : t
+    )
+    setTasks(updatedTasks)
+    runBackup(updatedTasks)
+  }
+
+  const removeTasks = (prop, propVal) => {
+    const filteredTasks = tasks.filter((t) => t[prop] !== propVal)
+    setTasks(filteredTasks)
+    runBackup(filteredTasks, 400)
   }
 
   // toggle a task to be completed or back to incompleted
@@ -83,34 +137,26 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
 
   // receives a search keyword and searches through task names
   const onSearch = (keyword) => {
-    const res = rgxSearch(store, keyword)
+    const res = rgxSearch(tasksFromDB, keyword)
     const { positives, negatives } = group(res)
     if (positives.length > 0 || negatives.length > 0) {
       setTasks(negatives)
-      if (positives.length > 0) {
-        setCompTasks(positives)
-        setShowCompTasks(true)
-      } else {
-        setShowCompTasks(false)
-      }
+      setCompTasks(positives)
+      setShowCompTasks(positives.length > 0)
     } else {
       toast({
+        ...toastDefs,
         title: 'Search failed',
-        position: 'bottom-right',
         description: `No result found for ${keyword}`,
-        status: 'error',
-        duration: 4000,
-        isClosable: true,
-        variant: 'subtle',
       })
     }
   }
 
   // clears the search result and brings back the initial task list
   const onSearchClear = () => {
-    setTasks(sortTasks(undones, sortType, tags))
+    setTasks(undones, sortType, tags)
     setShowCompTasks(prefs?.showCompletedTasks || true)
-    setCompTasks(sortTasks(dones, sortType, tags))
+    setCompTasks(dones, sortType, tags)
   }
 
   const taskDeleteHandler = (deletingTask = {}, warned = false) => {
@@ -123,7 +169,7 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
       onConfOpen()
     } else {
       onConfClose()
-      removeTask(deletingTask.id)
+      removeTasks('id', deletingTask.id)
       setOpenTaskBar(false)
     }
   }
@@ -132,7 +178,7 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
   const sortTypeHandler = (type) => {
     if (sortType !== type) {
       setSortType(page, type)
-      setTasks(sortTasks(undones, type, tags))
+      setTasks(undones, type, tags)
     }
   }
 
@@ -147,7 +193,7 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
       onConfOpen()
     } else {
       removeTag(tag)
-      removeAllByTag(tag)
+      removeTasks('tag', tag)
       history.push('/')
     }
   }
@@ -156,6 +202,7 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
     <>
       <TaskHeader
         title={title}
+        loading={loading}
         onSearchSubmit={onSearch}
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
@@ -171,12 +218,13 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
             defaultTag={tag || 'untagged'}
             defaultDate={defaultDate}
             page={page}
+            onSubmit={addTask}
           />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           <SkeletonStack show={loading} />
           {!loading &&
-            tasks.map((task, i) => (
+            sortTasks(tasks, sortType, tags).map((task, i) => (
               <Task
                 key={i}
                 task={task}
@@ -193,6 +241,7 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
           tags={tags}
           onDelete={taskDeleteHandler}
           transition={'0.2s'}
+          onUpdate={(updates) => updateTasks(updates, 'id', updates.id)}
         />
 
         {/* completed tasks */}
@@ -227,7 +276,14 @@ const TasksContainer = ({ loading, store, title, tag, defaultDate, error }) => {
 
 TasksContainer.defaultProps = {
   store: [],
-  title: 'All tasks',
+  page: 'All Tasks',
+  title: 'All Tasks',
 }
 
 export default TasksContainer
+// if (positives.length > 0) {
+//   setCompTasks(positives)
+//   setShowCompTasks(true)
+// } else {
+//   setShowCompTasks(false)
+// }

@@ -36,12 +36,13 @@ const setUserData = async (newData = {}, currData) => {
   return updatedData
 }
 
-const setStore = async (newList, store = 'tasks') => {
+const setList = async (newList, list = 'tasks') => {
   if (!newList) return false
   const data = await getUserData()
-  data[store] = newList
+  data[list] = newList
+  // console.log(data[list])
   await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
-  return data[store]
+  return data[list]
 }
 
 /**
@@ -138,5 +139,5 @@ export {
   setPrefs,
   removeTaskOrTag,
   setUserData,
-  setStore,
+  setList,
 }

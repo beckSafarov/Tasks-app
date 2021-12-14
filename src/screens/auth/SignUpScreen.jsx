@@ -6,7 +6,6 @@ import { emailSignUp } from '../../firebase/auth'
 import { updateCurrUser } from '../../firebase/controllers'
 import FormBuild from '../../components/FormBuild'
 import ShowAlert from '../../components/ShowAlert'
-import Auth from '../../components/Auth'
 import AuthProviders from '../../components/AuthProviders'
 import { useAppContext } from '../../hooks/ContextHooks'
 
@@ -48,37 +47,35 @@ const SignUpScreen = ({ history }) => {
   }
 
   return (
-    <Auth redirect='/all-tasks' unloggedOnly>
-      <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
-        <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
-          <Heading mb='30px' size='2xl' textAlign='center'>
-            Sign up
-          </Heading>
-          <ShowAlert show={error ? 1 : 0} onClose={() => setError('')}>
-            {error}
-          </ShowAlert>
-          <AuthProviders
-            showForm={showForm}
-            onEmailClicked={() => setShowForm(true)}
-          />
-          <Text hidden={showForm} fontSize='0.8em' textAlign='center' py='5'>
-            Already have an account?{' '}
-            <Text as='span' color='blue.500'>
-              <Link to='/login'>Sign in</Link>
-            </Text>
+    <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
+      <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
+        <Heading mb='30px' size='2xl' textAlign='center'>
+          Sign up
+        </Heading>
+        <ShowAlert show={error ? 1 : 0} onClose={() => setError('')}>
+          {error}
+        </ShowAlert>
+        <AuthProviders
+          showForm={showForm}
+          onEmailClicked={() => setShowForm(true)}
+        />
+        <Text hidden={showForm} fontSize='0.8em' textAlign='center' py='5'>
+          Already have an account?{' '}
+          <Text as='span' color='blue.500'>
+            <Link to='/login'>Sign in</Link>
           </Text>
+        </Text>
 
-          {/* --- Sign up Form --- */}
-          <FormBuild
-            show={showForm}
-            onCancel={() => setShowForm(false)}
-            onSubmit={emailSignIn}
-            validationSchema={validationSchema}
-            initialValues={{ name: '', email: '', password: '' }}
-          />
-        </Flex>
+        {/* --- Sign up Form --- */}
+        <FormBuild
+          show={showForm}
+          onCancel={() => setShowForm(false)}
+          onSubmit={emailSignIn}
+          validationSchema={validationSchema}
+          initialValues={{ name: '', email: '', password: '' }}
+        />
       </Flex>
-    </Auth>
+    </Flex>
   )
 }
 

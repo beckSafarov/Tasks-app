@@ -13,7 +13,7 @@ import { isUpcoming } from '../helpers/tasksHelpers'
 dayjs.extend(isTomorrow)
 const defLoc = { pathname: 'http://localhost:3000/' }
 
-const filterTasks = (filter, list, tagName) => {
+const filterTasks = (filter = 'all', list, tagName) => {
   switch (filter) {
     case 'today':
       return list.filter((t) => t.dueDate && IsToday(t.dueDate.toDate()))
@@ -33,7 +33,7 @@ const filterTasks = (filter, list, tagName) => {
 const getPage = ({ pathname: path }) => {
   const match = path.match(/tag|today|tomorrow|upcoming/)
   if (match) return { filter: match[0], tagId: path.split('/').pop() }
-  return { filter: 'All Tasks' }
+  return { filter: '' }
 }
 
 const usePageData = (loc = defLoc) => {
@@ -43,8 +43,13 @@ const usePageData = (loc = defLoc) => {
   const { set: setPrefs } = usePrefsContext()
   const [pageTasks, setPageTasks] = useState([])
   const [requested, setRequested] = useState(false)
-  const page = getPage(loc)
-  const tagName = contextTags?.find((t) => t.id === page.tagId)?.tag || ''
+
+  const { filter, tagId } = getPage(loc)
+  const tagName = contextTags?.find((t) => t.id === tagId)?.tag || ''
+
+  const defaultDate = filter && filter !== 'tag' ? filter : ''
+  const page = !filter ? 'All Tasks' : tagName || filter
+  const title = !filter ? 'All Tasks' : tagName || capitalize(filter)
 
   useEffect(() => {
     if (isEmpty(userData) && !requested) {
@@ -61,24 +66,19 @@ const usePageData = (loc = defLoc) => {
     }
 
     if (contextTags.length > 0) {
-      const filteredTasks = filterTasks(page.filter, contextTasks, tagName)
+      const filteredTasks = filterTasks(filter, contextTasks, tagName)
       setPageTasks(filteredTasks)
     }
   }, [loc.pathname, userData, contextTasks, contextTags.length, requested])
-
-  const getTitle = () => {
-    if (tagName) return tagName
-    if (page.filter.match(/all/)) return 'All Tasks'
-    return capitalize(page.filter)
-  }
 
   return {
     loading,
     tasks: pageTasks,
     tag: tagName,
     error,
-    title: getTitle(),
-    defaultDate: page.filter,
+    title,
+    defaultDate,
+    page,
   }
 }
 

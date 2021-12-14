@@ -23,8 +23,9 @@ const TaskDrawer = ({
   onDelete,
   task,
   tags,
+  onUpdate,
 }) => {
-  const { updateById: update } = useContext(TasksContext)
+  // const { updateById: update } = useContext(TasksContext)
   const styles = document?.querySelector('#main')?.style || {}
   const [fields, setFields] = useState({ ...task })
   let updated = {}
@@ -45,7 +46,10 @@ const TaskDrawer = ({
     updated = { ...fields }
     updated[name] = value
     setFields(updated)
-    if (shouldUpdate) update(updated)
+    if (shouldUpdate) {
+      console.log(updated)
+      onUpdate(updated)
+    }
   }
 
   const outsideClicked = (e) => {
@@ -205,6 +209,7 @@ TaskDrawer.defaultProps = {
   transition: '0.3s',
   onClose: () => void 0,
   onDelete: () => void 0,
+  onUpdate: () => void 0,
   task: {
     id: '',
     name: '',

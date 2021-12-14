@@ -2,7 +2,15 @@ import produce, { current } from 'immer'
 
 const TasksReducer = produce((draft, action) => {
   switch (action.type) {
+    case 'loading':
+      draft.loading = true
+      break
+    case 'error':
+      draft.loading = false
+      draft.error = action.error
+      break
     case 'set':
+      draft.loading = false
       draft.data = action.data
       break
     case 'add':

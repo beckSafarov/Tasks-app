@@ -1,9 +1,18 @@
 import produce from 'immer'
+import { v4 } from 'uuid'
 
 const TagsReducer = produce((draft, action) => {
   switch (action.type) {
+    case 'loading':
+      draft.loading = true
+      break
+    case 'error':
+      draft.loading = false
+      draft.error = action.error
+      break
     case 'set':
-      draft.tags = [...draft.tags, ...action.tags]
+      draft.loading = false
+      draft.tags = action.tags
       break
     case 'add':
       draft.tags.push(action.tag)

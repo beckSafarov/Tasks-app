@@ -34,15 +34,6 @@ export const sortTasks = (list = [], type = 'none', tags) => {
   }
 }
 
-/**
- * @param: loc:String
- * @returns: matching page name among the options
- */
-export const getPage = (loc, fallBack = 'home') => {
-  const matches = loc.match(/tag|today|tomorrow|upcoming/)
-  return matches ? matches[0] : fallBack
-}
-
 // --- DATE RELATED HELPERS ---
 
 const weekList = {
@@ -148,5 +139,5 @@ export const textToDate = (text) => {
     tomorrow: () => dayjs().add(1, 'day').$d,
     upcoming: () => dayjs().add(rand(), 'day').$d,
   }
-  return cases[text] ? cases[text]() : void 0
+  return cases[text] ? cases[text]() : null
 }

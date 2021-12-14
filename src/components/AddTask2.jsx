@@ -13,8 +13,8 @@ import { TagsContext } from '../Context/TagsContext'
 import { v4 as uuid4 } from 'uuid'
 import { textToDate } from '../helpers/tasksHelpers'
 
-const AddTask2 = ({ defaultTag, defaultDate, page }) => {
-  const { add: addTask } = useContext(TasksContext)
+const AddTask2 = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
+  // const { add: addTask, backup } = useContext(TasksContext)
   const { tags, add: addTag } = useContext(TagsContext)
   const refToInput = useRef(null)
   const formik = useFormik({
@@ -29,7 +29,6 @@ const AddTask2 = ({ defaultTag, defaultDate, page }) => {
         id: uuid4(),
         dueDate: textToDate(defaultDate),
       })
-      if (!tags.untagged) addTag('untagged')
       resetForm()
       setSubmitting(false)
     },
@@ -84,6 +83,7 @@ AddTask2.defaultProps = {
   defaultDate: 'Someday',
   defaultTag: 'untagged',
   page: 'All Tasks',
+  onSubmit: () => void 0,
 }
 
 export default AddTask2

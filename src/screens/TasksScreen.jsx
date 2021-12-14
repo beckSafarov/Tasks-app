@@ -8,7 +8,8 @@ import { useLocation } from 'react-router'
 
 const TasksScreen = () => {
   const loc = useLocation()
-  const { loading, tasks, tag, title, defaultDate, error } = usePageData(loc)
+  const { loading, tasks, tag, title, defaultDate, error, page } =
+    usePageData(loc)
   const sidebarWidth = getScreenWidths([1, 5])[0]
 
   return (
@@ -28,6 +29,7 @@ const TasksScreen = () => {
           loading={loading}
           store={tasks}
           tag={tag}
+          page={page}
           title={title}
           defaultDate={defaultDate}
           error={error}
