@@ -79,14 +79,10 @@ const TasksContainer = ({
   const toast = useToast()
   const history = useHistory()
   const sortType = prefs?.sorts?.[page] || 'creationDate'
-  const loadTasks =
-    tasksFromDB.length > 0 && tasks.length === 0 && compTasks.length === 0
 
   useEffect(() => {
-    if (loadTasks) {
-      setTasks(undones)
-      setCompTasks(dones)
-    }
+    setTasks(undones)
+    setCompTasks(dones)
 
     if (error)
       toast({
