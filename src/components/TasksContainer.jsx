@@ -13,9 +13,8 @@ import ConfirmModal from './ConfirmModal'
 import SkeletonStack from './SkeletonStack'
 
 // --- library methods & custom hooks ---
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import useTasksMethods from '../hooks/useTasksMethods'
 
 // --- helper methods ---
 import { groupByBinaryProp as group, rgxSearch } from '../helpers'
@@ -60,11 +59,8 @@ const TasksContainer = ({
   const { tags, remove: removeTag } = useTagsContext()
   const { set: setTasksContext, backup } = useTasksContext()
 
-  const { positives: dones, negatives: undones } = group(tasksFromDB)
-
   // hooks
   const [tasks, setTasks] = useState([])
-  const [compTasks, setCompTasks] = useState([])
   const [selectedTask, setSelectedTask] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
   const [openTaskBar, setOpenTaskBar] = useState(false)
@@ -81,8 +77,7 @@ const TasksContainer = ({
   const sortType = prefs?.sorts?.[page] || 'creationDate'
 
   useEffect(() => {
-    setTasks(undones)
-    setCompTasks(dones)
+    setTasks(tasksFromDB)
 
     if (error)
       toast({
@@ -112,12 +107,18 @@ const TasksContainer = ({
     runBackup([...tasks, t], 200)
   }
 
-  const updateTasks = (updates, prop, propVal) => {
+  const updateTasks = (updates, prop, propVal, timer) => {
     const updatedTasks = tasks.map((t) =>
       t[prop] === propVal ? { ...t, ...updates } : t
     )
     setTasks(updatedTasks)
-    runBackup(updatedTasks)
+    runBackup(updatedTasks, timer)
+  }
+
+  const toggleTaskDone = (updates) => {
+    setTasks((tasks) =>
+      tasks.map((t) => (t.id === updates.id ? { ...t, done: !t.done } : t))
+    )
   }
 
   const removeTasks = (prop, propVal) => {
@@ -135,11 +136,9 @@ const TasksContainer = ({
   // receives a search keyword and searches through task names
   const onSearch = (keyword) => {
     const res = rgxSearch(tasksFromDB, keyword)
-    const { positives, negatives } = group(res)
-    if (positives.length > 0 || negatives.length > 0) {
-      setTasks(negatives)
-      setCompTasks(positives)
-      setShowCompTasks(positives.length > 0)
+    if (res.length > 0) {
+      setTasks(res)
+      setShowCompTasks(res.filter((t) => t.done).length > 0)
     } else {
       toast({
         ...toastDefs,
@@ -151,9 +150,8 @@ const TasksContainer = ({
 
   // clears the search result and brings back the initial task list
   const onSearchClear = () => {
-    setTasks(undones, sortType, tags)
+    setTasks(tasksFromDB, sortType, tags)
     setShowCompTasks(prefs?.showCompletedTasks || true)
-    setCompTasks(dones, sortType, tags)
   }
 
   const taskDeleteHandler = (deletingTask = {}, warned = false) => {
@@ -172,12 +170,7 @@ const TasksContainer = ({
   }
 
   // receives and sets a new sort type for tasks
-  const sortTypeHandler = (type) => {
-    if (sortType !== type) {
-      setSortType(page, type)
-      setTasks(undones, type, tags)
-    }
-  }
+  const sortTypeHandler = (type) => setSortType(page, type)
 
   // delete a tag and tasks associated with it
   const removeTasksByTag = (warned = false) => {
@@ -221,13 +214,18 @@ const TasksContainer = ({
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
           <SkeletonStack show={loading} />
           {!loading &&
-            sortTasks(tasks, sortType, tags).map((task, i) => (
+            sortTasks(
+              tasks.filter((t) => !t.done),
+              sortType,
+              tags
+            ).map((task, i) => (
               <Task
                 key={i}
                 task={task}
                 onOpen={taskOpenHandle}
                 onDelete={taskDeleteHandler}
                 page={page}
+                onUpdate={(updates) => updateTasks(updates, 'id', task.id, 200)}
               />
             ))}
         </VStack>
@@ -238,22 +236,23 @@ const TasksContainer = ({
           tags={tags}
           onDelete={taskDeleteHandler}
           transition={'0.2s'}
-          onUpdate={(updates) => updateTasks(updates, 'id', updates.id)}
+          onUpdate={(u) => updateTasks(u, 'id', u.id)}
         />
 
         {/* completed tasks */}
-        <VStack
-          mt='50px'
-          id='completed_tasks_div'
-          className={showCompTasks && compTasks.length > 0 ? '' : 'hidden'}
-        >
-          {compTasks.map((t, i) => (
+        <VStack mt='50px' id='completed_tasks_div' hidden={!showCompTasks}>
+          {sortTasks(
+            tasks.filter((t) => t.done),
+            sortType,
+            tags
+          ).map((t, i) => (
             <Task
               key={i}
               task={t}
               onOpen={taskOpenHandle}
               onDelete={taskDeleteHandler}
               page={page}
+              onUpdate={(u) => updateTasks(u, 'id', t.id, 10)}
               completed
             />
           ))}

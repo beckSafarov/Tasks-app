@@ -1,5 +1,3 @@
-import { useContext } from 'react'
-import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
   Flex,
   Text,
@@ -14,8 +12,6 @@ import {
   Box,
   Tooltip,
 } from '@chakra-ui/react'
-import { TasksContext } from '../Context/TasksContext'
-import CircleIcon from './CircleIcon'
 import {
   FaEllipsisV,
   FaTrash,
@@ -30,17 +26,20 @@ import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { getDueDate, taskTimeHandler } from '../helpers/tasksHelpers'
+import { useTasksContext } from '../hooks/ContextHooks'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
-const Task = ({ task, onOpen, completed, onDelete, page }) => {
-  const { update: updateTask } = useContext(TasksContext)
+const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
   const { onClose: onModalClose } = useDisclosure()
   const taskTime = taskTimeHandler(getDueDate(task))
-  const toggleDone = () => updateTask({ ...task, done: !task.done })
+  const toggleDone = () => {
+    onUpdate({ ...task, done: !task.done })
+    // console.log('you toggled the task')
+  }
 
   const toggleStar = () =>
-    updateTask({ ...task, starred: task.starred ? null : { date: new Date() } })
+    onUpdate({ ...task, starred: task.starred ? null : { date: new Date() } })
 
   const handleRemoveTask = (e) => {
     onDelete(task)
@@ -60,7 +59,7 @@ const Task = ({ task, onOpen, completed, onDelete, page }) => {
         {/* task completion circle icon */}
         <Flex justifyContent='center' alignItems='center' mr='10px'>
           <Tooltip label={completed ? 'Uncomplete task' : 'Complete task'}>
-            <Box cursor='pointer'>
+            <Box cursor='pointer' onClick={toggleDone}>
               <Icon
                 color={completed ? 'blue.200' : 'gray.500'}
                 as={completed ? FaCheckCircle : FaRegCircle}
@@ -171,6 +170,7 @@ Task.defaultProps = {
     description: '',
   },
   onOpen: () => void 0,
+  onUpdate: () => void 0,
   onDelete: () => void 0,
   completed: false,
   page: 'home',
