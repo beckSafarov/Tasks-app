@@ -7,6 +7,11 @@ dayjs.extend(localizedFormat)
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
 
+export const getDueDate = (task) => {
+  if (!task || !task.dueDate) return null
+  return task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate
+}
+
 export const sortTasks = (list = [], type = 'none', tags) => {
   if (list.length < 1) return list
   switch (type) {
@@ -24,9 +29,7 @@ export const sortTasks = (list = [], type = 'none', tags) => {
       return [...positives, ...negatives]
     case 'dueDate':
       const { positives: p, negatives: n } = group(list, 'dueDate')
-      p.sort(
-        (x, y) => new Date(x.dueDate.toDate()) - new Date(y.dueDate.toDate())
-      )
+      p.sort((x, y) => new Date(getDueDate(x)) - new Date(getDueDate(y)))
       return [...p, ...n]
     case 'creationDate':
     default:
@@ -62,8 +65,8 @@ const monthList = {
 }
 
 /**
- * @param: date: Object
- * @returns: Thu,27 Oct: String
+ * @param Date Object
+ * @returns String: Thu,27 Oct
  */
 export const humanizeDate = (date) => {
   if (typeof date !== 'object') return null

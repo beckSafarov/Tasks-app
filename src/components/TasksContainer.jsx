@@ -105,6 +105,7 @@ const TasksContainer = ({
   // backup updated tasks to the context and db
   const runBackup = (newTasks, timer = 800) => {
     setTimeout(() => {
+      console.log('saving the changes...')
       setTasksContext(newTasks)
       backup(newTasks)
     }, timer)
@@ -112,7 +113,7 @@ const TasksContainer = ({
 
   const addTask = (t) => {
     setTasks([...tasks, t])
-    runBackup([...tasks, t])
+    runBackup([...tasks, t], 200)
   }
 
   const updateTasks = (updates, prop, propVal) => {

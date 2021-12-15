@@ -29,14 +29,14 @@ import {
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { taskTimeHandler } from '../helpers/tasksHelpers'
+import { getDueDate, taskTimeHandler } from '../helpers/tasksHelpers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
 const Task = ({ task, onOpen, completed, onDelete, page }) => {
   const { update: updateTask } = useContext(TasksContext)
   const { onClose: onModalClose } = useDisclosure()
-  const taskTime = taskTimeHandler(task?.dueDate?.toDate() || '')
+  const taskTime = taskTimeHandler(getDueDate(task))
   const toggleDone = () => updateTask({ ...task, done: !task.done })
 
   const toggleStar = () =>

@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback, useContext } from 'react'
 import { Box, Heading, HStack, VStack, Divider, Flex } from '@chakra-ui/layout'
 import { Icon } from '@chakra-ui/icon'
 import { Select } from '@chakra-ui/select'
-import { TasksContext } from '../Context/TasksContext'
 import { Collapse } from '@chakra-ui/transition'
 import SubTasks from './SubTasks'
 import {
@@ -14,6 +13,7 @@ import {
 import { Tooltip } from '@chakra-ui/tooltip'
 import MyEditable from './MyEditable'
 import ReactDatePicker from 'react-datepicker'
+import { getDueDate } from '../helpers/tasksHelpers'
 
 const TaskDrawer = ({
   show,
@@ -46,21 +46,13 @@ const TaskDrawer = ({
     updated = { ...fields }
     updated[name] = value
     setFields(updated)
-    if (shouldUpdate) {
-      console.log(updated)
-      onUpdate(updated)
-    }
+    if (shouldUpdate) onUpdate(updated)
   }
 
   const outsideClicked = (e) => {
     if (show && e.target.id.match(/main|container|completed_tasks_flex/)) {
       onClose(fields)
     }
-  }
-
-  const getDueDate = () => {
-    if (!fields || !fields.dueDate) return null
-    return fields.dueDate.toDate ? fields.dueDate.toDate() : fields.dueDate
   }
 
   return (
@@ -131,7 +123,7 @@ const TaskDrawer = ({
                 name='dueDate'
                 placeholderText='Add Due Date'
                 className='calendar'
-                selected={getDueDate()}
+                selected={getDueDate(fields)}
                 onChange={(v) => handleChanges('dueDate', v, true)}
                 timeInputLabel='Time:'
                 dateFormat='MM/dd/yyyy'
