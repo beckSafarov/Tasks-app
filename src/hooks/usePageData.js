@@ -40,7 +40,6 @@ const usePageData = (loc = defLoc) => {
   const { data: userData, loading, error, getData } = useAppContext()
   const { data: contextTasks, set: setTasks } = useTasksContext()
   const { set: setTags, tags: contextTags } = useTagsContext()
-  const { set: setPrefs } = usePrefsContext()
   const [pageTasks, setPageTasks] = useState([])
   const [requested, setRequested] = useState(false)
 
@@ -61,7 +60,6 @@ const usePageData = (loc = defLoc) => {
     if (!isEmpty(userData) && requested) {
       setTasks(userData.tasks)
       setTags(userData.tags)
-      setPrefs(userData.preferences)
       setRequested(false)
     }
 

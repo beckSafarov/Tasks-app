@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { Box } from '@chakra-ui/react'
 import SearchTask from '../components/SearchTask'
-import TagDropdown from '../components/Sidebar/TagDropdown'
 import ReactDatePicker from 'react-datepicker'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -69,7 +68,6 @@ const TestScreen = () => {
           <SearchTask onSubmit={(v) => console.log(v)} />
         </Box>
         {/* <AddTagModal show={show} close={close} onSubmit={proceed} /> */}
-        <TagDropdown />
         <h2>
           <strong>Foo value: </strong>
           <span style={{ color: foo ? 'green' : 'red' }}>

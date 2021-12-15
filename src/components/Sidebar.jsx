@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Container,
   HStack,
@@ -13,13 +13,11 @@ import {
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
-import { TagsContext } from '../../Context/TagsContext'
-import AddTagModal from '../AddTagModal'
+import AddTagModal from './AddTagModal'
 import { useHistory } from 'react-router'
-import { PreferencesContext } from '../../Context/PreferencesContext'
-import CustomAvatar from '../CustomAvatar'
-import AccountModal from '../AccountModal'
-import { useAppContext } from '../../hooks/ContextHooks'
+import CustomAvatar from './CustomAvatar'
+import AccountModal from './AccountModal'
+import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
 import { getAuth } from '@firebase/auth'
 
 const menuOptionHover = {
@@ -29,11 +27,7 @@ const menuOptionHover = {
 }
 
 const Sidebar = () => {
-  const { preferences: prefs, sidebarTagsToggle } =
-    useContext(PreferencesContext)
-  const { isOpen, onToggle } = useDisclosure({
-    defaultIsOpen: prefs.sidebarTagsToggle,
-  })
+  const { preferences: prefs, sidebarTagsToggle } = usePrefsContext()
   const history = useHistory()
   const {
     isOpen: isAddTagModalOpen,
@@ -44,17 +38,20 @@ const Sidebar = () => {
   const [caret, setCaret] = useState(prefs.sidebarTagsToggle)
   const [newTag, setNewTag] = useState('')
   const [accountModal, setAccountModal] = useState(false)
-  const { tags, add: addTag } = useContext(TagsContext)
+  const { tags, add: addTag } = useTagsContext()
   const user = getAuth().currentUser
+  const { isOpen, onToggle } = useDisclosure({
+    defaultIsOpen: prefs.sidebarTagsToggle,
+  })
 
   useEffect(() => {
     if (newTag && tags[newTag]) {
       setNewTag('')
       history.push(`/tag/${tags[newTag]}`)
     }
-  }, [tags, newTag, history])
+  }, [prefs, tags, newTag, history])
 
-  const toggleClicked = (e) => {
+  const toggleClicked = () => {
     setCaret(!caret)
     onToggle()
     sidebarTagsToggle()

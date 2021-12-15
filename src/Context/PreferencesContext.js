@@ -1,5 +1,6 @@
 import React, { createContext, useReducer } from 'react'
 import { setList } from '../firebase/controllers'
+import { getStore } from '../helpers/lcs'
 import PreferencesReducer from './reducers/PreferencesReducer'
 
 export const defaultPrefs = {
@@ -10,7 +11,7 @@ export const defaultPrefs = {
   },
 }
 
-const initialState = { loading: false, error: null, preferences: defaultPrefs }
+const initialState = { preferences: getStore('prefs', defaultPrefs) }
 
 export const PreferencesContext = createContext(initialState)
 
@@ -27,10 +28,10 @@ export const PreferencesProvider = ({ children }) => {
 
   const sidebarTagsToggle = () => dispatch({ type: 'sidebarTagsToggle' })
 
-  const backup = async () => {
+  const backup = async (updated = state.preferences) => {
     dispatch({ type: 'loading' })
     try {
-      await setList(state.preferences, 'preferences')
+      await setList(updated, 'preferences')
     } catch (err) {
       dispatch({ type: 'error', error: err })
     }
