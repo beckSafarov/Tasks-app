@@ -1,5 +1,4 @@
 import React, { createContext, useReducer } from 'react'
-import { setList } from '../firebase/controllers'
 import { getStore } from '../helpers/lcs'
 import PreferencesReducer from './reducers/PreferencesReducer'
 
