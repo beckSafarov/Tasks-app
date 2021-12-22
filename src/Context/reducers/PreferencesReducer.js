@@ -17,6 +17,9 @@ const PreferencesReducer = produce((draft, action) => {
     case 'sidebarTagsToggle':
       draft.preferences.sidebarTagsToggle = !sidebarTagsToggle
       break
+    case 'lastSelectedTag':
+      draft.preferences.lastSelectedTag = action.lastSelectedTag
+      break
     default:
       return draft
   }

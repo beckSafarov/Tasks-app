@@ -1,16 +1,11 @@
 import React, { createContext, useReducer } from 'react'
-import { removeTaskOrTag, setList } from '../firebase/controllers'
-import {
-  addTaskToDB,
-  removeTask,
-  updateOneOrMore,
-} from '../firebase/tasksControllers'
+import { removeTaskOrTag } from '../firebase/controllers'
+import { addTaskToDB, updateOneOrMore } from '../firebase/tasksControllers'
 import TasksReducer from './reducers/TasksReducer'
 
 export const taskSchema = {
   name: '',
   tag: '',
-
   done: false,
   subtasks: [],
   description: '',

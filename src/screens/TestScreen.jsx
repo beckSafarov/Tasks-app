@@ -5,7 +5,6 @@ import ReactDatePicker from 'react-datepicker'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import AddTask2 from '../components/AddTask2'
 import { taskSchema, TasksContext } from '../Context/TasksContext'
 import { AppContext } from '../Context/AppContext'
 import usePageData from '../hooks/usePageData'
@@ -103,7 +102,6 @@ const TestScreen = () => {
             showTimeInput
           />
           <br />
-          <AddTask2 defaultDate='Someday' page='All Tasks' />
         </Box>
       </div>
     </>

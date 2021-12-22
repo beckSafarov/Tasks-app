@@ -11,6 +11,7 @@ import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
 import ConfirmModal from './ConfirmModal'
 import SkeletonStack from './SkeletonStack'
+import AddTask from './AddTask'
 
 // --- library methods & custom hooks ---
 import { useEffect, useState } from 'react'
@@ -21,7 +22,6 @@ import { rgxSearch } from '../helpers'
 import { sortTasks } from '../helpers/tasksHelpers'
 
 // --- context stuff ---
-import AddTask2 from './AddTask2'
 import {
   usePrefsContext,
   useTagsContext,
@@ -102,7 +102,6 @@ const TasksContainer = ({
   // backup updated tasks to the context and db
   const runBackup = (data, updateType, prop, propVal, timer = 800) => {
     setTimeout(() => {
-      console.log('saving the changes...')
       switch (updateType) {
         case 'add':
           addTaskInContext(data)
@@ -214,8 +213,8 @@ const TasksContainer = ({
       />
       <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
-          <AddTask2
-            defaultTag={tag || 'untagged'}
+          <AddTask
+            defaultTag={tag}
             defaultDate={defaultDate}
             page={page}
             onSubmit={addTask}

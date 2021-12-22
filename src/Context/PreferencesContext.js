@@ -5,6 +5,7 @@ import PreferencesReducer from './reducers/PreferencesReducer'
 export const defaultPrefs = {
   showCompletedTasks: false,
   sidebarTagsToggle: false,
+  lastSelectedTag: 'untagged',
   sorts: {
     'All Tasks': 'creation_date',
   },
@@ -27,6 +28,9 @@ export const PreferencesProvider = ({ children }) => {
 
   const sidebarTagsToggle = () => dispatch({ type: 'sidebarTagsToggle' })
 
+  const setLastSelectedTag = (tagName) =>
+    dispatch({ type: 'lastSelectedTag', lastSelectedTag: tagName })
+
   return (
     <PreferencesContext.Provider
       value={{
@@ -35,6 +39,7 @@ export const PreferencesProvider = ({ children }) => {
         toggleShowCompletedTasks,
         setSortType,
         sidebarTagsToggle,
+        setLastSelectedTag,
       }}
     >
       {children}

@@ -1,73 +1,96 @@
-import { useContext, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import {
-  Flex,
   FormControl,
   Input,
   InputGroup,
   InputLeftElement,
+  Select,
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
-import { Formik, Form, Field } from 'formik'
-import { taskSchema, TasksContext } from '../Context/TasksContext'
-import { TagsContext } from '../Context/TagsContext'
+import { useFormik } from 'formik'
+import { taskSchema } from '../Context/TasksContext'
 import { v4 as uuid4 } from 'uuid'
 import { textToDate } from '../helpers/tasksHelpers'
+import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
 
-const AddTask = ({ defaultTag, defaultDate }) => {
-  const { add: addTask } = useContext(TasksContext)
-  const { tags, add: addTag } = useContext(TagsContext)
+const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
+  const { tags } = useTagsContext()
+  const { preferences: prefs, set: setPrefs } = usePrefsContext()
+  const [selectedTag, setSelectedTag] = useState(
+    prefs.lastSelectedTag || 'untagged'
+  )
+  const refToInput = useRef(null)
 
-  const submitHandler = (todo, onSubmitProps) => {
-    addTask({
-      ...todo,
-      id: uuid4(),
-      tag: defaultTag,
-      dueDate: textToDate(defaultDate),
-    })
-    if (!tags.untagged) addTag('untagged')
-    onSubmitProps.resetForm()
-    onSubmitProps.setSubmitting(false)
+  const formik = useFormik({
+    initialValues: { ...taskSchema, tag: prefs.lastSelectedTag || 'untagged' },
+    validate: (v) => (!v.name ? { name: 'empty' } : {}),
+    onSubmit: (todo, { resetForm, setSubmitting }) => {
+      addTask({
+        ...todo,
+        id: uuid4(),
+        tag: todo.tag || defaultTag || 'untagged',
+        dueDate: textToDate(defaultDate),
+      })
+      resetForm()
+      setSubmitting(false)
+    },
+  })
+
+  const onChange = (e) => {
+    formik.handleChange(e)
+    setSelectedTag(e.target.value)
+    setPrefs({ ...prefs, lastSelectedTag: e.target.value })
+    refToInput.current.focus()
   }
 
-  const validate = (v) => (!v.name ? { name: 'empty' } : {})
-
   return (
-    <Formik
-      initialValues={taskSchema}
-      onSubmit={submitHandler}
-      validate={validate}
-    >
-      <Form style={{ width: '100%' }}>
-        <Flex width='full'>
-          <Field name='name'>
-            {({ field }) => (
-              <FormControl flex={3} pr={'20px'}>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents='none'
-                    children={<AddIcon color='light.placeholder' />}
-                  />
-                  <Input
-                    {...field}
-                    id='name'
-                    placeholder='Add task'
-                    type='text'
-                    variant='flushed'
-                    _focus={{ borderColor: 'light.placeholder' }}
-                  />
-                </InputGroup>
-              </FormControl>
-            )}
-          </Field>
-        </Flex>
-      </Form>
-    </Formik>
+    <form onSubmit={formik.handleSubmit} style={{ width: 'inherit' }}>
+      <FormControl flex={4} pr={'20px'}>
+        <InputGroup>
+          <InputLeftElement
+            pointerEvents='none'
+            children={<AddIcon color='light.placeholder' />}
+          />
+          <Input
+            id='name'
+            flex='3'
+            ref={refToInput}
+            placeholder='Add task'
+            type='text'
+            variant='flushed'
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+            _focus={{ borderColor: 'light.placeholder' }}
+          />
+          {page === 'All Tasks' && (
+            <Select
+              name='tag'
+              variant='flushed'
+              flex='1'
+              onChange={onChange}
+              onBlur={formik.handleBlur}
+              value={selectedTag}
+              isTruncated
+            >
+              {tags.map((t) => (
+                <option key={t.id} value={t.tag}>
+                  {t.tag}
+                </option>
+              ))}
+            </Select>
+          )}
+        </InputGroup>
+      </FormControl>
+    </form>
   )
 }
 
 AddTask.defaultProps = {
-  defaultDate: null,
+  defaultDate: 'Someday',
   defaultTag: 'untagged',
+  page: 'All Tasks',
+  onSubmit: () => void 0,
 }
 
 export default AddTask
