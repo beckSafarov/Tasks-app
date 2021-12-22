@@ -25,7 +25,6 @@ const TaskDrawer = ({
   tags,
   onUpdate,
 }) => {
-  // const { updateById: update } = useContext(TasksContext)
   const styles = document?.querySelector('#main')?.style || {}
   const [fields, setFields] = useState({ ...task })
   let updated = {}

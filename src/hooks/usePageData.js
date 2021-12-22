@@ -1,28 +1,20 @@
 import { useState, useEffect } from 'react'
-import { IsToday } from '../helpers/tasksHelpers'
-import {
-  useAppContext,
-  usePrefsContext,
-  useTagsContext,
-  useTasksContext,
-} from './ContextHooks'
+import { getDueDate, IsToday, isUpcoming } from '../helpers/tasksHelpers'
+import { useAppContext, useTagsContext, useTasksContext } from './ContextHooks'
 import dayjs from 'dayjs'
 import isTomorrow from 'dayjs/plugin/isTomorrow.js'
 import { capitalize, isEmpty } from '../helpers'
-import { isUpcoming } from '../helpers/tasksHelpers'
 dayjs.extend(isTomorrow)
 const defLoc = { pathname: 'http://localhost:3000/' }
 
 const filterTasks = (filter = 'all', list, tagName) => {
   switch (filter) {
     case 'today':
-      return list.filter((t) => t.dueDate && IsToday(t.dueDate.toDate()))
+      return list.filter((t) => t.dueDate && IsToday(getDueDate(t)))
     case 'tomorrow':
-      return list.filter(
-        (t) => t.dueDate && dayjs(t.dueDate.toDate()).isTomorrow()
-      )
+      return list.filter((t) => t.dueDate && dayjs(getDueDate(t)).isTomorrow())
     case 'upcoming':
-      return list.filter((t) => t.dueDate && isUpcoming(t.dueDate.toDate()))
+      return list.filter((t) => t.dueDate && isUpcoming(getDueDate(t)))
     case 'tag':
       return list.filter((t) => t.tag === tagName)
     default:

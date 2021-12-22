@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 
 // --- helper methods ---
-import { groupByBinaryProp as group, rgxSearch } from '../helpers'
+import { rgxSearch } from '../helpers'
 import { sortTasks } from '../helpers/tasksHelpers'
 
 // --- context stuff ---
@@ -57,7 +57,13 @@ const TasksContainer = ({
     onClose: onConfClose,
   } = useDisclosure()
   const { tags, remove: removeTag } = useTagsContext()
-  const { set: setTasksContext, backup } = useTasksContext()
+  const {
+    set: setTasksContext,
+    backup,
+    update: updateTasksInContext,
+    remove: removeTasksInContext,
+    add: addTaskInContext,
+  } = useTasksContext()
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -94,17 +100,27 @@ const TasksContainer = ({
   }
 
   // backup updated tasks to the context and db
-  const runBackup = (newTasks, timer = 800) => {
+  const runBackup = (data, updateType, prop, propVal, timer = 800) => {
     setTimeout(() => {
       console.log('saving the changes...')
-      setTasksContext(newTasks)
-      backup(newTasks)
+      switch (updateType) {
+        case 'add':
+          addTaskInContext(data)
+          break
+        case 'update':
+          updateTasksInContext(data, prop, propVal)
+          break
+        case 'remove':
+          removeTasksInContext(prop, propVal)
+          break
+      }
+      backup(data, updateType, prop, propVal)
     }, timer)
   }
 
   const addTask = (t) => {
     setTasks([...tasks, t])
-    runBackup([...tasks, t], 200)
+    runBackup(t, 'add', 0, 0, 200)
   }
 
   const updateTasks = (updates, prop, propVal, timer) => {
@@ -112,19 +128,13 @@ const TasksContainer = ({
       t[prop] === propVal ? { ...t, ...updates } : t
     )
     setTasks(updatedTasks)
-    runBackup(updatedTasks, timer)
-  }
-
-  const toggleTaskDone = (updates) => {
-    setTasks((tasks) =>
-      tasks.map((t) => (t.id === updates.id ? { ...t, done: !t.done } : t))
-    )
+    runBackup(updates, 'update', prop, propVal, timer)
   }
 
   const removeTasks = (prop, propVal) => {
     const filteredTasks = tasks.filter((t) => t[prop] !== propVal)
     setTasks(filteredTasks)
-    runBackup(filteredTasks, 400)
+    runBackup([], 'remove', prop, propVal, 400)
   }
 
   // toggle a task to be completed or back to incompleted

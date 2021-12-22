@@ -28,22 +28,10 @@ export const PreferencesProvider = ({ children }) => {
 
   const sidebarTagsToggle = () => dispatch({ type: 'sidebarTagsToggle' })
 
-  const backup = async (updated = state.preferences) => {
-    dispatch({ type: 'loading' })
-    try {
-      await setList(updated, 'preferences')
-    } catch (err) {
-      dispatch({ type: 'error', error: err })
-    }
-  }
-
   return (
     <PreferencesContext.Provider
       value={{
         preferences: state.preferences,
-        loading: state.loading,
-        error: state.error,
-        backup,
         set,
         toggleShowCompletedTasks,
         setSortType,

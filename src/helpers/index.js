@@ -204,6 +204,14 @@ const uniqify = (arr = [], key = 'id') => {
   return typeof arr[0] === 'object' ? objUniqify(arr, key) : arrUniqify(arr)
 }
 
+// const objListSortUniqify = (arr = [], key = 'id') => {
+//   // const sorted = arr.sort((x, y)=>x.)
+// }
+
+// const list = [{ id: 'wew1ev' }, { id: 'ewf233fwee' }, { id: 'recds33' }]
+
+// console.log(list.sort((x, y) => x.id < y.id))
+
 const sum = (arr = [], key = '') => {
   const numbSum = (arr) => arr.reduce((a, c) => (a += c), 0)
   const objSum = (arr, key) => arr.reduce((a, c) => (a += c[key]), 0)

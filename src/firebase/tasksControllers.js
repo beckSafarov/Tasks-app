@@ -97,6 +97,7 @@ const removeTasksByTag = async (tagName) => {
 
 export {
   addTaskToDB,
+  updateOneOrMore,
   updateTask,
   updateTaskTags,
   getUserData,
