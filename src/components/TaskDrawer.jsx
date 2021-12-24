@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Heading, HStack, VStack, Divider, Flex } from '@chakra-ui/layout'
 import { Icon } from '@chakra-ui/icon'
 import { Select } from '@chakra-ui/select'
@@ -13,7 +13,7 @@ import {
 import { Tooltip } from '@chakra-ui/tooltip'
 import MyEditable from './MyEditable'
 import ReactDatePicker from 'react-datepicker'
-import { getDueDate } from '../helpers/tasksHelpers'
+import { getDueDate } from '../helpers/dateHelpers'
 
 const TaskDrawer = ({
   show,

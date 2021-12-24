@@ -58,30 +58,23 @@ export const rgxSearch = (arr = [], keyword, prop = 'name') => {
   })
   return res
 }
-
-const tags = {
-  untagged: 'fewfqf232',
-  newTag: 'nwefq3f2',
-  extras: 'weewhfiuh23f23',
-  rubio: 'wewefew',
-}
-const tasks = [
-  { name: 'wewefew', tag: 'untagged' },
-  { name: 'ewfew', tag: 'newTag' },
-  { name: 'ewfew', tag: 'extras' },
-  { name: 'ewf', tag: 'untagged' },
-  { name: 'ewfewf', tag: 'newTag' },
-  { name: 'ewf23', tag: 'extras' },
-  { name: 'ewfewfq32', tag: 'untagged' },
-  { name: 'wefewf23', tag: 'newTag' },
-  { name: 'verbh45', tag: 'extras' },
-  { name: 'wefwqf3', tag: 'untagged' },
-  { name: 'wececg', tag: 'newTag' },
-  { name: 'wef32f3f', tag: 'extras' },
-  { name: 'weewvevr', tag: 'untagged' },
-  { name: 'ewf3', tag: 'newTag' },
-  { name: 'ewf33f', tag: 'extras' },
-]
+// const tasks = [
+//   { name: 'wewefew', tag: 'untagged' },
+//   { name: 'ewfew', tag: 'newTag' },
+//   { name: 'ewfew', tag: 'extras' },
+//   { name: 'ewf', tag: 'untagged' },
+//   { name: 'ewfewf', tag: 'newTag' },
+//   { name: 'ewf23', tag: 'extras' },
+//   { name: 'ewfewfq32', tag: 'untagged' },
+//   { name: 'wefewf23', tag: 'newTag' },
+//   { name: 'verbh45', tag: 'extras' },
+//   { name: 'wefwqf3', tag: 'untagged' },
+//   { name: 'wececg', tag: 'newTag' },
+//   { name: 'wef32f3f', tag: 'extras' },
+//   { name: 'weewvevr', tag: 'untagged' },
+//   { name: 'ewf3', tag: 'newTag' },
+//   { name: 'ewf33f', tag: 'extras' },
+// ]
 
 // console.time('serrero')
 // console.log(serrero(tags, tasks))
@@ -371,4 +364,20 @@ export const getScreenWidths = (sizes = []) => {
   const sum = sizes.reduce((a, c) => (a += c), 0)
   const div = width / sum
   return sizes.map((s) => Math.floor(div * s))
+}
+
+export const getSorted = (a, b) => [a, b].sort((x, y) => x - y)
+
+export const snatch = (arr, predicate = {}) => {
+  const prop = Object.keys(predicate)[0]
+  const list = [...arr]
+  const snatched = []
+  list.forEach((obj, i) => {
+    if (obj[prop] === predicate[prop]) {
+      snatched.push(obj)
+      list.splice(i, 1)
+    }
+  })
+  console.log(list)
+  return { list, snatched }
 }

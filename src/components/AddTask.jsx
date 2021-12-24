@@ -10,7 +10,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { useFormik } from 'formik'
 import { taskSchema } from '../Context/TasksContext'
 import { v4 as uuid4 } from 'uuid'
-import { textToDate } from '../helpers/tasksHelpers'
+import { textToDate } from '../helpers/dateHelpers'
 import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
 
 const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {

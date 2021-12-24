@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getDueDate, IsToday, isUpcoming } from '../helpers/tasksHelpers'
+import { getDueDate, IsToday, isUpcoming } from '../helpers/dateHelpers'
 import { useAppContext, useTagsContext, useTasksContext } from './ContextHooks'
 import dayjs from 'dayjs'
 import isTomorrow from 'dayjs/plugin/isTomorrow.js'
