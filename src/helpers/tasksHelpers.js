@@ -1,14 +1,14 @@
 import { groupByBinaryProp as group, objSort } from '.'
 import { getDueDate } from './dateHelpers'
 
-export const sortTasks = (list = [], type = 'none', tags) => {
+export const sortTasks = (list = [], type, tags) => {
   if (list.length < 1) return list
   switch (type) {
     case 'alphabetically':
       return objSort(list, 'name')
     case 'tag':
       let res = []
-      tags.forEach((tag) => {
+      tags.forEach(({ tag }) => {
         res = [...res, ...list.filter((t) => t.tag === tag)]
       })
       return res

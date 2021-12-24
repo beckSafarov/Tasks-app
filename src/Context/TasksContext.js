@@ -3,15 +3,6 @@ import { removeTaskOrTag } from '../firebase/controllers'
 import { addTaskToDB, updateOneOrMore } from '../firebase/tasksControllers'
 import TasksReducer from './reducers/TasksReducer'
 
-export const taskSchema = {
-  name: '',
-  tag: '',
-  done: false,
-  subtasks: [],
-  description: '',
-  // dueDate: {}
-}
-
 const initialState = { data: [], loading: false, error: null }
 export const TasksContext = createContext(initialState)
 
@@ -97,4 +88,13 @@ export const TasksProvider = ({ children }) => {
       {children}
     </TasksContext.Provider>
   )
+}
+
+export const taskSchema = {
+  name: '',
+  tag: '',
+  done: false,
+  subtasks: [],
+  description: '',
+  // dueDate: {}
 }
