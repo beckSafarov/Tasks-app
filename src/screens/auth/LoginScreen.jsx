@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Text, Flex, Heading, Box } from '@chakra-ui/react'
 import * as Yup from 'yup'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import FormBuild from '../../components/FormBuild'
 import { emailSignIn } from '../../firebase/auth'
 import ShowAlert from '../../components/ShowAlert'
@@ -17,7 +17,8 @@ const validationSchema = Yup.object().shape({
   ),
 })
 
-const LoginScreen = ({ history }) => {
+const LoginScreen = () => {
+  const history = useHistory()
   const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState('')
   const { setUser } = useAppContext()
@@ -36,53 +37,51 @@ const LoginScreen = ({ history }) => {
   }
 
   return (
-    <>
-      <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
-        <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
-          <Heading mb='30px' size='2xl' textAlign='center'>
-            Login
-          </Heading>
-          <ShowAlert
-            show={error ? 1 : 0}
-            title='Login Error!'
-            onClose={() => setError('')}
-          >
-            {error}
-          </ShowAlert>
-          <AuthProviders
-            showForm={showForm}
-            onEmailClicked={() => setShowForm(true)}
-          />
-          <Text hidden={showForm} fontSize='0.8em' textAlign='center' py='5'>
-            Do not have an account?{' '}
-            <Text as='span' color='blue.500'>
-              <Link to='/signup'>Create one</Link>
-            </Text>
+    <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
+      <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
+        <Heading mb='30px' size='2xl' textAlign='center'>
+          Login
+        </Heading>
+        <ShowAlert
+          show={error ? 1 : 0}
+          title='Login Error!'
+          onClose={() => setError('')}
+        >
+          {error}
+        </ShowAlert>
+        <AuthProviders
+          showForm={showForm}
+          onEmailClicked={() => setShowForm(true)}
+        />
+        <Text hidden={showForm} fontSize='0.8em' textAlign='center' py='5'>
+          Do not have an account?{' '}
+          <Text as='span' color='blue.500'>
+            <Link to='/signup'>Create one</Link>
           </Text>
+        </Text>
 
-          {/* --- Login Form --- */}
-          <FormBuild
-            show={showForm}
-            onCancel={() => setShowForm(false)}
-            onSubmit={submitHandler}
-            validationSchema={validationSchema}
-            initialValues={{ email: '', password: '' }}
-          />
+        {/* --- Login Form --- */}
+        <FormBuild
+          show={showForm}
+          onCancel={() => setShowForm(false)}
+          onSubmit={submitHandler}
+          validationSchema={validationSchema}
+          initialValues={{ email: '', password: '' }}
+        />
 
-          {/* forgot password link */}
-          <Box textAlign='center' py='5' hidden={!showForm}>
-            <Text
-              fontSize='0.8em'
-              color='gray.600'
-              cursor='pointer'
-              _hover={{ color: 'blue.400', textDecor: 'underline' }}
-            >
-              Forgot Password?
-            </Text>
-          </Box>
-        </Flex>
+        {/* forgot password link */}
+        <Box textAlign='center' py='5' hidden={!showForm}>
+          <Text
+            fontSize='0.8em'
+            color='gray.600'
+            cursor='pointer'
+            _hover={{ color: 'blue.400', textDecor: 'underline' }}
+          >
+            Forgot Password?
+          </Text>
+        </Box>
       </Flex>
-    </>
+    </Flex>
   )
 }
 
