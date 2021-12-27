@@ -34,7 +34,10 @@ export const TagsProvider = ({ children }) => {
   const update = (currTag, newTag) =>
     dispatch({ type: 'update', currTag, newTag })
 
-  const remove = (tag) => dispatch({ type: 'remove', tag })
+  const remove = (tag) => {
+    dispatch({ type: 'remove', tag })
+    setTimeout(() => backup(state.tags.filter((t) => t.tag !== tag)), 100)
+  }
 
   return (
     <TagsContext.Provider

@@ -32,9 +32,9 @@ import {
   FaRegCalendarPlus,
   FaCog,
 } from 'react-icons/fa'
-import { useState, useEffect, useContext, useRef } from 'react'
-import { TagsContext } from '../Context/TagsContext'
-import { TasksContext } from '../Context/TasksContext'
+import { useState, useEffect, useRef } from 'react'
+import { useTagsContext, useTasksContext } from '../hooks/ContextHooks'
+import { useLocation } from 'react-router-dom'
 
 const TaskHeader = ({
   title,
@@ -50,18 +50,20 @@ const TaskHeader = ({
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
   const tagEditInput = useRef(null)
-  const { update: updateTag, tags } = useContext(TagsContext)
-  const { updateMany: updateTaskTags } = useContext(TasksContext)
+  const { update: updateTag, tags } = useTagsContext()
+  const { updateTag: updateTaskTags } = useTasksContext()
   const toast = useToast()
+  const loc = useLocation().pathname
+  const noEditableTag = !loc.match(/tag/) || page === 'untagged'
 
   useEffect(() => {
     if (title !== tagName) setTagName(title)
   }, [title])
 
   const validated = (newTitle) => {
-    if (!tagName || newTitle === title) {
-      return false
-    } else if (tags[newTitle]) {
+    if (!tagName || newTitle === title) return false
+
+    if (tags.find((t) => t.tag === newTitle)) {
       toast({
         title: 'Duplicate tag names are not allowed',
         position: 'bottom-right',
@@ -106,7 +108,7 @@ const TaskHeader = ({
             value={tagName}
             onSubmit={tagUpdated}
             onCancel={tagUpdated}
-            isDisabled={page !== 'tag'} //disabled in non-tag pages
+            isDisabled={noEditableTag} //disabled in non-tag pages
             startWithEditView={tagEditMode}
           >
             <EditablePreview
@@ -159,14 +161,14 @@ const TaskHeader = ({
 
                 <MenuItem
                   onClick={() => tagEditInput.current.focus()}
-                  hidden={page !== 'tag'} //hidden in non-tag pages
+                  hidden={noEditableTag} //hidden in non-tag pages
                   icon={<Icon as={FaEdit} />}
                 >
                   Rename tag
                 </MenuItem>
                 <MenuItem
                   onClick={() => removeTasksByTag()}
-                  hidden={page !== 'tag'} //hidden in non-tag pages
+                  hidden={noEditableTag} //hidden in non-tag pages
                   icon={<Icon as={FaTrash} />}
                 >
                   Delete tag

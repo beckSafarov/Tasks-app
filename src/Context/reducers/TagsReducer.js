@@ -19,13 +19,13 @@ const TagsReducer = produce((draft, action) => {
       break
     case 'update':
       for (let tag in draft.tags) {
-        if (tag.name === action.currTag) {
-          tag.name = action.newTag
+        if (tag.tag === action.currTag) {
+          tag.tag = action.newTag
         }
       }
       break
     case 'remove':
-      draft.tags = draft.tags.filter((t) => t.name !== action.tag)
+      draft.tags = draft.tags.filter((t) => t.tag !== action.tag)
       break
     default:
       return draft
