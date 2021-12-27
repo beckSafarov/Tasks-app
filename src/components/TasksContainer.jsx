@@ -19,7 +19,7 @@ import { useHistory } from 'react-router'
 
 // --- helper methods ---
 import { rgxSearch } from '../helpers'
-import { sortTasks } from '../helpers/tasksHelpers'
+import { sortTasks, toastDefs } from '../helpers/tasksHelpers'
 
 // --- context stuff ---
 import {
@@ -27,15 +27,6 @@ import {
   useTagsContext,
   useTasksContext,
 } from '../hooks/ContextHooks'
-
-// default props for error toasts
-const toastDefs = {
-  duration: 4000,
-  isClosable: true,
-  variant: 'subtle',
-  position: 'bottom-right',
-  status: 'error',
-}
 
 const TasksContainer = ({
   loading,

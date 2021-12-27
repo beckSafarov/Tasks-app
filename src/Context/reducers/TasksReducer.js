@@ -20,6 +20,7 @@ const TasksReducer = produce((draft, action) => {
       draft.data = draft.data.map((t) =>
         t[action.prop] === action.propVal ? { ...t, ...action.updates } : t
       )
+      console.log(draft.data)
       break
     case 'remove':
       draft.data = draft.data.filter((t) => t[action.prop] !== action.propVal)

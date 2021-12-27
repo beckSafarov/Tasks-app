@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react'
 import { v1 as uuidv1 } from 'uuid'
-import { setList } from '../firebase/controllers'
+import { setList, updateTagAndTasks } from '../firebase/controllers'
 import TagsReducer from './reducers/TagsReducer'
 
 const initialState = { loading: false, error: null, tags: [] }
@@ -39,6 +39,16 @@ export const TagsProvider = ({ children }) => {
     setTimeout(() => backup(state.tags.filter((t) => t.tag !== tag)), 100)
   }
 
+  const updateTagInDB = async (currTag, newTag, userData) => {
+    dispatch({ type: 'loading' }) //toggles loading status
+    try {
+      await updateTagAndTasks(currTag, newTag, userData)
+    } catch (err) {
+      dispatch({ type: 'error', error: err })
+    }
+    dispatch({ type: 'loading' })
+  }
+
   return (
     <TagsContext.Provider
       value={{
@@ -49,6 +59,7 @@ export const TagsProvider = ({ children }) => {
         set,
         add,
         update,
+        updateTagInDB,
         remove,
       }}
     >

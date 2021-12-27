@@ -82,6 +82,19 @@ const updateCurrUser = async (up = {}) => {
   return successRes
 }
 
+const updateTagAndTasks = async (currTag, newTag, userData) => {
+  const data = userData || (await getUserData())
+  data.tags = data.tags.map((t) =>
+    t.tag === currTag ? { ...t, tag: newTag } : t
+  )
+  data.tasks = data.tasks.map((t) =>
+    t.tag === currTag ? { ...t, tag: newTag } : t
+  )
+  console.log(data)
+  await setDoc(doc(db, 'tasks', auth.currentUser.uid), data)
+  return data
+}
+
 /**
  * @desc removes a task or a tag from the db, by default a task
  * @param key - identifier, such as id or tag value of the object
@@ -113,6 +126,7 @@ export {
   errRes,
   getUserData,
   updateCurrUser,
+  updateTagAndTasks,
   removeTaskOrTag,
   setUserData,
   setList,

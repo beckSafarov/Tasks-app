@@ -1,6 +1,14 @@
 import { groupByBinaryProp as group, objSort } from '.'
 import { getDueDate } from './dateHelpers'
 
+export const toastDefs = {
+  duration: 4000,
+  isClosable: true,
+  variant: 'subtle',
+  position: 'bottom-right',
+  status: 'error',
+}
+
 export const sortTasks = (list = [], type, tags) => {
   if (list.length < 1) return list
   switch (type) {

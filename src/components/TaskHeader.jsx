@@ -35,6 +35,7 @@ import {
 import { useState, useEffect, useRef } from 'react'
 import { useTagsContext, useTasksContext } from '../hooks/ContextHooks'
 import { useLocation } from 'react-router-dom'
+import { toastDefs } from '../helpers/tasksHelpers'
 
 const TaskHeader = ({
   title,
@@ -50,7 +51,7 @@ const TaskHeader = ({
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
   const tagEditInput = useRef(null)
-  const { update: updateTag, tags } = useTagsContext()
+  const { update: updateTag, updateTagInDB, tags } = useTagsContext()
   const { updateTag: updateTaskTags } = useTasksContext()
   const toast = useToast()
   const loc = useLocation().pathname
@@ -65,13 +66,9 @@ const TaskHeader = ({
 
     if (tags.find((t) => t.tag === newTitle)) {
       toast({
+        ...toastDefs,
         title: 'Duplicate tag names are not allowed',
-        position: 'bottom-right',
         description: `The tag name "${newTitle}" already exists.`,
-        status: 'error',
-        duration: 4000,
-        isClosable: true,
-        variant: 'subtle',
       })
       return false
     }
@@ -82,6 +79,7 @@ const TaskHeader = ({
     if (validated(newTitle)) {
       updateTag(title, newTitle)
       updateTaskTags(title, newTitle)
+      setTimeout(() => updateTagInDB(page, newTitle), 100)
     } else {
       setTagName(title)
     }
