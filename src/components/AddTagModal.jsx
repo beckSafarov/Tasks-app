@@ -1,35 +1,35 @@
-import { useState, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
   Box,
-  FormControl,
   Input,
-  Text,
-  useDisclosure,
+  FormControl,
+  FormErrorMessage,
 } from '@chakra-ui/react'
-import { ErrorMessage, Field, Form, Formik } from 'formik'
+import { Field, Form, Formik } from 'formik'
 
 const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
+  const hasError = (form) => form.touched.tag && form.errors.tag
   const validate = ({ tag }) => {
     const res = {}
     if (!tag) res.tag = 'Please enter a tag title'
-    if (tags[tag]) res.tag = 'Such tag already exists'
+    if (tags.find((t) => t.tag.toLowerCase() === tag.toLowerCase()))
+      res.tag = 'Such tag already exists'
     return res
   }
 
-  const submitHandler = ({ tag }) => onSubmit(tag)
+  const submitHandler = ({ tag }) => {
+    console.log(tag)
+    onSubmit(tag)
+  }
   const closeHandler = (e) => onClose(e)
-  const handleBorderColor = ({ tag }) => ({
-    borderColor: tag ? 'red.500' : '',
-  })
 
   return (
     <Modal isOpen={isOpen} onClose={closeHandler}>
@@ -43,28 +43,22 @@ const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
             onSubmit={submitHandler}
             validate={validate}
           >
-            {({ errors }) => (
+            {() => (
               <Form style={{ width: '100%' }}>
                 <Field name='tag'>
-                  {({ field }) => (
-                    <Input
-                      id='tag'
-                      type='text'
-                      placeholder='Title'
-                      variant='flushed'
-                      borderColor={handleBorderColor(errors)}
-                      _focus={handleBorderColor(errors)}
-                      {...field}
-                    />
+                  {({ field, form }) => (
+                    <FormControl isInvalid={hasError(form)}>
+                      <Input
+                        id='tag'
+                        type='text'
+                        placeholder='Title'
+                        variant='flushed'
+                        {...field}
+                      />
+                      <FormErrorMessage>{hasError(form)}</FormErrorMessage>
+                    </FormControl>
                   )}
                 </Field>
-                <ErrorMessage name='tag'>
-                  {(msg) => (
-                    <Text py='2' color='red.500'>
-                      {msg}
-                    </Text>
-                  )}
-                </ErrorMessage>
                 <Box py='20px'>
                   <Button type='submit' colorScheme='blue' w='full'>
                     Save

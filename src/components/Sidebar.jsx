@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Container,
   HStack,
@@ -14,7 +14,6 @@ import {
 import { Link } from 'react-router-dom'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
 import AddTagModal from './AddTagModal'
-import { useHistory } from 'react-router'
 import CustomAvatar from './CustomAvatar'
 import AccountModal from './AccountModal'
 import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
@@ -28,7 +27,6 @@ const menuOptionHover = {
 
 const Sidebar = () => {
   const { preferences: prefs, sidebarTagsToggle } = usePrefsContext()
-  const history = useHistory()
   const {
     isOpen: isAddTagModalOpen,
     onOpen: onAddTagModalOpen,
@@ -36,20 +34,12 @@ const Sidebar = () => {
   } = useDisclosure()
 
   const [caret, setCaret] = useState(prefs.sidebarTagsToggle)
-  const [newTag, setNewTag] = useState('')
   const [accountModal, setAccountModal] = useState(false)
   const { tags, add: addTag } = useTagsContext()
   const user = getAuth().currentUser
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: prefs.sidebarTagsToggle,
   })
-
-  useEffect(() => {
-    if (newTag && tags[newTag]) {
-      setNewTag('')
-      history.push(`/tag/${tags[newTag]}`)
-    }
-  }, [prefs, tags, newTag, history])
 
   const toggleClicked = () => {
     setCaret(!caret)
@@ -58,7 +48,6 @@ const Sidebar = () => {
   }
 
   const addTagModalSubmit = (tag) => {
-    setNewTag(tag)
     addTag(tag)
     onAddTagModalClosed()
   }

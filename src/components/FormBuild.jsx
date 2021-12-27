@@ -8,7 +8,6 @@ import {
   FormControl,
 } from '@chakra-ui/react'
 import { Formik, Form, Field } from 'formik'
-import { capitalize } from '../helpers'
 
 const lookUp = {
   name: { type: 'text', label: 'Name' },
@@ -25,6 +24,7 @@ const FormBuild = ({
   validationSchema,
   initialValues,
 }) => {
+  const hasError = (form, prop) => form.touched[prop] && form.errors[prop]
   const handleSubmit = (values, onSubmitProps) => {
     onSubmitProps.resetForm()
     onSubmitProps.setSubmitting(false)
@@ -43,9 +43,7 @@ const FormBuild = ({
             <Box mt='2' key={i}>
               <Field name={prop}>
                 {({ field, form }) => (
-                  <FormControl
-                    isInvalid={form.errors[prop] && form.touched[prop]}
-                  >
+                  <FormControl isInvalid={hasError(form, prop)}>
                     <FormLabel htmlFor={prop} fontSize='0.8em' color='gray.500'>
                       {lookUp[prop].label}
                     </FormLabel>
@@ -54,7 +52,7 @@ const FormBuild = ({
                       type={lookUp[prop].type}
                       variant='outline'
                     />
-                    <FormErrorMessage>{form.errors[prop]}</FormErrorMessage>
+                    <FormErrorMessage>{hasError(form, prop)}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>

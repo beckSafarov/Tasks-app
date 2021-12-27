@@ -32,10 +32,7 @@ dayjs.extend(relativeTime)
 const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
   const { onClose: onModalClose } = useDisclosure()
   const taskTime = taskTimeHandler(getDueDate(task))
-  const toggleDone = () => {
-    onUpdate({ ...task, done: !task.done })
-    // console.log('you toggled the task')
-  }
+  const toggleDone = () => onUpdate({ ...task, done: !task.done })
 
   const toggleStar = () =>
     onUpdate({ ...task, starred: task.starred ? null : { date: new Date() } })

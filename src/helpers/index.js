@@ -1,3 +1,5 @@
+import { v4 } from 'uuid'
+
 export const capitalize = (w) => w.charAt(0).toUpperCase() + w.slice(1)
 
 // console.log(capitalize('ewfew'))
@@ -247,7 +249,9 @@ const range = (arr = []) => {
   return sorted[arr.length - 1] - sorted[0]
 }
 
-export const collect = (arr = [], prop = 'id') => arr.map((v) => v[prop])
+export const collect = (arr = [], prop = 'id') => {
+  return arr.map((v) => v[prop])
+}
 
 const zipObject = (props = [], vals = []) => {
   let zipObj = {}
@@ -378,6 +382,19 @@ export const snatch = (arr, predicate = {}) => {
       list.splice(i, 1)
     }
   })
-  console.log(list)
   return { list, snatched }
 }
+
+const genUniqNumbFrom = (list = []) => {
+  const sorted = list.sort((x, y) => x - y)
+  return sorted.pop() + 1
+}
+
+const subtasks = [
+  { id: 2 },
+  { id: 1 },
+  { id: 0 },
+  { id: 10 },
+  { id: 5 },
+  { id: 4 },
+]
