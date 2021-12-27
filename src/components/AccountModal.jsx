@@ -16,8 +16,7 @@ import {
   MenuItem,
   IconButton,
 } from '@chakra-ui/react'
-import { getCurrUser, logout } from '../firebase/auth'
-import { useHistory } from 'react-router'
+import { defUser, getCurrUser, logout } from '../firebase/auth'
 import CustomAvatar from './CustomAvatar'
 import { FaEllipsisH } from 'react-icons/fa'
 import * as Yup from 'yup'
@@ -41,17 +40,9 @@ const validationSchema = Yup.object().shape({
     .required('Please enter your new password'),
 })
 
-const defUser = {
-  displayName: '',
-  email: '',
-  password: '',
-  providerId: {},
-}
-
 const defAlert = { status: 'error', text: '' }
 
 const AccountModal = ({ show, onClose }) => {
-  const history = useHistory()
   const user = getCurrUser() || defUser
   const [editMode, setEditMode] = useState(false)
   const [alert, setAlert] = useState(defAlert)
@@ -61,11 +52,11 @@ const AccountModal = ({ show, onClose }) => {
     password: '',
     newPass: '',
   }
-  // console.log(user.uid)
 
   const handleLogout = async () => {
-    const loggedOut = await logout()
-    if (loggedOut) history.replace('/')
+    await logout()
+    onClose()
+    window.location.reload()
   }
 
   const handleUpdate = async (vals) => {

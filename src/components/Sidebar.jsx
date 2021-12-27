@@ -18,6 +18,7 @@ import CustomAvatar from './CustomAvatar'
 import AccountModal from './AccountModal'
 import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
 import { getAuth } from '@firebase/auth'
+import { defUser } from '../firebase/auth'
 
 const menuOptionHover = {
   background: 'light.sidebar_hover',
@@ -36,7 +37,7 @@ const Sidebar = () => {
   const [caret, setCaret] = useState(prefs.sidebarTagsToggle)
   const [accountModal, setAccountModal] = useState(false)
   const { tags, add: addTag } = useTagsContext()
-  const user = getAuth().currentUser
+  const user = getAuth()?.currentUser || defUser
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: prefs.sidebarTagsToggle,
   })

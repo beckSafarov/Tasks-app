@@ -8,9 +8,17 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from 'firebase/auth'
+import { app } from './config'
 
 const google = new GoogleAuthProvider()
-const auth = getAuth()
+const auth = getAuth(app)
+
+const defUser = {
+  displayName: '',
+  email: '',
+  password: '',
+  providerId: {},
+}
 
 const signInWithGoogle = () => signInWithRedirect(auth, google)
 
@@ -57,4 +65,11 @@ const logout = async () => {
   }
 }
 
-export { signInWithGoogle, emailSignUp, emailSignIn, getCurrUser, logout }
+export {
+  defUser,
+  signInWithGoogle,
+  emailSignUp,
+  emailSignIn,
+  getCurrUser,
+  logout,
+}
