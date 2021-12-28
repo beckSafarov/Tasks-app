@@ -18,7 +18,6 @@ const TagsReducer = produce((draft, action) => {
       draft.tags = draft.tags.map((t) =>
         t.tag === action.currTag ? { ...t, tag: action.newTag } : t
       )
-      console.log(draft.tags)
       break
     case 'remove':
       draft.tags = draft.tags.filter((t) => t.tag !== action.tag)

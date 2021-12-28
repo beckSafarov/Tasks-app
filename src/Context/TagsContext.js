@@ -13,7 +13,9 @@ export const TagsProvider = ({ children }) => {
     dispatch({ type: 'loading' })
     try {
       await setList(newTags, 'tags')
+      dispatch({ type: 'loading' })
     } catch (err) {
+      dispatch({ type: 'loading' })
       dispatch({ type: 'error', error: err })
     }
   }
@@ -40,13 +42,14 @@ export const TagsProvider = ({ children }) => {
   }
 
   const updateTagInDB = async (currTag, newTag, userData) => {
-    dispatch({ type: 'loading' }) //toggles loading status
+    dispatch({ type: 'loading' })
     try {
       await updateTagAndTasks(currTag, newTag, userData)
+      dispatch({ type: 'loading' })
     } catch (err) {
+      dispatch({ type: 'loading' })
       dispatch({ type: 'error', error: err })
     }
-    dispatch({ type: 'loading' })
   }
 
   return (

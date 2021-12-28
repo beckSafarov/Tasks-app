@@ -17,7 +17,6 @@ const AppReducer = produce((draft, action) => {
   switch (action.type) {
     case 'setData':
       draft.data = { ...draft.data, ...action.data }
-      // console.log(current(draft))
       break
     case 'setUser':
       draft.user = { ...draft.user, ...action.user }

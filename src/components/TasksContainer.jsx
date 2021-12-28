@@ -29,7 +29,6 @@ import {
 } from '../hooks/ContextHooks'
 
 const TasksContainer = ({
-  loading,
   store: tasksFromDB,
   title,
   tag,
@@ -192,7 +191,6 @@ const TasksContainer = ({
     <>
       <TaskHeader
         title={title}
-        loading={loading}
         onSearchSubmit={onSearch}
         onSearchClear={onSearchClear}
         showCompTasks={showCompTasks}
@@ -212,8 +210,8 @@ const TasksContainer = ({
           />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
-          <SkeletonStack show={loading} />
-          {!loading &&
+          <SkeletonStack show={false} />
+          {1 !== 0 &&
             sortTasks(
               tasks.filter((t) => !t.done),
               sortType,

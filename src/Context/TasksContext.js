@@ -45,10 +45,7 @@ export const TasksProvider = ({ children }) => {
 
   const backup = async (data = state.data, updateType, prop, propVal) => {
     dispatch({ type: 'loading' })
-    console.log(updateType)
     try {
-      console.log(data)
-
       switch (updateType) {
         case 'add':
           await addTaskToDB(data)
@@ -59,11 +56,10 @@ export const TasksProvider = ({ children }) => {
         case 'remove':
           await removeTaskOrTag(propVal, 'tasks', prop)
           break
-        default:
-          // await setList(data, 'tasks')
-          console.log('omg you did not pass updateType😱')
       }
+      dispatch({ type: 'loading' })
     } catch (err) {
+      dispatch({ type: 'loading' })
       dispatch({ type: 'error', error: err })
     }
   }
