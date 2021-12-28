@@ -1,5 +1,5 @@
 # Tasks App
 
-- Version 1.0.0
+- Version 0.6.7
 
-A simple todolist app using React & Context API, Chakra UI for design. No backend or usage of an external server.
+A simple todolist app using React, React Context, Firebase, Chakra UI for design.
