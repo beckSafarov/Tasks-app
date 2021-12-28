@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import {
   FormControl,
   Input,
@@ -12,17 +12,24 @@ import { taskSchema } from '../Context/TasksContext'
 import { v4 as uuid4 } from 'uuid'
 import { textToDate } from '../helpers/dateHelpers'
 import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
+import { useLocation } from 'react-router-dom'
 
 const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
+  const { pathname: path } = useLocation()
   const { tags } = useTagsContext()
   const { preferences: prefs, set: setPrefs } = usePrefsContext()
+  const [tag, setTag] = useState('')
   const [selectedTag, setSelectedTag] = useState(
     prefs.lastSelectedTag || 'untagged'
   )
   const refToInput = useRef(null)
 
+  useEffect(() => {
+    setTag(path.match(/tag/) ? defaultTag : prefs.lastSelectedTag)
+  }, [defaultTag])
+
   const formik = useFormik({
-    initialValues: { ...taskSchema, tag: prefs.lastSelectedTag || 'untagged' },
+    initialValues: { ...taskSchema, tag },
     validate: (v) => (!v.name ? { name: 'empty' } : {}),
     onSubmit: (todo, { resetForm, setSubmitting }) => {
       addTask({
@@ -31,6 +38,12 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
         tag: todo.tag || defaultTag || 'untagged',
         dueDate: textToDate(defaultDate),
       })
+      // console.log({
+      //   ...todo,
+      //   // id: uuid4(),
+      //   tag: todo.tag || defaultTag,
+      //   dueDate: textToDate(defaultDate),
+      // })
       resetForm()
       setSubmitting(false)
     },
