@@ -6,32 +6,24 @@ import { Field, Form, Formik } from 'formik'
 
 // UI components and icons
 import {
-  Text,
   Input,
   InputGroup,
   InputLeftElement,
   FormControl,
   Icon,
   Box,
-  Flex,
   VStack,
 } from '@chakra-ui/react'
-import {
-  FaPlus,
-  FaRegCircle as EmptyCircle,
-  FaCheckCircle as FullCircle,
-  FaTimes,
-} from 'react-icons/fa'
-import MyEditable from './MyEditable'
+import { FaPlus } from 'react-icons/fa'
+import SubTask from './SubTask'
 
 const initialValue = { text: '', done: false }
 
 const SubTasks = ({ task, onChange, fontSize, color }) => {
   const [subTasks, setSubTasks] = useState([])
+  const [dragTask, setDragTask] = useState({})
 
-  useEffect(() => {
-    setSubTasks(task.subtasks)
-  }, [task])
+  useEffect(() => setSubTasks(task.subtasks), [task])
 
   const handleAdd = (v, { resetForm, setSubmitting }) => {
     const updated = [...subTasks, { ...v, id: uuid4() }]
@@ -59,45 +51,29 @@ const SubTasks = ({ task, onChange, fontSize, color }) => {
 
   const validate = (v) => (!v.text ? { text: 'empty' } : {})
 
+  const handleDragDrop = (dropAreaTask) => {
+    setSubTasks(
+      produce((draft) => {
+        draft.find((t) => t.id === dragTask.id).text = dropAreaTask.text
+        draft.find((t) => t.id === dropAreaTask.id).text = dragTask.text
+        onChange(current(draft))
+      })
+    )
+  }
+
   return (
     <VStack w='full' aria-label='sub-tasks list'>
       <Box w='full' pb='10px' fontSize={fontSize} color={color}>
         {subTasks &&
           subTasks.map((task) => (
-            <Flex
-              alignItems='center'
-              pl='2px'
-              pb='2px'
-              flexWrap='wrap'
-              textOverflow='scroll'
+            <SubTask
               key={task.id}
-            >
-              <Flex alignItems='center' flex='4'>
-                <Icon
-                  cursor='pointer'
-                  mr='5px'
-                  onClick={() => handleUpdate(task.id, 'done', !task.done)}
-                  as={task.done ? FullCircle : EmptyCircle}
-                />
-                <MyEditable onSubmit={(v) => handleUpdate(task.id, 'text', v)}>
-                  <Text
-                    as={task.done ? 's' : ''}
-                    color={task.done ? 'gray.500' : ''}
-                  >
-                    {task.text || ''}
-                  </Text>
-                </MyEditable>
-              </Flex>
-              {/* delete subtask icon */}
-              <Flex
-                onClick={() => handleRemove(task.id)}
-                cursor='pointer'
-                flex='1'
-                justifyContent='flex-end'
-              >
-                <Icon color='gray.500' as={FaTimes} />
-              </Flex>
-            </Flex>
+              task={task}
+              onUpdate={handleUpdate}
+              onRemove={handleRemove}
+              onDragDrop={handleDragDrop}
+              setDragTask={setDragTask}
+            />
           ))}
       </Box>
       {/* add subtask formik */}

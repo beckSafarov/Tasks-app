@@ -19,9 +19,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
   const { tags } = useTagsContext()
   const { preferences: prefs, set: setPrefs } = usePrefsContext()
   const [tag, setTag] = useState('')
-  const [selectedTag, setSelectedTag] = useState(
-    prefs.lastSelectedTag || 'untagged'
-  )
+  const [selectedTag, setSelectedTag] = useState(prefs.lastSelectedTag)
   const refToInput = useRef(null)
 
   useEffect(() => {
@@ -38,12 +36,6 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
         tag: todo.tag || defaultTag || 'untagged',
         dueDate: textToDate(defaultDate),
       })
-      // console.log({
-      //   ...todo,
-      //   // id: uuid4(),
-      //   tag: todo.tag || defaultTag,
-      //   dueDate: textToDate(defaultDate),
-      // })
       resetForm()
       setSubmitting(false)
     },

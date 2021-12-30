@@ -6,6 +6,7 @@ export const defaultPrefs = {
   showCompletedTasks: false,
   sidebarTagsToggle: false,
   lastSelectedTag: 'untagged',
+  draggingSubTask: { id: '', text: '' },
   sorts: {
     'All Tasks': 'creation_date',
   },
