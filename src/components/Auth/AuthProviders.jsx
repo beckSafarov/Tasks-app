@@ -1,7 +1,7 @@
 import React from 'react'
 import { VStack, Button, HStack, Img, Text, Icon } from '@chakra-ui/react'
 import { FaEnvelope } from 'react-icons/fa'
-import { signInWithGoogle } from '../firebase/auth'
+import { signInWithGoogle } from '../../firebase/auth'
 
 const AuthProviders = ({ showForm, onEmailClicked }) => {
   return (

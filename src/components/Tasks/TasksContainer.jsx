@@ -9,8 +9,8 @@ import {
 import Task from './Task'
 import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
-import ConfirmModal from './ConfirmModal'
-import SkeletonStack from './SkeletonStack'
+import ConfirmModal from '../Modals/ConfirmModal'
+import SkeletonStack from '../SkeletonStack'
 import AddTask from './AddTask'
 
 // --- library methods & custom hooks ---
@@ -18,15 +18,15 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 
 // --- helper methods ---
-import { rgxSearch } from '../helpers'
-import { sortTasks, toastDefs } from '../helpers/tasksHelpers'
+import { rgxSearch } from '../../helpers'
+import { sortTasks, toastDefs } from '../../helpers/tasksHelpers'
 
 // --- context stuff ---
 import {
   usePrefsContext,
   useTagsContext,
   useTasksContext,
-} from '../hooks/ContextHooks'
+} from '../../hooks/ContextHooks'
 
 const TasksContainer = ({
   store: tasksFromDB,

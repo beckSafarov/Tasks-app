@@ -16,14 +16,14 @@ import {
   MenuItem,
   IconButton,
 } from '@chakra-ui/react'
-import { defUser, getCurrUser, logout } from '../firebase/auth'
-import CustomAvatar from './CustomAvatar'
+import { defUser, getCurrUser, logout } from '../../firebase/auth'
+import CustomAvatar from '../CustomAvatar'
 import { FaEllipsisH } from 'react-icons/fa'
 import * as Yup from 'yup'
-import FormBuild from './FormBuild'
-import ShowAlert from './ShowAlert'
-import { updateCurrUser } from '../firebase/controllers'
-import { renameProp } from '../helpers'
+import FormBuild from '../FormBuild'
+import ShowAlert from '../ShowAlert'
+import { updateCurrUser } from '../../firebase/controllers'
+import { renameProp } from '../../helpers'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()

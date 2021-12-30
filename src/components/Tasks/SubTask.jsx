@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Flex, Icon, Text } from '@chakra-ui/react'
-import MyEditable from './MyEditable'
+import MyEditable from '../MyEditable'
 import {
   FaRegCircle as EmptyCircle,
   FaCheckCircle as FullCircle,

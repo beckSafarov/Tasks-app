@@ -6,7 +6,7 @@ import { emailSignUp } from '../../firebase/auth'
 import { updateCurrUser } from '../../firebase/controllers'
 import FormBuild from '../../components/FormBuild'
 import ShowAlert from '../../components/ShowAlert'
-import AuthProviders from '../../components/AuthProviders'
+import AuthProviders from '../../components/Auth/AuthProviders'
 import { useAppContext } from '../../hooks/ContextHooks'
 
 const validationSchema = Yup.object().shape({

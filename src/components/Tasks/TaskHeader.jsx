@@ -18,7 +18,7 @@ import {
   Tooltip,
   useToast,
 } from '@chakra-ui/react'
-import SearchTask from './SearchTask'
+import SearchTask from '../SearchTask'
 import {
   FaEye,
   FaEyeSlash,
@@ -33,9 +33,9 @@ import {
   FaCog,
 } from 'react-icons/fa'
 import { useState, useEffect, useRef } from 'react'
-import { useTagsContext, useTasksContext } from '../hooks/ContextHooks'
+import { useTagsContext, useTasksContext } from '../../hooks/ContextHooks'
 import { useLocation } from 'react-router-dom'
-import { toastDefs } from '../helpers/tasksHelpers'
+import { toastDefs } from '../../helpers/tasksHelpers'
 
 const TaskHeader = ({
   title,

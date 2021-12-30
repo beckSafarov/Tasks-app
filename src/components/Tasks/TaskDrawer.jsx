@@ -11,9 +11,9 @@ import {
   FaTrash,
 } from 'react-icons/fa'
 import { Tooltip } from '@chakra-ui/tooltip'
-import MyEditable from './MyEditable'
+import MyEditable from '../MyEditable'
 import ReactDatePicker from 'react-datepicker'
-import { getDueDate } from '../helpers/dateHelpers'
+import { getDueDate } from '../../helpers/dateHelpers'
 
 const TaskDrawer = ({
   show,

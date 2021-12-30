@@ -25,7 +25,7 @@ import {
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { getDueDate, taskTimeHandler } from '../helpers/dateHelpers'
+import { getDueDate, taskTimeHandler } from '../../helpers/dateHelpers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 

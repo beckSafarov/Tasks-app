@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom'
 import FormBuild from '../../components/FormBuild'
 import { emailSignIn } from '../../firebase/auth'
 import ShowAlert from '../../components/ShowAlert'
-import AuthProviders from '../../components/AuthProviders'
+import AuthProviders from '../../components/Auth/AuthProviders'
 import { useAppContext } from '../../hooks/ContextHooks'
 
 const validationSchema = Yup.object().shape({

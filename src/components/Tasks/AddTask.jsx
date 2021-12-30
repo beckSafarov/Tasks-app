@@ -8,10 +8,10 @@ import {
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { useFormik } from 'formik'
-import { taskSchema } from '../Context/TasksContext'
+import { taskSchema } from '../../Context/TasksContext'
 import { v4 as uuid4 } from 'uuid'
-import { textToDate } from '../helpers/dateHelpers'
-import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
+import { textToDate } from '../../helpers/dateHelpers'
+import { usePrefsContext, useTagsContext } from '../../hooks/ContextHooks'
 import { useLocation } from 'react-router-dom'
 
 const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
