@@ -12,7 +12,7 @@ const TasksScreen = () => {
   const { loading: tasksLoading } = useTasksContext()
   const { loading: tagsLoading } = useTagsContext()
   const {
-    loading: userDataLoading,
+    loading: pageTasksLoading,
     tasks,
     tag,
     title,
@@ -51,6 +51,7 @@ const TasksScreen = () => {
       </Box>
       <Box ml={sidebarWidth} id='main' pb='100px'>
         <TasksContainer
+          loading={pageTasksLoading}
           store={tasks}
           tag={tag}
           page={page}

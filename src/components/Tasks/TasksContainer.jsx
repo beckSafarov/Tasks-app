@@ -10,8 +10,8 @@ import Task from './Task'
 import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
 import ConfirmModal from '../Modals/ConfirmModal'
-import SkeletonStack from '../SkeletonStack'
 import AddTask from './AddTask'
+import Loading from '../Loading'
 
 // --- library methods & custom hooks ---
 import { useEffect, useState } from 'react'
@@ -30,6 +30,7 @@ import {
 
 const TasksContainer = ({
   store: tasksFromDB,
+  loading: pageTasksLoading,
   title,
   tag,
   defaultDate,
@@ -54,6 +55,8 @@ const TasksContainer = ({
     remove: removeTasksInContext,
     add: addTaskInContext,
   } = useTasksContext()
+
+  console.log(pageTasksLoading)
 
   // hooks
   const [tasks, setTasks] = useState([])
@@ -210,8 +213,8 @@ const TasksContainer = ({
           />
         </HStack>
         <VStack mt={tasks.length > 0 ? '50px' : '0'}>
-          <SkeletonStack show={false} />
-          {1 !== 0 &&
+          <Loading component show={pageTasksLoading} />
+          {!pageTasksLoading &&
             sortTasks(
               tasks.filter((t) => !t.done),
               sortType,
@@ -238,7 +241,11 @@ const TasksContainer = ({
         />
 
         {/* completed tasks */}
-        <VStack mt='50px' id='completed_tasks_div' hidden={!showCompTasks}>
+        <VStack
+          mt='50px'
+          id='completed_tasks_div'
+          hidden={!showCompTasks || pageTasksLoading}
+        >
           {sortTasks(
             tasks.filter((t) => t.done),
             sortType,

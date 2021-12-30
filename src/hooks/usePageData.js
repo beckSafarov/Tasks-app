@@ -29,12 +29,17 @@ const getPage = ({ pathname: path }) => {
 }
 
 const usePageData = (loc = defLoc) => {
-  const { data: userData, loading, error, getData } = useAppContext()
+  const {
+    data: userData,
+    loading: appLoading,
+    error,
+    getData,
+  } = useAppContext()
   const { data: contextTasks, set: setTasks } = useTasksContext()
   const { set: setTags, tags: contextTags } = useTagsContext()
   const [pageTasks, setPageTasks] = useState([])
   const [requested, setRequested] = useState(false)
-
+  const [loading, setLoading] = useState(true)
   const { filter, tagId } = getPage(loc)
   const tagName = contextTags?.find((t) => t.id === tagId)?.tag || ''
 
@@ -58,6 +63,7 @@ const usePageData = (loc = defLoc) => {
     if (contextTags.length > 0) {
       const filteredTasks = filterTasks(filter, contextTasks, tagName)
       setPageTasks(filteredTasks)
+      setLoading(false)
     }
   }, [loc.pathname, userData, contextTasks, contextTags.length, requested])
 
