@@ -48,7 +48,7 @@ const SearchTask = ({ onSubmit, onClear }) => {
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents='none'
-                    children={<Icon color='light.placeholder' as={FaSearch} />}
+                    children={<Icon color='light.searchIcon' as={FaSearch} />}
                   />
                   <Input
                     {...field}
@@ -56,14 +56,15 @@ const SearchTask = ({ onSubmit, onClear }) => {
                     placeholder='Search Task'
                     type='text'
                     variant='filled'
-                    _focus={{ borderColor: 'light.placeholder' }}
+                    bg='light.searchBg'
+                    _focus={{ borderColor: 'light.searchOnFocus' }}
                     disabled={field.isSubmitting}
                   />
                   {searchState && (
                     <InputRightElement
                       onClick={formClearHandler}
                       children={
-                        <Icon color='light.placeholder' as={FaTimesCircle} />
+                        <Icon color='light.searchIcon' as={FaTimesCircle} />
                       }
                     />
                   )}

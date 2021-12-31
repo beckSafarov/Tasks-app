@@ -63,11 +63,11 @@ const TaskDrawer = ({
         top='10px'
         bottom='20px'
         right='10px'
-        bg='whiteAlpha.200'
+        bg='light.taskDrawer'
         boxShadow='lg'
         overflowX='scroll'
         transition={transition}
-        color='gray.800'
+        color='light.taskDrawertext'
         // boxSizing='border-box'
         rounded='md'
       >
@@ -160,7 +160,7 @@ const TaskDrawer = ({
             borderColor='gray.200'
             justifyContent='space-between'
             alignItems='center'
-            color='gray.800'
+            color='light.taskDrawerText'
             p='5px'
           >
             <Tooltip label='Close'>

@@ -17,6 +17,7 @@ import {
   HStack,
   Tooltip,
   useToast,
+  useColorMode,
 } from '@chakra-ui/react'
 import SearchTask from '../SearchTask'
 import {
@@ -31,6 +32,8 @@ import {
   FaSortAlphaDown,
   FaRegCalendarPlus,
   FaCog,
+  FaSun,
+  FaRegMoon,
 } from 'react-icons/fa'
 import { useState, useEffect, useRef } from 'react'
 import { useTagsContext, useTasksContext } from '../../hooks/ContextHooks'
@@ -50,6 +53,7 @@ const TaskHeader = ({
 }) => {
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
+  const { colorMode, toggleColorMode } = useColorMode()
   const tagEditInput = useRef(null)
   const { update: updateTag, updateTagInDB, tags } = useTagsContext()
   const { updateTag: updateTaskTags } = useTasksContext()
@@ -144,6 +148,12 @@ const TaskHeader = ({
             <MenuList fontSize='0.8rem'>
               <MenuGroup title='Actions'>
                 {/* --- actions ---*/}
+                <MenuItem
+                  icon={<Icon as={colorMode === 'light' ? FaRegMoon : FaSun} />}
+                  onClick={toggleColorMode}
+                >
+                  {colorMode === 'light' ? 'Dark' : 'Light'} mode
+                </MenuItem>
                 <MenuItem
                   icon={
                     !showCompTasks ? (

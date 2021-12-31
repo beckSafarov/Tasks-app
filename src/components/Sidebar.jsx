@@ -23,8 +23,16 @@ import { defUser } from '../firebase/auth'
 const menuOptionHover = {
   background: 'light.sidebar_hover',
   cursor: 'pointer',
-  color: 'white',
+  color: 'light.sidebar_hover_text',
 }
+
+const mainPageLinks = [
+  { text: 'All Tasks', link: '/all-tasks' },
+  { text: 'Today', link: '/today' },
+  { text: 'Tomorrow', link: '/tomorrow' },
+  { text: 'Upcoming', link: '/upcoming' },
+  { text: 'Test', link: '/test' },
+]
 
 const Sidebar = () => {
   const { preferences: prefs, sidebarTagsToggle } = usePrefsContext()
@@ -64,7 +72,7 @@ const Sidebar = () => {
       {/* profile info button place */}
       <HStack
         spacing={2}
-        color='#fff'
+        color='light.sidebar_text'
         p='2'
         _hover={menuOptionHover}
         borderRadius='md'
@@ -96,66 +104,24 @@ const Sidebar = () => {
         spacing={0}
         color='light.sidebar_text'
       >
-        {/* all tasks link */}
-        <Link to='/all-tasks' style={{ width: '100%' }}>
-          <Box
-            p={2}
-            position='relative'
-            display='flex'
-            alignItems='flex-start'
-            fontSize={18}
-            fontWeight='600'
-            _hover={menuOptionHover}
-            borderRadius='md'
-          >
-            All Tasks
-          </Box>
-        </Link>
-        {/* today's tasks link */}
-        <Link to='/today' style={{ width: '100%' }}>
-          <Box
-            p={2}
-            position='relative'
-            display='flex'
-            alignItems='flex-start'
-            fontSize={18}
-            fontWeight='600'
-            _hover={menuOptionHover}
-            borderRadius='md'
-          >
-            Today
-          </Box>
-        </Link>
-        {/* tomorrow's tasks link */}
-        <Link to='/tomorrow' style={{ width: '100%' }}>
-          <Box
-            p={2}
-            position='relative'
-            display='flex'
-            alignItems='flex-start'
-            fontSize={18}
-            fontWeight='600'
-            _hover={menuOptionHover}
-            borderRadius='md'
-          >
-            Tomorrow
-          </Box>
-        </Link>
-        {/* tomorrow's tasks link */}
-        <Link to='/upcoming' style={{ width: '100%' }}>
-          <Box
-            p={2}
-            position='relative'
-            display='flex'
-            alignItems='flex-start'
-            fontSize={18}
-            fontWeight='600'
-            _hover={menuOptionHover}
-            borderRadius='md'
-          >
-            Upcoming
-          </Box>
-        </Link>
+        {/* main task page links */}
+        {mainPageLinks.map((page, i) => (
+          <Link key={i} to={page.link} style={{ width: '100%' }}>
+            <Box
+              p={2}
+              position='relative'
+              display='flex'
+              alignItems='flex-start'
+              fontSize={18}
+              fontWeight='600'
+              _hover={menuOptionHover}
+              borderRadius='md'
+            >
+              {page.text}
+            </Box>
+          </Link>
+        ))}
+
         {/* tags toggle */}
         <Box
           p={2}
@@ -209,22 +175,6 @@ const Sidebar = () => {
             </VStack>
           </Collapse>
         </Box>
-
-        {/* link to test page */}
-        <Link to='/test' style={{ width: '100%' }}>
-          <Box
-            p={2}
-            position='relative'
-            display='flex'
-            alignItems='flex-start'
-            fontSize={18}
-            fontWeight='600'
-            _hover={menuOptionHover}
-            borderRadius='10px'
-          >
-            Test
-          </Box>
-        </Link>
       </VStack>
     </Container>
   )

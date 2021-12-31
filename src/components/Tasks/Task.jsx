@@ -46,11 +46,12 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
     <div style={{ width: '100%', marginTop: '5px' }}>
       <Flex
         w='full'
-        bg='gray.100'
+        bg='light.tasks'
         pl={'10px'}
         py='5px'
         borderRadius='10px'
         fontSize='lg'
+        color='light.taskText'
       >
         {/* task completion circle icon */}
         <Flex justifyContent='center' alignItems='center' mr='10px'>
@@ -75,7 +76,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
         >
           <Text
             as={completed ? 's' : ''}
-            color={completed ? 'gray.500' : ''}
+            color={completed ? 'gray.500' : 'inherit'}
             mb='0'
           >
             {task.name}
@@ -84,7 +85,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
             mt='0'
             hidden={page === 'tag'}
             fontSize='0.8rem'
-            color='gray.500'
+            color='light.taskTag'
           >
             {task.tag}
           </Text>

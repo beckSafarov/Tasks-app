@@ -54,7 +54,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
         <InputGroup>
           <InputLeftElement
             pointerEvents='none'
-            children={<AddIcon color='light.placeholder' />}
+            children={<AddIcon color='light.addIcon' />}
           />
           <Input
             id='name'
@@ -66,7 +66,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.name}
-            _focus={{ borderColor: 'light.placeholder' }}
+            _focus={{ borderColor: 'light.addTaskOnFocus' }}
           />
           {page === 'All Tasks' && (
             <Select
@@ -76,6 +76,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
               onChange={onChange}
               onBlur={formik.handleBlur}
               value={selectedTag}
+              _focus={{ borderColor: 'light.addTaskOnFocus' }}
               isTruncated
             >
               {tags.map((t) => (
