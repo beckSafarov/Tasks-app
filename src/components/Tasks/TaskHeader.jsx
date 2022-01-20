@@ -18,6 +18,7 @@ import {
   Tooltip,
   useToast,
   useColorMode,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import SearchTask from '../SearchTask'
 import {
@@ -53,10 +54,13 @@ const TaskHeader = ({
 }) => {
   const [tagName, setTagName] = useState('')
   const [tagEditMode, setTagEditMode] = useState(false)
-  const { colorMode, toggleColorMode } = useColorMode()
-  const tagEditInput = useRef(null)
   const { update: updateTag, updateTagInDB, tags } = useTagsContext()
   const { updateTag: updateTaskTags } = useTasksContext()
+
+  // color themes
+  const { colorMode: mode, toggleColorMode } = useColorMode()
+
+  const tagEditInput = useRef(null)
   const toast = useToast()
   const loc = useLocation().pathname
   const noEditableTag = !loc.match(/tag/) || page === 'untagged'
@@ -93,7 +97,7 @@ const TaskHeader = ({
   return (
     <Box
       position='sticky'
-      bg='#fff'
+      bg={`${mode}.taskHeaderBg`}
       pt='20px'
       pb='10px'
       top='0'
@@ -101,11 +105,12 @@ const TaskHeader = ({
       mr='20px'
       right='0'
       left='0'
-      borderBottom='1px solid #f4f4f4'
       zIndex={10}
+      borderBottom='1px solid'
+      borderBottomColor={`${mode}.headerBorder`}
     >
       <HStack px='50px' display='flex'>
-        <Heading size='lg' color='gray.800' flex='1'>
+        <Heading size='lg' color={`${mode}.headerHeading`} flex='1'>
           <Editable
             value={tagName}
             onSubmit={tagUpdated}
@@ -142,26 +147,20 @@ const TaskHeader = ({
                 variant='flushed'
                 _focus={{ borderColor: 'none' }}
                 borderRadius={'50%'}
-                _hover={{ background: 'gray.100' }}
+                _hover={{ background: `${mode}.headerMenuBtnHover` }}
               />
             </Tooltip>
             <MenuList fontSize='0.8rem'>
               <MenuGroup title='Actions'>
                 {/* --- actions ---*/}
                 <MenuItem
-                  icon={<Icon as={colorMode === 'light' ? FaRegMoon : FaSun} />}
+                  icon={<Icon as={mode === 'light' ? FaRegMoon : FaSun} />}
                   onClick={toggleColorMode}
                 >
-                  {colorMode === 'light' ? 'Dark' : 'Light'} mode
+                  {mode === 'light' ? 'Dark' : 'Light'} mode
                 </MenuItem>
                 <MenuItem
-                  icon={
-                    !showCompTasks ? (
-                      <Icon as={FaEye} />
-                    ) : (
-                      <Icon as={FaEyeSlash} />
-                    )
-                  }
+                  icon={<Icon as={!showCompTasks ? FaEye : FaEyeSlash} />}
                   onClick={toggleCompTasks}
                 >
                   {!showCompTasks ? 'Show' : 'Hide'} completed tasks

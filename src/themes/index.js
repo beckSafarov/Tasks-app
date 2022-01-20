@@ -1,25 +1,104 @@
 import { extendTheme, theme as base } from '@chakra-ui/react'
-import { darkGreyTheme, lightGreyTheme, notionTheme } from './themeBlocks'
+
+export const calendarDarkTheme = {
+  input: '#2D384D',
+  modal: {
+    bg: '#2D384D',
+    color: '#edf2f7',
+    border: '1px solid #e2e8f0',
+  },
+  header: { color: '#fff', bg: '#1a202c' },
+  currMonth: { color: '#edf2f7' },
+  dayNames: { color: '#fff' },
+}
 
 const theme = extendTheme({
   colors: {
     light: {
-      // # defaults
-      text: '#333333',
-      // ##task related
-      tasks: '#EFF1F6',
-      taskText: '#333',
-      taskTag: '#718096',
+      // generals
+      text: '#333',
+      // sidebar
+      sidebar: '#f7f6f3',
+      sidebar_text: '#333',
+      sidebar_hover: '#dfe5ef',
+      sidebar_hover_text: '#333',
+
+      // task header
+      taskHeaderBg: '#fff',
+      taskHeaderTxt: '#333',
+      headerBorder: '#f4f4f4',
+      headerHeading: '#1A202C',
+      headerMenuBtnHover: '#EDF2F7',
+
+      // add task
       addIcon: '#808080',
       addTaskOnFocus: '#808080',
-      // ## search related
-      searchBg: '#EFF1F6',
+
+      // tasks
+      tasks: '#f7f6f3', //tasks
+      taskTag: '#718096',
+      taskText: '#333',
+      crossedTask: '#718096',
+      taskIcon: '#4A5568', //600 for 800:#1A202C
+
+      //taskdrawer
+      taskDrawer: 'whiteAlpha.200',
+      taskDrawerText: '#333',
+      drawerBorder: '#E2E8F0',
+      drawerActionsHover: '#E2E8F0',
+      subTasksHover: '#D5EEF8',
+
+      //search task
+      searchBg: '#f7f6f3',
       searchIcon: '#808080',
       searchOnFocus: '#808080',
-      // ## final designs
-      ...notionTheme,
+
+      // account window
+      accountLabel: '#718096',
     },
-    dark: {},
+    dark: {
+      //generals
+      text: '#EDF2F7',
+
+      // sidebar
+      sidebar: '#2D384D',
+      sidebar_text: '#EDF2F7',
+      sidebar_hover: '#262F40',
+      sidebar_hover_text: '#EDF2F7',
+
+      //task header
+      taskHeaderBg: '#1A202C',
+      taskHeaderTxt: '#EDF2F7',
+      headerBorder: '#2D384D',
+      headerHeading: '#EDF2F7',
+      headerMenuBtnHover: '#2D384D',
+
+      // add task
+      addIcon: '#2D384D',
+      addTaskOnFocus: '#2D384D',
+
+      // tasks
+      tasks: '#2D384D',
+      taskTag: '#718096',
+      taskText: '#EDF2F7',
+      crossedTask: '#718096',
+      taskIcon: '#4A5568',
+
+      // task drawer
+      taskDrawer: '#2D384D',
+      taskDrawerText: '#EDF2F7',
+      drawerBorder: '#E2E8F0',
+      drawerActionsHover: '#E2E8F0',
+      subTasksHover: '#272E3F',
+
+      // search
+      searchBg: '#2D384D',
+      searchIcon: '#808080',
+      searchOnFocus: '#3E4B65',
+
+      // account window
+      accountLabel: '#9CB7D3',
+    },
   },
   fonts: {
     heading: `Poppins, ${base.fonts?.heading}`,

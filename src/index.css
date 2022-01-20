@@ -17,6 +17,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* 
+#main {
+  background: blue;
+} */
 
 .btn {
   border: none;
@@ -33,11 +37,21 @@ code {
   color: #fff;
 }
 
-.calendar {
+.calendar-input {
   width: 100%;
+  border-radius: 5px;
   border: 1px solid #e2e8f0;
+  padding-left: 15px;
+}
+
+.calendar-input.dark {
+  width: 100%;
   border-radius: 5px;
   padding-left: 15px;
+}
+
+.date-picker-dark {
+  background-color: #2d384d;
 }
 
 .hidden {

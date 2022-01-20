@@ -1,5 +1,5 @@
-import { Form, Formik, Field, useFormikContext } from 'formik'
-import { useState, useEffect } from 'react'
+import { Form, Formik, Field } from 'formik'
+import { useState } from 'react'
 import {
   Flex,
   Input,
@@ -8,13 +8,14 @@ import {
   InputRightElement,
   InputGroup,
   Icon,
-  Button,
+  useColorMode,
 } from '@chakra-ui/react'
 import { FaSearch, FaTimesCircle } from 'react-icons/fa'
 
 const SearchTask = ({ onSubmit, onClear }) => {
   const [onSubmitProps, setOnSubmitProps] = useState({})
   const [searchState, setSearchState] = useState(false)
+  const { colorMode: mode } = useColorMode()
 
   const submitHandler = ({ keyword }, onSubmitProps) => {
     onSubmit(keyword)
@@ -48,7 +49,9 @@ const SearchTask = ({ onSubmit, onClear }) => {
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents='none'
-                    children={<Icon color='light.searchIcon' as={FaSearch} />}
+                    children={
+                      <Icon color={`${mode}.searchIcon`} as={FaSearch} />
+                    }
                   />
                   <Input
                     {...field}
@@ -56,15 +59,15 @@ const SearchTask = ({ onSubmit, onClear }) => {
                     placeholder='Search Task'
                     type='text'
                     variant='filled'
-                    bg='light.searchBg'
-                    _focus={{ borderColor: 'light.searchOnFocus' }}
+                    bg={`${mode}.searchBg`}
+                    _focus={{ borderColor: `${mode}.searchOnFocus` }}
                     disabled={field.isSubmitting}
                   />
                   {searchState && (
                     <InputRightElement
                       onClick={formClearHandler}
                       children={
-                        <Icon color='light.searchIcon' as={FaTimesCircle} />
+                        <Icon color={`${mode}.searchIcon`} as={FaTimesCircle} />
                       }
                     />
                   )}

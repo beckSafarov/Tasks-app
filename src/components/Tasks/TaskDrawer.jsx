@@ -1,9 +1,15 @@
+// --- Libary & methdos ---
 import { useEffect, useState } from 'react'
+import SubTasks from './SubTasks'
+import MyEditable from '../MyEditable'
+import { getDueDate } from '../../helpers/dateHelpers'
+import useQuerySelector from '../../hooks/useQuerySelector'
+
+// --- UI components ---
 import { Box, Heading, HStack, VStack, Divider, Flex } from '@chakra-ui/layout'
 import { Icon } from '@chakra-ui/icon'
 import { Select } from '@chakra-ui/select'
 import { Collapse } from '@chakra-ui/transition'
-import SubTasks from './SubTasks'
 import {
   FaChevronRight,
   FaTag,
@@ -11,9 +17,19 @@ import {
   FaTrash,
 } from 'react-icons/fa'
 import { Tooltip } from '@chakra-ui/tooltip'
-import MyEditable from '../MyEditable'
-import ReactDatePicker from 'react-datepicker'
-import { getDueDate } from '../../helpers/dateHelpers'
+import DatePicker from 'react-datepicker'
+import { useColorMode } from '@chakra-ui/react'
+import { calendarDarkTheme as cd } from '../../themes'
+
+const dpClasses = {
+  modal: '.react-datepicker',
+  header: '.react-datepicker__header',
+  month: '.react-datepicker__current-month',
+  week: '.react-datepicker__week',
+  dayName: '.react-datepicker__day-name',
+  day: '.react-datepicker__day',
+  dayDisabled: '.react-datepicker__day--disabled',
+}
 
 const TaskDrawer = ({
   show,
@@ -25,8 +41,11 @@ const TaskDrawer = ({
   tags,
   onUpdate,
 }) => {
-  const styles = document?.querySelector('#main')?.style || {}
   const [fields, setFields] = useState({ ...task })
+  const { colorMode: mode } = useColorMode()
+  const styles = useQuerySelector('#main').style || {}
+  const dpInput = useQuerySelector('#dpInput').style || {}
+  dpInput.backgroundColor = mode === 'dark' ? cd.input : ''
   let updated = {}
 
   useEffect(() => {
@@ -40,6 +59,23 @@ const TaskDrawer = ({
       document.removeEventListener('click', outsideClicked)
     }
   }, [show, task, fields])
+
+  const handleCalendarTheme = () => {
+    if (mode !== 'dark') return
+    const dpModal = document.querySelector(dpClasses.modal).style
+    const dpHeader = document.querySelector(dpClasses.header).style
+    const currMonth = document.querySelector(dpClasses.month).style
+    const dayNames = [...document.querySelectorAll(dpClasses.dayName)]
+    dpModal.backgroundColor = cd.modal.bg
+    dpModal.color = cd.modal.color
+    dpModal.border = cd.modal.border
+    dpHeader.backgroundColor = cd.header.bg
+    dpHeader.color = cd.header.color
+    currMonth.color = cd.currMonth.color
+    dayNames.forEach((d) => {
+      d.style.color = cd.dayNames.color
+    })
+  }
 
   const handleChanges = (name, value, shouldUpdate = false) => {
     updated = { ...fields }
@@ -63,12 +99,11 @@ const TaskDrawer = ({
         top='10px'
         bottom='20px'
         right='10px'
-        bg='light.taskDrawer'
+        bg={`${mode}.taskDrawer`}
         boxShadow='lg'
         overflowX='scroll'
         transition={transition}
-        color='light.taskDrawertext'
-        // boxSizing='border-box'
+        color={`${mode}.text`}
         rounded='md'
       >
         <Box py={7} px='20px'>
@@ -117,19 +152,22 @@ const TaskDrawer = ({
                   <Icon as={FaRegCalendarAlt} />
                 </Box>
               </Tooltip>
-              <ReactDatePicker
-                id='datePicker'
-                name='dueDate'
-                placeholderText='Add Due Date'
-                className='calendar'
-                selected={getDueDate(fields)}
-                onChange={(v) => handleChanges('dueDate', v, true)}
-                timeInputLabel='Time:'
-                dateFormat='MM/dd/yyyy'
-                shouldCloseOnSelect={false}
-                minDate={new Date()}
-                isClearable
-              />
+              <Box>
+                <DatePicker
+                  id='dpInput'
+                  name='dueDate'
+                  placeholderText='Add Due Date'
+                  className={`calendar-input ${mode}`}
+                  selected={getDueDate(fields)}
+                  onChange={(v) => handleChanges('dueDate', v, true)}
+                  timeInputLabel='Time:'
+                  dateFormat='MM/dd/yyyy'
+                  onCalendarOpen={handleCalendarTheme}
+                  shouldCloseOnSelect={false}
+                  minDate={new Date()}
+                  isClearable
+                />
+              </Box>
             </HStack>
 
             {/* subtasks */}
@@ -157,17 +195,17 @@ const TaskDrawer = ({
             left='0'
             right='0'
             borderTop='1px'
-            borderColor='gray.200'
+            borderColor={`${mode}.drawerBorder`}
             justifyContent='space-between'
             alignItems='center'
-            color='light.taskDrawerText'
+            color={`${mode}.drawerText`}
             p='5px'
           >
             <Tooltip label='Close'>
               <Box
                 borderRadius='50%'
                 cursor='pointer'
-                _hover={{ backgroundColor: 'gray.200' }}
+                _hover={{ backgroundColor: `${mode}.drawerActionsHover` }}
                 py='5px'
                 px='10px'
                 onClick={() => onClose()}
@@ -179,7 +217,7 @@ const TaskDrawer = ({
               <Box
                 borderRadius='50%'
                 cursor='pointer'
-                _hover={{ backgroundColor: 'gray.200' }}
+                _hover={{ backgroundColor: `${mode}.drawerActionsHover` }}
                 py='5px'
                 px='10px'
                 onClick={() => onDelete(task)}

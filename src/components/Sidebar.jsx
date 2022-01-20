@@ -10,6 +10,7 @@ import {
   Collapse,
   Text,
   Image,
+  useColorMode,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
@@ -19,12 +20,6 @@ import AccountModal from './Modals/AccountModal'
 import { usePrefsContext, useTagsContext } from '../hooks/ContextHooks'
 import { getAuth } from '@firebase/auth'
 import { defUser } from '../firebase/auth'
-
-const menuOptionHover = {
-  background: 'light.sidebar_hover',
-  cursor: 'pointer',
-  color: 'light.sidebar_hover_text',
-}
 
 const mainPageLinks = [
   { text: 'All Tasks', link: '/all-tasks' },
@@ -45,10 +40,11 @@ const Sidebar = () => {
   const [caret, setCaret] = useState(prefs.sidebarTagsToggle)
   const [accountModal, setAccountModal] = useState(false)
   const { tags, add: addTag } = useTagsContext()
-  const user = getAuth()?.currentUser || defUser
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: prefs.sidebarTagsToggle,
   })
+  const { colorMode: mode } = useColorMode()
+  const user = getAuth()?.currentUser || defUser
 
   const toggleClicked = () => {
     setCaret(!caret)
@@ -59,6 +55,11 @@ const Sidebar = () => {
   const addTagModalSubmit = (tag) => {
     addTag(tag)
     onAddTagModalClosed()
+  }
+
+  const menuOptionHover = {
+    background: `${mode}.sidebar_hover`,
+    color: `${mode}.sidebar_hover_text`,
   }
 
   return (
@@ -72,7 +73,7 @@ const Sidebar = () => {
       {/* profile info button place */}
       <HStack
         spacing={2}
-        color='light.sidebar_text'
+        cursor='pointer'
         p='2'
         _hover={menuOptionHover}
         borderRadius='md'
@@ -97,13 +98,7 @@ const Sidebar = () => {
       />
 
       {/* page links */}
-      <VStack
-        w='full'
-        alignItems='flex-start'
-        pt='3'
-        spacing={0}
-        color='light.sidebar_text'
-      >
+      <VStack w='full' alignItems='flex-start' pt='3' spacing={0}>
         {/* main task page links */}
         {mainPageLinks.map((page, i) => (
           <Link key={i} to={page.link} style={{ width: '100%' }}>
@@ -132,6 +127,7 @@ const Sidebar = () => {
           fontSize={18}
           fontWeight='600'
           borderRadius='md'
+          cursor='pointer'
           onClick={toggleClicked}
           _hover={menuOptionHover}
         >
@@ -141,7 +137,7 @@ const Sidebar = () => {
           </span>
         </Box>
         {/* tags toggle contents */}
-        <Box color='light.sidebar_text' w='full'>
+        <Box w='full'>
           <Collapse in={isOpen} animateOpacity>
             <VStack spacing={0}>
               {tags.map((tag, i) => (
@@ -166,6 +162,7 @@ const Sidebar = () => {
               <Box
                 p={1}
                 paddingLeft={'20px'}
+                cursor='pointer'
                 _hover={{ ...menuOptionHover, color: 'blue.200' }}
                 w='full'
                 borderRadius='10px'

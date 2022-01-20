@@ -15,6 +15,7 @@ import {
   MenuList,
   MenuItem,
   IconButton,
+  useColorMode,
 } from '@chakra-ui/react'
 import { defUser, getCurrUser, logout } from '../../firebase/auth'
 import CustomAvatar from '../CustomAvatar'
@@ -46,6 +47,7 @@ const AccountModal = ({ show, onClose }) => {
   const user = getCurrUser() || defUser
   const [editMode, setEditMode] = useState(false)
   const [alert, setAlert] = useState(defAlert)
+  const { colorMode: mode } = useColorMode()
   const initialValues = {
     name: user.displayName,
     email: user.email,
@@ -144,18 +146,18 @@ const AccountModal = ({ show, onClose }) => {
               {/* read only */}
               <Box hidden={editMode}>
                 <Box>
-                  <Text as='small' color='gray.500'>
+                  <Text as='small' color={`${mode}.accountLabel`}>
                     Name:
                   </Text>
-                  <Text as='p' color='gray.700' fontSize='1rem'>
+                  <Text as='p' color={`${mode}.text`} fontSize='1rem'>
                     {user.displayName}
                   </Text>
                 </Box>
                 <Box mt='2px'>
-                  <Text as='small' color='gray.500'>
+                  <Text as='small' color={`${mode}.accountLabel`}>
                     Email:
                   </Text>
-                  <Text as='p' color='gray.700' fontSize='1rem'>
+                  <Text as='p' color={`${mode}.text`} fontSize='1rem'>
                     {user.email}
                   </Text>
                 </Box>

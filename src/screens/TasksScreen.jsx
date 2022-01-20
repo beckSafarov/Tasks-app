@@ -6,6 +6,7 @@ import TasksContainer from '../components/Tasks/TasksContainer'
 import usePageData from '../hooks/usePageData'
 import { useLocation } from 'react-router'
 import { useTagsContext, useTasksContext } from '../hooks/ContextHooks'
+import { useColorMode } from '@chakra-ui/react'
 
 const TasksScreen = () => {
   const loc = useLocation()
@@ -22,6 +23,7 @@ const TasksScreen = () => {
   } = usePageData(loc)
   const sidebarWidth = getScreenWidths([1, 5])[0]
   const updateLoading = tasksLoading || tagsLoading
+  const { colorMode: mode } = useColorMode()
 
   const onBeforeUnload = (e) => {
     if (updateLoading) {
@@ -45,7 +47,8 @@ const TasksScreen = () => {
         right='0'
         w={sidebarWidth}
         height='full'
-        backgroundColor='light.sidebar'
+        backgroundColor={`${mode}.sidebar`}
+        color={`${mode}.text`}
       >
         <Sidebar />
       </Box>

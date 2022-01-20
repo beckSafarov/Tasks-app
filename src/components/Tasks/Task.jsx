@@ -11,6 +11,7 @@ import {
   useDisclosure,
   Box,
   Tooltip,
+  useColorMode,
 } from '@chakra-ui/react'
 import {
   FaEllipsisV,
@@ -33,6 +34,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
   const { onClose: onModalClose } = useDisclosure()
   const taskTime = taskTimeHandler(getDueDate(task))
   const toggleDone = () => onUpdate({ ...task, done: !task.done })
+  const { colorMode: mode } = useColorMode()
 
   const toggleStar = () =>
     onUpdate({ ...task, starred: task.starred ? null : { date: new Date() } })
@@ -46,12 +48,12 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
     <div style={{ width: '100%', marginTop: '5px' }}>
       <Flex
         w='full'
-        bg='light.tasks'
+        bg={`${mode}.tasks`}
         pl={'10px'}
         py='5px'
         borderRadius='10px'
         fontSize='lg'
-        color='light.taskText'
+        color={`${mode}.taskText`}
       >
         {/* task completion circle icon */}
         <Flex justifyContent='center' alignItems='center' mr='10px'>
@@ -76,7 +78,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
         >
           <Text
             as={completed ? 's' : ''}
-            color={completed ? 'gray.500' : 'inherit'}
+            color={completed ? `${mode}.crossedTask` : 'inherit'}
             mb='0'
           >
             {task.name}
@@ -85,7 +87,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
             mt='0'
             hidden={page === 'tag'}
             fontSize='0.8rem'
-            color='light.taskTag'
+            color={`${mode}.taskTag`}
           >
             {task.tag}
           </Text>
@@ -120,7 +122,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
             <MenuButton
               as={IconButton}
               aria-label='Options'
-              icon={<Icon color='gray.800' as={FaEllipsisV}></Icon>}
+              icon={<Icon color={`${mode}.taskIcon`} as={FaEllipsisV}></Icon>}
               variant='unstyled'
               size='sm'
               _focus={{ border: 'none' }}
@@ -130,7 +132,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
                 fontSize='sm'
                 icon={
                   <Icon
-                    color='gray.800'
+                    color={`${mode}.taskIcon`}
                     as={!task.done ? FaCheckCircle : FaRegCheckCircle}
                   ></Icon>
                 }
@@ -140,7 +142,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
               </MenuItem>
               <MenuItem
                 fontSize='sm'
-                icon={<Icon color='gray.800' as={FaEdit}></Icon>}
+                icon={<Icon color={`${mode}.taskIcon`} as={FaEdit}></Icon>}
                 onClick={() => onOpen(task)}
               >
                 Edit Task
@@ -148,7 +150,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
               <MenuDivider />
               <MenuItem
                 fontSize='sm'
-                icon={<Icon color='gray.800' as={FaTrash}></Icon>}
+                icon={<Icon color={`${mode}.taskIcon`} as={FaTrash}></Icon>}
                 onClick={handleRemoveTask}
               >
                 Delete Task

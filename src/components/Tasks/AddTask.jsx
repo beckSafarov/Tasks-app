@@ -5,6 +5,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  useColorMode,
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { useFormik } from 'formik'
@@ -18,6 +19,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
   const { pathname: path } = useLocation()
   const { tags } = useTagsContext()
   const { preferences: prefs, set: setPrefs } = usePrefsContext()
+  const { colorMode: mode } = useColorMode()
   const [tag, setTag] = useState('')
   const [selectedTag, setSelectedTag] = useState(prefs.lastSelectedTag)
   const refToInput = useRef(null)
@@ -54,7 +56,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
         <InputGroup>
           <InputLeftElement
             pointerEvents='none'
-            children={<AddIcon color='light.addIcon' />}
+            children={<AddIcon color={`${mode}.addIcon`} />}
           />
           <Input
             id='name'
@@ -66,7 +68,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.name}
-            _focus={{ borderColor: 'light.addTaskOnFocus' }}
+            _focus={{ borderColor: `${mode}.addTaskOnFocus` }}
           />
           {page === 'All Tasks' && (
             <Select
@@ -76,7 +78,7 @@ const AddTask = ({ defaultTag, defaultDate, page, onSubmit: addTask }) => {
               onChange={onChange}
               onBlur={formik.handleBlur}
               value={selectedTag}
-              _focus={{ borderColor: 'light.addTaskOnFocus' }}
+              _focus={{ borderColor: `${mode}.addTaskOnFocus` }}
               isTruncated
             >
               {tags.map((t) => (

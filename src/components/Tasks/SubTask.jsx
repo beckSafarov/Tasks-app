@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Flex, Icon, Text } from '@chakra-ui/react'
+import { Flex, Icon, Text, useColorMode } from '@chakra-ui/react'
 import MyEditable from '../MyEditable'
 import {
   FaRegCircle as EmptyCircle,
@@ -9,7 +9,9 @@ import {
 
 const SubTask = ({ task, onUpdate, onRemove, setDragTask, onDragDrop }) => {
   const [opacity, setOpacity] = useState('1')
-  const [bg, setBg] = useState('#fff')
+  const { colorMode: mode } = useColorMode()
+  const defBg = `${mode}.taskDrawer`
+  const [bg, setBg] = useState(defBg)
 
   const onDragStart = () => {
     setOpacity('0.5')
@@ -17,12 +19,12 @@ const SubTask = ({ task, onUpdate, onRemove, setDragTask, onDragDrop }) => {
   }
 
   const onDragEnd = () => setOpacity('1')
-  const onDragEnter = () => setBg('#D5EEF8')
-  const onDragLeave = () => setBg('#fff')
+  const onDragEnter = () => setBg(`${mode}.subTasksHover`)
+  const onDragLeave = () => setBg(defBg)
   const onDragOver = (e) => e.preventDefault()
 
   const onDrop = () => {
-    setBg('#fff')
+    setBg(defBg)
     onDragDrop(task)
   }
 

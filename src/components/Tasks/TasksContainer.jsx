@@ -56,8 +56,6 @@ const TasksContainer = ({
     add: addTaskInContext,
   } = useTasksContext()
 
-  console.log(pageTasksLoading)
-
   // hooks
   const [tasks, setTasks] = useState([])
   const [selectedTask, setSelectedTask] = useState({})
