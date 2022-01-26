@@ -11,7 +11,7 @@ const SubTask = ({ task, onUpdate, onRemove, setDragTask, onDragDrop }) => {
   const [opacity, setOpacity] = useState('1')
   const { colorMode: mode } = useColorMode()
   const defBg = `${mode}.taskDrawer`
-  const [bg, setBg] = useState(defBg)
+  const [bg, setBg] = useState('inherit')
 
   const onDragStart = () => {
     setOpacity('0.5')

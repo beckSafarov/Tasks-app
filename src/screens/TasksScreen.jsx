@@ -35,21 +35,19 @@ const TasksScreen = () => {
     }
   }
 
-  const handleKeydown = (e) => {
-    console.log(e)
+  const onKeydown = (e) => {
     // Action for Command+Shift+L keydown
     if (e.shiftKey && e.metaKey && e.key === 'l') {
-      console.log('toggled the theme')
       toggleColorMode()
     }
   }
 
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload)
-    window.addEventListener('keydown', handleKeydown)
+    window.addEventListener('keydown', onKeydown)
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload)
-      window.removeEventListener('keydown', handleKeydown)
+      window.removeEventListener('keydown', onKeydown)
     }
   }, [updateLoading, mode])
 

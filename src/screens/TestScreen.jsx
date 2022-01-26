@@ -5,21 +5,6 @@ const TestScreen = () => {
 
   const toggleFoo = (e) => {}
 
-  // useEffect(() => {
-  //   document.addEventListener('keydown', handleKeydown)
-
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeydown)
-  //   }
-  // }, [])
-
-  // const handleKeydown = ({ shiftKey, metaKey, key }) => {
-  //   // console.log(e)
-  //   if (shiftKey && metaKey && key === 'l') {
-  //     console.log('you have changed the theme')
-  //   }
-  // }
-
   return (
     <div style={{ padding: '50px' }}>
       <h2>

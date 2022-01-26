@@ -62,7 +62,7 @@ const SubTasks = ({ task, onChange, fontSize, color }) => {
   }
 
   return (
-    <VStack w='full' aria-label='sub-tasks list'>
+    <VStack w='full' bg='inherit' aria-label='sub-tasks list'>
       <Box w='full' pb='10px' fontSize={fontSize} color={color}>
         {subTasks &&
           subTasks.map((task) => (
