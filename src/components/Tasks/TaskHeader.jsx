@@ -155,6 +155,7 @@ const TaskHeader = ({
                 {/* --- actions ---*/}
                 <MenuItem
                   icon={<Icon as={mode === 'light' ? FaRegMoon : FaSun} />}
+                  command='⌘+Shift+L'
                   onClick={toggleColorMode}
                 >
                   {mode === 'light' ? 'Dark' : 'Light'} mode

@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
-import { Box } from '@chakra-ui/layout'
-import Sidebar from '../components/Sidebar'
-import { getScreenWidths } from '../helpers'
-import TasksContainer from '../components/Tasks/TasksContainer'
-import usePageData from '../hooks/usePageData'
 import { useLocation } from 'react-router'
+import TasksContainer from '../components/Tasks/TasksContainer'
+
+import usePageData from '../hooks/usePageData'
 import { useTagsContext, useTasksContext } from '../hooks/ContextHooks'
+import { getScreenWidths } from '../helpers'
+
+import Sidebar from '../components/Sidebar'
+import { Box } from '@chakra-ui/layout'
 import { useColorMode } from '@chakra-ui/react'
 
 const TasksScreen = () => {
@@ -23,8 +25,9 @@ const TasksScreen = () => {
   } = usePageData(loc)
   const sidebarWidth = getScreenWidths([1, 5])[0]
   const updateLoading = tasksLoading || tagsLoading
-  const { colorMode: mode } = useColorMode()
+  const { colorMode: mode, toggleColorMode } = useColorMode()
 
+  // to give warning if a user is leaving before updates are saved
   const onBeforeUnload = (e) => {
     if (updateLoading) {
       e.preventDefault()
@@ -32,12 +35,23 @@ const TasksScreen = () => {
     }
   }
 
+  const handleKeydown = (e) => {
+    console.log(e)
+    // Action for Command+Shift+L keydown
+    if (e.shiftKey && e.metaKey && e.key === 'l') {
+      console.log('toggled the theme')
+      toggleColorMode()
+    }
+  }
+
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload)
+    window.addEventListener('keydown', handleKeydown)
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload)
+      window.removeEventListener('keydown', handleKeydown)
     }
-  }, [updateLoading])
+  }, [updateLoading, mode])
 
   return (
     <Box width='full' height='100vh'>

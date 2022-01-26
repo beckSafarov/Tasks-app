@@ -1,9 +1,24 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
 
   const toggleFoo = (e) => {}
+
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeydown)
+
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeydown)
+  //   }
+  // }, [])
+
+  // const handleKeydown = ({ shiftKey, metaKey, key }) => {
+  //   // console.log(e)
+  //   if (shiftKey && metaKey && key === 'l') {
+  //     console.log('you have changed the theme')
+  //   }
+  // }
 
   return (
     <div style={{ padding: '50px' }}>
