@@ -18,7 +18,6 @@ import {
   Tooltip,
   useToast,
   useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import SearchTask from '../SearchTask'
 import {
@@ -35,6 +34,7 @@ import {
   FaCog,
   FaSun,
   FaRegMoon,
+  FaSortAmountDown,
 } from 'react-icons/fa'
 import { useState, useEffect, useRef } from 'react'
 import { useTagsContext, useTasksContext } from '../../hooks/ContextHooks'
@@ -139,6 +139,87 @@ const TaskHeader = ({
         {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
           <Menu>
+            <Tooltip label='Sort'>
+              <MenuButton
+                as={IconButton}
+                aria-label='Menu'
+                icon={<Icon as={FaSortAmountDown} />}
+                variant='flushed'
+                _focus={{ borderColor: 'none' }}
+                borderRadius='50%'
+                _hover={{ background: `${mode}.headerMenuBtnHover` }}
+              />
+            </Tooltip>
+            <MenuList fontSize='0.8rem'>
+              <MenuItem
+                onClick={() => onSort('alphabetically')}
+                icon={<Icon as={FaSortAlphaDown} />}
+              >
+                <Flex>
+                  <Box>Alphabetically</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'alphabetically'} as={FaCheck} />
+                  </Box>
+                </Flex>
+              </MenuItem>
+              <MenuItem
+                onClick={() => onSort('tag')}
+                hidden={page === 'tag'} //tag pages can't sort by tag
+                icon={<Icon as={FaTag} />}
+              >
+                <Flex>
+                  <Box>Tag</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'tag'} as={FaCheck} />
+                  </Box>
+                </Flex>
+              </MenuItem>
+              {/* sort by creation date */}
+              <MenuItem
+                onClick={() => onSort('creationDate')}
+                icon={<Icon as={FaRegCalendarPlus} />}
+              >
+                <Flex>
+                  <Box>Creation Date</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'creationDate'} as={FaCheck} />
+                  </Box>
+                </Flex>
+              </MenuItem>
+              {/* sort by due date */}
+              <MenuItem
+                onClick={() => onSort('dueDate')}
+                icon={<Icon as={FaRegCalendarAlt} />}
+                hidden={page.match(/today|tomorrow/)}
+              >
+                <Flex>
+                  <Box>Due Date</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'dueDate'} as={FaCheck} />
+                  </Box>
+                </Flex>
+              </MenuItem>
+
+              {/* sort by importance */}
+              <MenuItem
+                onClick={() => onSort('starred')}
+                icon={<Icon as={FaRegStar} />}
+              >
+                <Flex>
+                  <Box>Importance</Box>
+                  <Spacer />
+                  <Box>
+                    <Icon hidden={sortType !== 'starred'} as={FaCheck} />
+                  </Box>
+                </Flex>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          <Menu>
             <Tooltip label='Settings'>
               <MenuButton
                 as={IconButton}
@@ -151,111 +232,34 @@ const TaskHeader = ({
               />
             </Tooltip>
             <MenuList fontSize='0.8rem'>
-              <MenuGroup title='Actions'>
-                {/* --- actions ---*/}
-                <MenuItem
-                  icon={<Icon as={mode === 'light' ? FaRegMoon : FaSun} />}
-                  command='⌘+Shift+L'
-                  onClick={toggleColorMode}
-                >
-                  {mode === 'light' ? 'Dark' : 'Light'} mode
-                </MenuItem>
-                <MenuItem
-                  icon={<Icon as={!showCompTasks ? FaEye : FaEyeSlash} />}
-                  onClick={toggleCompTasks}
-                >
-                  {!showCompTasks ? 'Show' : 'Hide'} completed tasks
-                </MenuItem>
+              <MenuItem
+                icon={<Icon as={mode === 'light' ? FaRegMoon : FaSun} />}
+                command='⌘+Shift+L'
+                onClick={toggleColorMode}
+              >
+                {mode === 'light' ? 'Dark' : 'Light'} mode
+              </MenuItem>
+              <MenuItem
+                icon={<Icon as={!showCompTasks ? FaEye : FaEyeSlash} />}
+                onClick={toggleCompTasks}
+              >
+                {!showCompTasks ? 'Show' : 'Hide'} completed tasks
+              </MenuItem>
 
-                <MenuItem
-                  onClick={() => tagEditInput.current.focus()}
-                  hidden={noEditableTag} //hidden in non-tag pages
-                  icon={<Icon as={FaEdit} />}
-                >
-                  Rename tag
-                </MenuItem>
-                <MenuItem
-                  onClick={() => removeTasksByTag()}
-                  hidden={noEditableTag} //hidden in non-tag pages
-                  icon={<Icon as={FaTrash} />}
-                >
-                  Delete tag
-                </MenuItem>
-              </MenuGroup>
-              <MenuDivider />
-
-              {/* --- sorts ---*/}
-              <MenuGroup title='Sort'>
-                <MenuItem
-                  onClick={() => onSort('alphabetically')}
-                  icon={<Icon as={FaSortAlphaDown} />}
-                >
-                  <Flex>
-                    <Box>Alphabetically</Box>
-                    <Spacer />
-                    <Box>
-                      <Icon
-                        hidden={sortType !== 'alphabetically'}
-                        as={FaCheck}
-                      />
-                    </Box>
-                  </Flex>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => onSort('tag')}
-                  hidden={page === 'tag'} //tag pages can't sort by tag
-                  icon={<Icon as={FaTag} />}
-                >
-                  <Flex>
-                    <Box>Tag</Box>
-                    <Spacer />
-                    <Box>
-                      <Icon hidden={sortType !== 'tag'} as={FaCheck} />
-                    </Box>
-                  </Flex>
-                </MenuItem>
-                {/* sort by creation date */}
-                <MenuItem
-                  onClick={() => onSort('creationDate')}
-                  icon={<Icon as={FaRegCalendarPlus} />}
-                >
-                  <Flex>
-                    <Box>Creation Date</Box>
-                    <Spacer />
-                    <Box>
-                      <Icon hidden={sortType !== 'creationDate'} as={FaCheck} />
-                    </Box>
-                  </Flex>
-                </MenuItem>
-                {/* sort by due date */}
-                <MenuItem
-                  onClick={() => onSort('dueDate')}
-                  icon={<Icon as={FaRegCalendarAlt} />}
-                  hidden={page.match(/today|tomorrow/)}
-                >
-                  <Flex>
-                    <Box>Due Date</Box>
-                    <Spacer />
-                    <Box>
-                      <Icon hidden={sortType !== 'dueDate'} as={FaCheck} />
-                    </Box>
-                  </Flex>
-                </MenuItem>
-
-                {/* sort by importance */}
-                <MenuItem
-                  onClick={() => onSort('starred')}
-                  icon={<Icon as={FaRegStar} />}
-                >
-                  <Flex>
-                    <Box>Importance</Box>
-                    <Spacer />
-                    <Box>
-                      <Icon hidden={sortType !== 'starred'} as={FaCheck} />
-                    </Box>
-                  </Flex>
-                </MenuItem>
-              </MenuGroup>
+              <MenuItem
+                onClick={() => tagEditInput.current.focus()}
+                hidden={noEditableTag} //hidden in non-tag pages
+                icon={<Icon as={FaEdit} />}
+              >
+                Rename tag
+              </MenuItem>
+              <MenuItem
+                onClick={() => removeTasksByTag()}
+                hidden={noEditableTag} //hidden in non-tag pages
+                icon={<Icon as={FaTrash} />}
+              >
+                Delete tag
+              </MenuItem>
             </MenuList>
           </Menu>
         </Box>
