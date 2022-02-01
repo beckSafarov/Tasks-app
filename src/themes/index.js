@@ -39,6 +39,8 @@ const theme = extendTheme({
       taskActive: '#E7EAEE',
       taskTag: '#718096',
       taskText: '#333',
+      taskCircle: '#718096',
+      completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
       taskIcon: '#4A5568', //600 for 800:#1A202C
 
@@ -84,6 +86,8 @@ const theme = extendTheme({
       taskActive: '#262F40',
       taskTag: '#718096',
       taskText: '#EDF2F7',
+      taskCircle: '#EDF2F7',
+      completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
       taskIcon: '#4A5568',
 

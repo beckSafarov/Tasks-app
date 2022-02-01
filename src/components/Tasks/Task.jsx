@@ -43,6 +43,9 @@ const Task = ({
   const taskTime = taskTimeHandler(getDueDate(task))
   const toggleDone = () => onUpdate({ ...task, done: !task.done })
   const { colorMode: mode } = useColorMode()
+  const circleColor = completed
+    ? `${mode}.completedTaskCircle`
+    : `${mode}.taskCircle`
 
   const toggleStar = () =>
     onUpdate({ ...task, starred: task.starred ? null : { date: new Date() } })
@@ -65,14 +68,12 @@ const Task = ({
       >
         {/* task completion circle icon */}
         <Flex justifyContent='center' alignItems='center' mr='10px'>
-          <Tooltip label={completed ? 'Uncomplete task' : 'Complete task'}>
-            <Box cursor='pointer' onClick={toggleDone}>
-              <Icon
-                color={completed ? 'blue.200' : 'gray.500'}
-                as={completed ? FaCheckCircle : FaRegCircle}
-              />
-            </Box>
-          </Tooltip>
+          <Box cursor='pointer' onClick={toggleDone}>
+            <Icon
+              color={circleColor}
+              as={completed ? FaCheckCircle : FaRegCircle}
+            />
+          </Box>
         </Flex>
 
         {/* task text */}
