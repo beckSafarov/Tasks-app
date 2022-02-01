@@ -10,10 +10,20 @@ import {
   Collapse,
   Text,
   Image,
+  Divider,
   useColorMode,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
-import { FaCaretRight, FaCaretDown } from 'react-icons/fa'
+import { Link, useLocation } from 'react-router-dom'
+import {
+  FaCaretRight,
+  FaCaretDown,
+  FaTasks,
+  FaSun,
+  FaRegMoon,
+  FaCalendarDay,
+  FaTags,
+  FaHammer,
+} from 'react-icons/fa'
 import AddTagModal from './Modals/AddTagModal'
 import CustomAvatar from './CustomAvatar'
 import AccountModal from './Modals/AccountModal'
@@ -22,11 +32,11 @@ import { getAuth } from '@firebase/auth'
 import { defUser } from '../firebase/auth'
 
 const mainPageLinks = [
-  { text: 'All Tasks', link: '/all-tasks' },
-  { text: 'Today', link: '/today' },
-  { text: 'Tomorrow', link: '/tomorrow' },
-  { text: 'Upcoming', link: '/upcoming' },
-  { text: 'Test', link: '/test' },
+  { text: 'All Tasks', link: '/all-tasks', icon: FaTasks },
+  { text: 'Today', link: '/today', icon: FaSun },
+  { text: 'Tomorrow', link: '/tomorrow', icon: FaRegMoon },
+  { text: 'Upcoming', link: '/upcoming', icon: FaCalendarDay },
+  { text: 'Test', link: '/test', icon: FaHammer },
 ]
 
 const Sidebar = () => {
@@ -45,6 +55,7 @@ const Sidebar = () => {
   })
   const { colorMode: mode } = useColorMode()
   const user = getAuth()?.currentUser || defUser
+  const loc = useLocation()
 
   const toggleClicked = () => {
     setCaret(!caret)
@@ -57,8 +68,10 @@ const Sidebar = () => {
     onAddTagModalClosed()
   }
 
+  const handleActiveBg = (link) =>
+    loc.pathname === link ? `${mode}.sidebar_active_link` : ''
+
   const menuOptionHover = {
-    background: `${mode}.sidebar_hover`,
     color: `${mode}.sidebar_hover_text`,
   }
 
@@ -105,22 +118,22 @@ const Sidebar = () => {
             <Box
               p={2}
               position='relative'
-              display='flex'
-              alignItems='flex-start'
+              bg={handleActiveBg(page.link)}
               fontSize={18}
               fontWeight='600'
-              _hover={menuOptionHover}
+              _hover={loc.pathname !== page.link ? menuOptionHover : {}}
               borderRadius='md'
             >
-              {page.text}
+              <HStack spacing={2}>
+                <Icon as={page.icon} /> <span>{page.text}</span>
+              </HStack>
             </Box>
           </Link>
         ))}
-
+        <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
         {/* tags toggle */}
-        <Box
+        <Flex
           p={2}
-          display='flex'
           alignItems='flex-start'
           justifyContent='space-between'
           w={'full'}
@@ -131,11 +144,13 @@ const Sidebar = () => {
           onClick={toggleClicked}
           _hover={menuOptionHover}
         >
-          <span>Tags</span>
+          <HStack spacing={2}>
+            <Icon as={FaTags} /> <span>Tags</span>
+          </HStack>
           <span>
             <Icon as={caret ? FaCaretDown : FaCaretRight}></Icon>
           </span>
-        </Box>
+        </Flex>
         {/* tags toggle contents */}
         <Box w='full'>
           <Collapse in={isOpen} animateOpacity>
@@ -147,6 +162,7 @@ const Sidebar = () => {
                     paddingLeft={'20px'}
                     _hover={menuOptionHover}
                     w='full'
+                    bg={handleActiveBg(`/tag/${tag.id}`)}
                     borderRadius='10px'
                   >
                     <Flex

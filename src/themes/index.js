@@ -20,8 +20,8 @@ const theme = extendTheme({
       // sidebar
       sidebar: '#f7f6f3',
       sidebar_text: '#333',
-      sidebar_hover: '#dfe5ef',
-      sidebar_hover_text: '#333',
+      sidebar_hover_text: '#000',
+      sidebar_active_link: '#dfe5ef',
 
       // task header
       taskHeaderBg: '#fff',
@@ -62,9 +62,10 @@ const theme = extendTheme({
 
       // sidebar
       sidebar: '#2D384D',
-      sidebar_text: '#EDF2F7',
+      sidebar_text: '#D5E0EC',
       sidebar_hover: '#262F40',
-      sidebar_hover_text: '#EDF2F7',
+      sidebar_hover_text: '#fff',
+      sidebar_active_link: '#262F40',
 
       //task header
       taskHeaderBg: '#1A202C',
