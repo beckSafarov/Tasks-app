@@ -58,9 +58,8 @@ const TasksContainer = ({
 
   // hooks
   const [tasks, setTasks] = useState([])
-  const [selectedTask, setSelectedTask] = useState({})
+  const [taskDrawer, setTaskDrawer] = useState({})
   const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
-  const [openTaskBar, setOpenTaskBar] = useState(false)
   const [confModal, setConfModal] = useState({
     title: '',
     body: '',
@@ -84,10 +83,12 @@ const TasksContainer = ({
       })
   }, [tasksFromDB, tag, error])
 
-  // when a task is clicked, it opens the taskDrawer
-  const taskOpenHandle = (task) => {
-    setSelectedTask(task)
-    setOpenTaskBar(true)
+  const handleOpenTaskDrawer = (task) => {
+    setTaskDrawer({ task, open: true })
+  }
+
+  const handleCloseTaskDrawer = () => {
+    setTaskDrawer((t) => ({ ...t, open: false }))
   }
 
   // backup updated tasks to the context and db
@@ -165,7 +166,7 @@ const TasksContainer = ({
     } else {
       onConfClose()
       removeTasks('id', deletingTask.id)
-      setOpenTaskBar(false)
+      setTaskDrawer({})
     }
   }
 
@@ -217,11 +218,12 @@ const TasksContainer = ({
               tasks.filter((t) => !t.done),
               sortType,
               tags
-            ).map((task, i) => (
+            ).map((task) => (
               <Task
-                key={i}
+                key={task.id}
                 task={task}
-                onOpen={taskOpenHandle}
+                onOpen={handleOpenTaskDrawer}
+                active={taskDrawer.open && taskDrawer.task.id === task.id}
                 onDelete={taskDeleteHandler}
                 page={page}
                 onUpdate={(updates) => updateTasks(updates, 'id', task.id, 200)}
@@ -229,9 +231,9 @@ const TasksContainer = ({
             ))}
         </VStack>
         <TaskDrawer
-          show={openTaskBar}
-          onClose={() => setOpenTaskBar(false)}
-          task={selectedTask}
+          show={taskDrawer.open}
+          onClose={handleCloseTaskDrawer}
+          task={taskDrawer.task}
           tags={tags}
           onDelete={taskDeleteHandler}
           transition={'0.2s'}
@@ -248,11 +250,11 @@ const TasksContainer = ({
             tasks.filter((t) => t.done),
             sortType,
             tags
-          ).map((t, i) => (
+          ).map((t) => (
             <Task
-              key={i}
+              key={t.id}
               task={t}
-              onOpen={taskOpenHandle}
+              onOpen={handleOpenTaskDrawer}
               onDelete={taskDeleteHandler}
               page={page}
               onUpdate={(u) => updateTasks(u, 'id', t.id, 10)}
@@ -280,9 +282,3 @@ TasksContainer.defaultProps = {
 }
 
 export default TasksContainer
-// if (positives.length > 0) {
-//   setCompTasks(positives)
-//   setShowCompTasks(true)
-// } else {
-//   setShowCompTasks(false)
-// }

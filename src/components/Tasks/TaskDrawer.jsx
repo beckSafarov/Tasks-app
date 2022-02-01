@@ -1,4 +1,4 @@
-// --- Libary & methdos ---
+// --- Libary & methods ---
 import { useEffect, useState } from 'react'
 import SubTasks from './SubTasks'
 import MyEditable from '../MyEditable'

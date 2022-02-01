@@ -30,7 +30,15 @@ import { getDueDate, taskTimeHandler } from '../../helpers/dateHelpers'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
-const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
+const Task = ({
+  task,
+  active,
+  onOpen,
+  completed,
+  onDelete,
+  page,
+  onUpdate,
+}) => {
   const { onClose: onModalClose } = useDisclosure()
   const taskTime = taskTimeHandler(getDueDate(task))
   const toggleDone = () => onUpdate({ ...task, done: !task.done })
@@ -48,7 +56,7 @@ const Task = ({ task, onOpen, completed, onDelete, page, onUpdate }) => {
     <div style={{ width: '100%', marginTop: '5px' }}>
       <Flex
         w='full'
-        bg={`${mode}.tasks`}
+        bg={active ? `${mode}.taskActive` : `${mode}.tasks`}
         pl={'10px'}
         py='5px'
         borderRadius='10px'
@@ -168,6 +176,7 @@ Task.defaultProps = {
     name: 'unnamed',
     description: '',
   },
+  active: false,
   onOpen: () => void 0,
   onUpdate: () => void 0,
   onDelete: () => void 0,

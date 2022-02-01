@@ -36,6 +36,7 @@ const theme = extendTheme({
 
       // tasks
       tasks: '#f7f6f3', //tasks
+      taskActive: '#E7EAEE',
       taskTag: '#718096',
       taskText: '#333',
       crossedTask: '#718096',
@@ -80,6 +81,7 @@ const theme = extendTheme({
 
       // tasks
       tasks: '#2D384D',
+      taskActive: '#262F40',
       taskTag: '#718096',
       taskText: '#EDF2F7',
       crossedTask: '#718096',
