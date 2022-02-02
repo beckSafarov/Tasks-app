@@ -241,6 +241,7 @@ const TaskHeader = ({
               </MenuItem>
               <MenuItem
                 icon={<Icon as={!showCompTasks ? FaEye : FaEyeSlash} />}
+                command='⌘+⌥+A'
                 onClick={toggleCompTasks}
               >
                 {!showCompTasks ? 'Show' : 'Hide'} completed tasks

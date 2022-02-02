@@ -5,7 +5,6 @@ const PreferencesReducer = produce((draft, action) => {
   let { showCompletedTasks, sidebarTagsToggle } = draft.preferences
   switch (action.type) {
     case 'set':
-      draft.loading = false
       draft.preferences = { ...draft.preferences, ...action.preferences }
       break
     case 'showCompletedTasks':

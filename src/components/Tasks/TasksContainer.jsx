@@ -41,6 +41,7 @@ const TasksContainer = ({
     preferences: prefs,
     toggleShowCompletedTasks,
     setSortType,
+    set: setPrefs,
   } = usePrefsContext()
   const {
     isOpen: isConfOpen,
@@ -59,7 +60,7 @@ const TasksContainer = ({
   // hooks
   const [tasks, setTasks] = useState([])
   const [taskDrawer, setTaskDrawer] = useState({})
-  const [showCompTasks, setShowCompTasks] = useState(prefs.showCompletedTasks)
+  const [showCompTasks, setShowCompTasks] = useState(false)
   const [confModal, setConfModal] = useState({
     title: '',
     body: '',
@@ -71,6 +72,8 @@ const TasksContainer = ({
   const toast = useToast()
   const history = useHistory()
   const sortType = prefs?.sorts?.[page] || 'creationDate'
+  const isCompTasksHidden =
+    (!prefs.showCompletedTasks && !showCompTasks) || pageTasksLoading
 
   useEffect(() => {
     setTasks(tasksFromDB)
@@ -129,10 +132,7 @@ const TasksContainer = ({
   }
 
   // toggle a task to be completed or back to incompleted
-  const toggleCompTasks = () => {
-    setShowCompTasks((v) => !v)
-    toggleShowCompletedTasks()
-  }
+  const toggleCompTasks = () => toggleShowCompletedTasks()
 
   // receives a search keyword and searches through task names
   const onSearch = (keyword) => {
@@ -152,7 +152,7 @@ const TasksContainer = ({
   // clears the search result and brings back the initial task list
   const onSearchClear = () => {
     setTasks(tasksFromDB, sortType, tags)
-    setShowCompTasks(prefs?.showCompletedTasks || true)
+    setShowCompTasks(0)
   }
 
   const taskDeleteHandler = (deletingTask = {}, warned = false) => {
@@ -195,7 +195,7 @@ const TasksContainer = ({
         title={title}
         onSearchSubmit={onSearch}
         onSearchClear={onSearchClear}
-        showCompTasks={showCompTasks}
+        showCompTasks={prefs.showCompletedTasks}
         toggleCompTasks={toggleCompTasks}
         sortType={sortType}
         onSort={sortTypeHandler}
@@ -241,11 +241,7 @@ const TasksContainer = ({
         />
 
         {/* completed tasks */}
-        <VStack
-          mt='50px'
-          id='completed_tasks_div'
-          hidden={!showCompTasks || pageTasksLoading}
-        >
+        <VStack mt='50px' id='completed_tasks_div' hidden={isCompTasksHidden}>
           {sortTasks(
             tasks.filter((t) => t.done),
             sortType,
@@ -254,6 +250,7 @@ const TasksContainer = ({
             <Task
               key={t.id}
               task={t}
+              active={taskDrawer.open && taskDrawer.task.id === t.id}
               onOpen={handleOpenTaskDrawer}
               onDelete={taskDeleteHandler}
               page={page}

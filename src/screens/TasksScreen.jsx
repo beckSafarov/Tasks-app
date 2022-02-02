@@ -3,7 +3,11 @@ import { useLocation } from 'react-router'
 import TasksContainer from '../components/Tasks/TasksContainer'
 
 import usePageData from '../hooks/usePageData'
-import { useTagsContext, useTasksContext } from '../hooks/ContextHooks'
+import {
+  usePrefsContext,
+  useTagsContext,
+  useTasksContext,
+} from '../hooks/ContextHooks'
 import { getScreenWidths } from '../helpers'
 
 import Sidebar from '../components/Sidebar'
@@ -14,6 +18,7 @@ const TasksScreen = () => {
   const loc = useLocation()
   const { loading: tasksLoading } = useTasksContext()
   const { loading: tagsLoading } = useTagsContext()
+  const { toggleShowCompletedTasks } = usePrefsContext()
   const {
     loading: pageTasksLoading,
     tasks,
@@ -36,9 +41,13 @@ const TasksScreen = () => {
   }
 
   const onKeydown = (e) => {
-    // Action for Command+Shift+L keydown
+    // Command+Shift+L keydown
     if (e.shiftKey && e.metaKey && e.key === 'l') {
       toggleColorMode()
+    }
+    // Command+Alt+A keydown
+    if (e.altKey && e.metaKey && e.key === 'å') {
+      toggleShowCompletedTasks()
     }
   }
 
