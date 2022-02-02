@@ -1,5 +1,4 @@
 import { useRef } from 'react'
-
 import {
   Modal,
   ModalOverlay,
@@ -16,6 +15,7 @@ import {
 import { Field, Form, Formik } from 'formik'
 
 const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
+  const refToInput = useRef(null)
   const hasError = (form) => form.touched.tag && form.errors.tag
   const validate = ({ tag }) => {
     const res = {}
@@ -25,14 +25,11 @@ const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
     return res
   }
 
-  const submitHandler = ({ tag }) => {
-    console.log(tag)
-    onSubmit(tag)
-  }
+  const handleSubmit = ({ tag }) => onSubmit(tag)
   const closeHandler = (e) => onClose(e)
 
   return (
-    <Modal isOpen={isOpen} onClose={closeHandler}>
+    <Modal isOpen={isOpen} onClose={closeHandler} initialFocusRef={refToInput}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New Tag</ModalHeader>
@@ -40,7 +37,7 @@ const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
         <ModalBody>
           <Formik
             initialValues={{ tag: '' }}
-            onSubmit={submitHandler}
+            onSubmit={handleSubmit}
             validate={validate}
           >
             {() => (
@@ -50,6 +47,7 @@ const AddTagModal = ({ isOpen, onSubmit, onClose, tags }) => {
                     <FormControl isInvalid={hasError(form)}>
                       <Input
                         id='tag'
+                        ref={refToInput}
                         type='text'
                         placeholder='Title'
                         variant='flushed'
