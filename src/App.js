@@ -9,7 +9,7 @@ import SignUpScreen from './screens/auth/SignUpScreen'
 import LoginScreen from './screens/auth/LoginScreen'
 import PrivateRoute from './components/Auth/PrivateRoute'
 import PublicRoute from './components/Auth/PublicRoute'
-import Loading from './components/Loading'
+import SpinnerLoading from './components/SpinnerLoading'
 import { useState, useEffect } from 'react'
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
 import TasksScreen from './screens/TasksScreen'
@@ -34,7 +34,7 @@ const App = () => {
   return (
     <ChakraProvider theme={theme}>
       {loading ? (
-        <Loading />
+        <SpinnerLoading />
       ) : (
         <Router>
           {/* public routes */}

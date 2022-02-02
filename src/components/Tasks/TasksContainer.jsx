@@ -5,13 +5,14 @@ import {
   Container,
   useDisclosure,
   useToast,
+  Box,
 } from '@chakra-ui/react'
 import Task from './Task'
 import TaskDrawer from './TaskDrawer'
 import TaskHeader from './TaskHeader'
 import ConfirmModal from '../Modals/ConfirmModal'
 import AddTask from './AddTask'
-import Loading from '../Loading'
+import SkeletonLoading from '../SkeletonLoading'
 
 // --- library methods & custom hooks ---
 import { useEffect, useState } from 'react'
@@ -27,7 +28,8 @@ import {
   useTagsContext,
   useTasksContext,
 } from '../../hooks/ContextHooks'
-
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 const TasksContainer = ({
   store: tasksFromDB,
   loading: pageTasksLoading,
@@ -72,8 +74,9 @@ const TasksContainer = ({
   const toast = useToast()
   const history = useHistory()
   const sortType = prefs?.sorts?.[page] || 'creationDate'
+  const areTasksHidden = tasks.length === 0 || pageTasksLoading
   const isCompTasksHidden =
-    (!prefs.showCompletedTasks && !showCompTasks) || pageTasksLoading
+    (!prefs.showCompletedTasks && !showCompTasks) || areTasksHidden
 
   useEffect(() => {
     setTasks(tasksFromDB)
@@ -211,24 +214,26 @@ const TasksContainer = ({
             onSubmit={addTask}
           />
         </HStack>
-        <VStack mt={tasks.length > 0 ? '50px' : '0'}>
-          <Loading component show={pageTasksLoading} />
-          {!pageTasksLoading &&
-            sortTasks(
-              tasks.filter((t) => !t.done),
-              sortType,
-              tags
-            ).map((task) => (
-              <Task
-                key={task.id}
-                task={task}
-                onOpen={handleOpenTaskDrawer}
-                active={taskDrawer.open && taskDrawer.task.id === task.id}
-                onDelete={taskDeleteHandler}
-                page={page}
-                onUpdate={(updates) => updateTasks(updates, 'id', task.id, 200)}
-              />
-            ))}
+
+        <Box hidden={!pageTasksLoading} pt='50px'>
+          <SkeletonLoading show={pageTasksLoading} count={5} />
+        </Box>
+        <VStack pt='50px' hidden={areTasksHidden}>
+          {sortTasks(
+            tasks.filter((t) => !t.done),
+            sortType,
+            tags
+          ).map((task) => (
+            <Task
+              key={task.id}
+              task={task}
+              onOpen={handleOpenTaskDrawer}
+              active={taskDrawer.open && taskDrawer.task.id === task.id}
+              onDelete={taskDeleteHandler}
+              page={page}
+              onUpdate={(updates) => updateTasks(updates, 'id', task.id, 200)}
+            />
+          ))}
         </VStack>
         <TaskDrawer
           show={taskDrawer.open}
@@ -241,7 +246,7 @@ const TasksContainer = ({
         />
 
         {/* completed tasks */}
-        <VStack mt='50px' id='completed_tasks_div' hidden={isCompTasksHidden}>
+        <VStack pt='50px' id='completed_tasks_div' hidden={isCompTasksHidden}>
           {sortTasks(
             tasks.filter((t) => t.done),
             sortType,

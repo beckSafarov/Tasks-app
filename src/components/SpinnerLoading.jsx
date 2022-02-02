@@ -1,7 +1,7 @@
 import { Flex, Spinner } from '@chakra-ui/react'
 import React from 'react'
 
-const Loading = ({ component, show }) => {
+const SpinnerLoading = ({ component, show }) => {
   return (
     <Flex
       hidden={!show}
@@ -21,4 +21,8 @@ const Loading = ({ component, show }) => {
   )
 }
 
-export default Loading
+SpinnerLoading.defaultProps = {
+  show: true,
+}
+
+export default SpinnerLoading
