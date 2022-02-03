@@ -28,8 +28,7 @@ import {
   useTagsContext,
   useTasksContext,
 } from '../../hooks/ContextHooks'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+
 const TasksContainer = ({
   store: tasksFromDB,
   loading: pageTasksLoading,
@@ -43,7 +42,6 @@ const TasksContainer = ({
     preferences: prefs,
     toggleShowCompletedTasks,
     setSortType,
-    set: setPrefs,
   } = usePrefsContext()
   const {
     isOpen: isConfOpen,
@@ -52,7 +50,6 @@ const TasksContainer = ({
   } = useDisclosure()
   const { tags, remove: removeTag } = useTagsContext()
   const {
-    set: setTasksContext,
     backup,
     update: updateTasksInContext,
     remove: removeTasksInContext,
@@ -75,7 +72,7 @@ const TasksContainer = ({
   const history = useHistory()
   const sortType = prefs?.sorts?.[page] || 'creationDate'
   const areTasksHidden = tasks.length === 0 || pageTasksLoading
-  const isCompTasksHidden =
+  const areCompTasksHidden =
     (!prefs.showCompletedTasks && !showCompTasks) || areTasksHidden
 
   useEffect(() => {
@@ -175,7 +172,7 @@ const TasksContainer = ({
 
   // receives and sets a new sort type for tasks
   const sortTypeHandler = (type) => setSortType(page, type)
-
+  // console.log(history)
   // delete a tag and tasks associated with it
   const removeTasksByTag = (warned = false) => {
     if (!warned) {
@@ -188,7 +185,7 @@ const TasksContainer = ({
     } else {
       removeTag(tag)
       removeTasks('tag', tag)
-      history.push('/')
+      history.goBack()
     }
   }
 
@@ -246,7 +243,7 @@ const TasksContainer = ({
         />
 
         {/* completed tasks */}
-        <VStack pt='50px' id='completed_tasks_div' hidden={isCompTasksHidden}>
+        <VStack pt='50px' id='completed_tasks_div' hidden={areCompTasksHidden}>
           {sortTasks(
             tasks.filter((t) => t.done),
             sortType,

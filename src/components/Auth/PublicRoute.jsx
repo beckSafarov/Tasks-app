@@ -1,5 +1,5 @@
-import { getAuth } from '@firebase/auth'
 import { Route, Redirect } from 'react-router'
+import { HOME_PAGE } from '../../config'
 
 const PublicRoute = ({ children, logged, ...rest }) => {
   return (
@@ -11,7 +11,7 @@ const PublicRoute = ({ children, logged, ...rest }) => {
         ) : (
           <Redirect
             to={{
-              pathname: '/all-tasks',
+              pathname: HOME_PAGE,
               state: { from: location },
             }}
           />

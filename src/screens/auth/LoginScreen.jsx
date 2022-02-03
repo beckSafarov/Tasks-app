@@ -7,6 +7,7 @@ import { emailSignIn } from '../../firebase/auth'
 import ShowAlert from '../../components/ShowAlert'
 import AuthProviders from '../../components/Auth/AuthProviders'
 import { useAppContext } from '../../hooks/ContextHooks'
+import { HOME_PAGE } from '../../config'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,7 +30,7 @@ const LoginScreen = () => {
       setUser(res.user)
       props && props.resetForm()
       props && props.setSubmitting(false)
-      history.replace('/all-tasks')
+      history.replace(HOME_PAGE)
     } else {
       setError(res.errorMessage)
       console.log(res)

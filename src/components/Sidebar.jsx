@@ -32,10 +32,10 @@ import { getAuth } from '@firebase/auth'
 import { defUser } from '../firebase/auth'
 
 const mainPageLinks = [
-  { text: 'All Tasks', link: '/all-tasks', icon: FaTasks },
   { text: 'Today', link: '/today', icon: FaSun },
   { text: 'Tomorrow', link: '/tomorrow', icon: FaRegMoon },
   { text: 'Upcoming', link: '/upcoming', icon: FaCalendarDay },
+  { text: 'All Tasks', link: '/all-tasks', icon: FaTasks },
   { text: 'Test', link: '/test', icon: FaHammer },
 ]
 
