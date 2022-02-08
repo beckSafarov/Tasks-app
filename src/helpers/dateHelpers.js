@@ -127,19 +127,12 @@ export const when = (d) => {
 export const testUpcoming = (d) => when(d) === 'Future'
 
 export const taskTimeHandler = (dueDate) => {
-  if (dueDate) {
-    const date = new Date(dueDate)
-    const tense = when(date)
-    if (tense.match(/Past|Future/)) {
-      return {
-        date: humanizeDate(date),
-        color: tense === 'Past' ? 'red.400' : 'gray.500',
-      }
-    } else {
-      return { date: tense, color: 'gray.500' }
-    }
-  } else {
-    return { date: 'Someday', color: 'gray.500' }
+  if (!dueDate) return { date: 'Someday' }
+  const date = new Date(dueDate)
+  const tense = when(date)
+  return {
+    date: tense.match(/Past|Future/) ? humanizeDate(date) : tense,
+    isPast: Boolean(tense.match(/Past/)),
   }
 }
 /**

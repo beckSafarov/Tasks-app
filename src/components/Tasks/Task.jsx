@@ -43,6 +43,7 @@ const Task = ({
   const taskTime = taskTimeHandler(getDueDate(task))
   const toggleDone = () => onUpdate({ ...task, done: !task.done })
   const { colorMode: mode } = useColorMode()
+  const dateColor = taskTime.isPast ? `${mode}.taskPast` : `${mode}.taskFuture`
   const circleColor = completed
     ? `${mode}.completedTaskCircle`
     : `${mode}.taskCircle`
@@ -108,7 +109,7 @@ const Task = ({
           alignItems='center'
           justifyContent='flex-end'
           fontSize='0.7em'
-          color={taskTime.color}
+          color={dateColor}
           pr='20px'
           cursor='pointer'
           onClick={() => onOpen(task)}

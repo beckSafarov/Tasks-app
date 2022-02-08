@@ -40,6 +40,8 @@ const theme = extendTheme({
       taskTag: '#718096',
       taskText: '#333',
       taskCircle: '#718096',
+      taskFuture: '#718096',
+      taskPast: '#F56565',
       completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
       taskIcon: '#4A5568', //600 for 800:#1A202C
@@ -84,9 +86,11 @@ const theme = extendTheme({
       // tasks
       tasks: '#2D384D',
       taskActive: '#262F40',
-      taskTag: '#718096',
+      taskTag: '#b9cbdf',
       taskText: '#EDF2F7',
       taskCircle: '#EDF2F7',
+      taskFuture: '#b9cbdf',
+      taskPast: '#F56565',
       completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
       taskIcon: '#4A5568',
@@ -104,7 +108,7 @@ const theme = extendTheme({
       searchOnFocus: '#3E4B65',
 
       // account window
-      accountLabel: '#9CB7D3',
+      accountLabel: '#b9cbdf',
     },
   },
   fonts: {

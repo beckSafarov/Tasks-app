@@ -137,7 +137,7 @@ const TaskHeader = ({
         {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
           <Menu>
-            <Tooltip label='Sort'>
+            <Tooltip label='Sort' closeOnClick closeOnMouseDown>
               <MenuButton
                 as={IconButton}
                 aria-label='Menu'
@@ -217,8 +217,14 @@ const TaskHeader = ({
               </MenuItem>
             </MenuList>
           </Menu>
+
           <Menu>
-            <Tooltip label='Settings'>
+            <Tooltip
+              aria-label='A tooltip'
+              label='Settings'
+              closeOnClick
+              closeOnMouseDown
+            >
               <MenuButton
                 as={IconButton}
                 aria-label='Menu'
