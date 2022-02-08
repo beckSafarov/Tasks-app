@@ -93,7 +93,7 @@ const theme = extendTheme({
       taskPast: '#F56565',
       completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
-      taskIcon: '#4A5568',
+      taskIcon: '#b9cbdf',
 
       // task drawer
       taskDrawer: '#2D384D',
