@@ -99,7 +99,7 @@ const theme = extendTheme({
       taskDrawer: '#2D384D',
       taskDrawerText: '#EDF2F7',
       drawerBorder: '#E2E8F0',
-      drawerActionsHover: '#E2E8F0',
+      drawerActionsHover: '#394760',
       subTasksHover: '#272E3F',
 
       // search

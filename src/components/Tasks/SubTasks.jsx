@@ -63,18 +63,23 @@ const SubTasks = ({ task, onChange, fontSize, color }) => {
 
   return (
     <VStack w='full' bg='inherit' aria-label='sub-tasks list'>
-      <Box w='full' pb='10px' fontSize={fontSize} color={color}>
-        {subTasks &&
-          subTasks.map((task) => (
-            <SubTask
-              key={task.id}
-              task={task}
-              onUpdate={handleUpdate}
-              onRemove={handleRemove}
-              onDragDrop={handleDragDrop}
-              setDragTask={setDragTask}
-            />
-          ))}
+      <Box
+        w='full'
+        pb='10px'
+        fontSize={fontSize}
+        color={color}
+        hidden={!subTasks}
+      >
+        {subTasks.map((task) => (
+          <SubTask
+            key={task.id}
+            task={task}
+            onUpdate={handleUpdate}
+            onRemove={handleRemove}
+            onDragDrop={handleDragDrop}
+            setDragTask={setDragTask}
+          />
+        ))}
       </Box>
       {/* add subtask formik */}
       <Formik
@@ -86,20 +91,22 @@ const SubTasks = ({ task, onChange, fontSize, color }) => {
           <Field name='text'>
             {({ field }) => (
               <FormControl>
-                <InputGroup color='gray.700'>
+                <InputGroup color={color}>
                   <InputLeftElement
                     pointerEvents='none'
+                    color={color}
                     children={<Icon as={FaPlus} />}
-                    fontSize='0.8em'
+                    fontSize='1em'
                     zIndex='0'
                   />
                   <Input
                     {...field}
                     type='text'
+                    color={color}
                     variant='flushed'
                     placeholder='Add a subtask'
-                    fontSize='0.8em'
-                    _focus={{ borderColor: 'gray.700' }}
+                    fontSize='1em'
+                    _focus={{ borderColor: color }}
                   />
                 </InputGroup>
               </FormControl>

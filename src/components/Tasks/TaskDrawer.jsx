@@ -174,6 +174,7 @@ const TaskDrawer = ({
             <SubTasks
               task={task}
               onChange={(v) => handleChanges('subtasks', v, true)}
+              color={`${mode}.text`}
             />
 
             {/* custom textarea for description  */}

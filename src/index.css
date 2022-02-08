@@ -47,6 +47,7 @@ code {
 .calendar-input.dark {
   width: 100%;
   border-radius: 5px;
+  border-color: #4f586a;
   padding-left: 15px;
 }
 
