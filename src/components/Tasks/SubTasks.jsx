@@ -63,23 +63,18 @@ const SubTasks = ({ task, onChange, fontSize, color }) => {
 
   return (
     <VStack w='full' bg='inherit' aria-label='sub-tasks list'>
-      <Box
-        w='full'
-        pb='10px'
-        fontSize={fontSize}
-        color={color}
-        hidden={!subTasks}
-      >
-        {subTasks.map((task) => (
-          <SubTask
-            key={task.id}
-            task={task}
-            onUpdate={handleUpdate}
-            onRemove={handleRemove}
-            onDragDrop={handleDragDrop}
-            setDragTask={setDragTask}
-          />
-        ))}
+      <Box w='full' pb='10px' fontSize={fontSize} color={color}>
+        {subTasks &&
+          subTasks.map((task) => (
+            <SubTask
+              key={task.id}
+              task={task}
+              onUpdate={handleUpdate}
+              onRemove={handleRemove}
+              onDragDrop={handleDragDrop}
+              setDragTask={setDragTask}
+            />
+          ))}
       </Box>
       {/* add subtask formik */}
       <Formik

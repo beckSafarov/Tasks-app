@@ -39,6 +39,22 @@ import { useTagsContext, useTasksContext } from '../../hooks/ContextHooks'
 import { useLocation } from 'react-router-dom'
 import { toastDefs } from '../../helpers/tasksHelpers'
 
+const sorts = [
+  {
+    label: 'Alphabetically',
+    type: 'alphabetically',
+    icon: FaSortAlphaDown,
+  },
+  { label: 'Tag', type: 'tag', icon: FaTag },
+  { label: 'Creation Date', type: 'creationDate', icon: FaRegCalendarPlus },
+  {
+    label: 'Due Date',
+    type: 'dueDate',
+    icon: FaRegCalendarAlt,
+  },
+  { label: 'Importance', type: 'starred', icon: FaRegStar },
+]
+
 const TaskHeader = ({
   title,
   onSearchSubmit,
@@ -92,6 +108,33 @@ const TaskHeader = ({
     setTagEditMode(false)
   }
 
+  const settings = [
+    {
+      icon: mode === 'light' ? FaRegMoon : FaSun,
+      command: '⌘+Shift+L',
+      onClick: toggleColorMode,
+      label: (mode === 'light' ? 'Dark' : 'Light') + ' mode',
+    },
+    {
+      icon: !showCompTasks ? FaEye : FaEyeSlash,
+      command: '⌘+⌥+A',
+      onClick: toggleCompTasks,
+      label: (!showCompTasks ? 'Show' : 'Hide') + ' completed tasks',
+    },
+    {
+      icon: FaEdit,
+      hidden: noEditableTag,
+      onClick: () => tagEditInput.current.focus(),
+      label: 'Rename tag',
+    },
+    {
+      icon: FaTrash,
+      hidden: noEditableTag,
+      onClick: () => removeTasksByTag(),
+      label: 'Delete tag',
+    },
+  ]
+
   return (
     <Box
       position='sticky'
@@ -134,8 +177,8 @@ const TaskHeader = ({
           <SearchTask onSubmit={onSearchSubmit} onClear={onSearchClear} />
         </Box>
 
-        {/* --- page actions menu --- */}
         <Box flex='1' display='flex' justifyContent='right'>
+          {/* --- sorts menu --- */}
           <Menu>
             <Tooltip label='Sort' closeOnClick closeOnMouseDown>
               <MenuButton
@@ -149,75 +192,24 @@ const TaskHeader = ({
               />
             </Tooltip>
             <MenuList fontSize='0.8rem'>
-              <MenuItem
-                onClick={() => onSort('alphabetically')}
-                icon={<Icon as={FaSortAlphaDown} />}
-              >
-                <Flex>
-                  <Box>Alphabetically</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'alphabetically'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
-              <MenuItem
-                onClick={() => onSort('tag')}
-                hidden={page === 'tag'} //tag pages can't sort by tag
-                icon={<Icon as={FaTag} />}
-              >
-                <Flex>
-                  <Box>Tag</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'tag'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
-              {/* sort by creation date */}
-              <MenuItem
-                onClick={() => onSort('creationDate')}
-                icon={<Icon as={FaRegCalendarPlus} />}
-              >
-                <Flex>
-                  <Box>Creation Date</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'creationDate'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
-              {/* sort by due date */}
-              <MenuItem
-                onClick={() => onSort('dueDate')}
-                icon={<Icon as={FaRegCalendarAlt} />}
-                hidden={page.match(/today|tomorrow/)}
-              >
-                <Flex>
-                  <Box>Due Date</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'dueDate'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
-
-              {/* sort by importance */}
-              <MenuItem
-                onClick={() => onSort('starred')}
-                icon={<Icon as={FaRegStar} />}
-              >
-                <Flex>
-                  <Box>Importance</Box>
-                  <Spacer />
-                  <Box>
-                    <Icon hidden={sortType !== 'starred'} as={FaCheck} />
-                  </Box>
-                </Flex>
-              </MenuItem>
+              {sorts.map((sort, i) => (
+                <MenuItem
+                  onClick={() => onSort(sort.type)}
+                  key={i}
+                  icon={<Icon as={sort.icon} />}
+                >
+                  <Flex>
+                    <Box>{sort.label}</Box>
+                    <Spacer />
+                    <Box>
+                      <Icon hidden={sortType !== sort.type} as={FaCheck} />
+                    </Box>
+                  </Flex>
+                </MenuItem>
+              ))}
             </MenuList>
           </Menu>
-
+          {/* --- settings menu */}
           <Menu>
             <Tooltip
               aria-label='A tooltip'
@@ -236,35 +228,17 @@ const TaskHeader = ({
               />
             </Tooltip>
             <MenuList fontSize='0.8rem'>
-              <MenuItem
-                icon={<Icon as={mode === 'light' ? FaRegMoon : FaSun} />}
-                command='⌘+Shift+L'
-                onClick={toggleColorMode}
-              >
-                {mode === 'light' ? 'Dark' : 'Light'} mode
-              </MenuItem>
-              <MenuItem
-                icon={<Icon as={!showCompTasks ? FaEye : FaEyeSlash} />}
-                command='⌘+⌥+A'
-                onClick={toggleCompTasks}
-              >
-                {!showCompTasks ? 'Show' : 'Hide'} completed tasks
-              </MenuItem>
-
-              <MenuItem
-                onClick={() => tagEditInput.current.focus()}
-                hidden={noEditableTag} //hidden in non-tag pages
-                icon={<Icon as={FaEdit} />}
-              >
-                Rename tag
-              </MenuItem>
-              <MenuItem
-                onClick={() => removeTasksByTag()}
-                hidden={noEditableTag} //hidden in non-tag pages
-                icon={<Icon as={FaTrash} />}
-              >
-                Delete tag
-              </MenuItem>
+              {settings.map((action, i) => (
+                <MenuItem
+                  icon={<Icon as={action.icon} />}
+                  command={action.command || ''}
+                  hidden={action.hidden || false}
+                  onClick={action.onClick}
+                  key={i}
+                >
+                  {action.label}
+                </MenuItem>
+              ))}
             </MenuList>
           </Menu>
         </Box>
