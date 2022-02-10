@@ -16,6 +16,9 @@ import {
   Tooltip,
   useToast,
   useColorMode,
+  FormLabel,
+  Switch,
+  Divider,
 } from '@chakra-ui/react'
 import SearchTask from '../SearchTask'
 import {
@@ -35,7 +38,11 @@ import {
   FaSortAmountDown,
 } from 'react-icons/fa'
 import { useState, useEffect, useRef } from 'react'
-import { useTagsContext, useTasksContext } from '../../hooks/ContextHooks'
+import {
+  useTagsContext,
+  useTasksContext,
+  usePrefsContext,
+} from '../../hooks/ContextHooks'
 import { useLocation } from 'react-router-dom'
 import { toastDefs } from '../../helpers/tasksHelpers'
 
@@ -61,8 +68,6 @@ const TaskHeader = ({
   onSearchClear,
   showCompTasks,
   toggleCompTasks,
-  sortType,
-  onSort,
   removeTasksByTag,
   page,
 }) => {
@@ -70,6 +75,12 @@ const TaskHeader = ({
   const [tagEditMode, setTagEditMode] = useState(false)
   const { update: updateTag, updateTagInDB, tags } = useTagsContext()
   const { updateTag: updateTaskTags } = useTasksContext()
+  const {
+    preferences: prefs,
+    setSortType,
+    sortAll,
+    toggleApplySortToAllPages,
+  } = usePrefsContext()
 
   // color themes
   const { colorMode: mode, toggleColorMode } = useColorMode()
@@ -78,6 +89,7 @@ const TaskHeader = ({
   const toast = useToast()
   const loc = useLocation().pathname
   const noEditableTag = !loc.match(/tag/) || page === 'untagged'
+  const sortType = prefs?.sorts?.[page] || 'creationDate'
 
   useEffect(() => {
     if (title !== tagName) setTagName(title)
@@ -97,7 +109,7 @@ const TaskHeader = ({
     return true
   }
 
-  const tagUpdated = (newTitle) => {
+  const handleTagNameUpdate = (newTitle) => {
     if (validated(newTitle)) {
       updateTag(title, newTitle)
       updateTaskTags(title, newTitle)
@@ -106,6 +118,20 @@ const TaskHeader = ({
       setTagName(title)
     }
     setTagEditMode(false)
+  }
+
+  const handleToggleSortAllPages = () => {
+    if (!prefs.isSortAppliedToAllPages) {
+      console.log('firing sortAll in TaskHeader.jsx')
+      sortAll(sortType, tags)
+    }
+    toggleApplySortToAllPages()
+  }
+
+  const handleSort = (type) => {
+    prefs.isSortAppliedToAllPages
+      ? sortAll(type, tags)
+      : setSortType(page, type)
   }
 
   const settings = [
@@ -154,8 +180,8 @@ const TaskHeader = ({
         <Heading size='lg' color={`${mode}.headerHeading`} flex='1'>
           <Editable
             value={tagName}
-            onSubmit={tagUpdated}
-            onCancel={tagUpdated}
+            onSubmit={handleTagNameUpdate}
+            onCancel={handleTagNameUpdate}
             isDisabled={noEditableTag} //disabled in non-tag pages
             startWithEditView={tagEditMode}
           >
@@ -194,7 +220,7 @@ const TaskHeader = ({
             <MenuList fontSize='0.8rem'>
               {sorts.map((sort, i) => (
                 <MenuItem
-                  onClick={() => onSort(sort.type)}
+                  onClick={() => handleSort(sort.type)}
                   key={i}
                   icon={<Icon as={sort.icon} />}
                 >
@@ -207,6 +233,17 @@ const TaskHeader = ({
                   </Flex>
                 </MenuItem>
               ))}
+              <Divider />
+              <HStack py='5px' textAlign='center' justifyContent='center'>
+                <FormLabel htmlFor='sortAllSwitch' mb='0' fontSize='0.8rem'>
+                  Apply to all pages
+                </FormLabel>
+                <Switch
+                  defaultChecked={prefs.isSortAppliedToAllPages}
+                  id='sortAllSwitch'
+                  onChange={handleToggleSortAllPages}
+                />
+              </HStack>
             </MenuList>
           </Menu>
           {/* --- settings menu */}
@@ -254,8 +291,6 @@ TaskHeader.defaultProps = {
   onSearchClear: () => void 0,
   toggleCompTasks: () => void 0,
   showCompTasks: false,
-  sortType: 'none',
-  onSort: () => void 0,
   removeTasksByTag: () => void 0,
   page: 'home',
 }

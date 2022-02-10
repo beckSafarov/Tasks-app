@@ -1,4 +1,6 @@
 import React, { createContext, useReducer } from 'react'
+import { mainPageLinks } from '../components/Sidebar'
+import { collect } from '../helpers'
 import { getStore } from '../helpers/lcs'
 import PreferencesReducer from './reducers/PreferencesReducer'
 
@@ -7,6 +9,7 @@ export const defaultPrefs = {
   sidebarTagsToggle: false,
   lastSelectedTag: 'untagged',
   draggingSubTask: { id: '', text: '' },
+  isSortAppliedToAllPages: false,
   sorts: {
     'All Tasks': 'creation_date',
   },
@@ -24,8 +27,18 @@ export const PreferencesProvider = ({ children }) => {
   const toggleShowCompletedTasks = () =>
     dispatch({ type: 'showCompletedTasks' })
 
+  const toggleApplySortToAllPages = () => dispatch({ type: 'toggleSortAll' })
+
   const setSortType = (page, newSort) =>
     dispatch({ type: 'sort', page, newSort })
+
+  const sortAll = (sortType, tags) => {
+    const mainPages = mainPageLinks.map(({ text }) =>
+      text !== 'All Tasks' ? text.toLowerCase() : text
+    )
+    const pages = mainPages.concat(collect(tags, 'tag'))
+    dispatch({ type: 'sortAll', sortType, pages })
+  }
 
   const sidebarTagsToggle = () => dispatch({ type: 'sidebarTagsToggle' })
 
@@ -38,7 +51,9 @@ export const PreferencesProvider = ({ children }) => {
         preferences: state.preferences,
         set,
         toggleShowCompletedTasks,
+        toggleApplySortToAllPages,
         setSortType,
+        sortAll,
         sidebarTagsToggle,
         setLastSelectedTag,
       }}

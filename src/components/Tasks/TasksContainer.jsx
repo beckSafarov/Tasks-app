@@ -38,11 +38,7 @@ const TasksContainer = ({
   page,
   error,
 }) => {
-  const {
-    preferences: prefs,
-    toggleShowCompletedTasks,
-    setSortType,
-  } = usePrefsContext()
+  const { preferences: prefs, toggleShowCompletedTasks } = usePrefsContext()
   const {
     isOpen: isConfOpen,
     onOpen: onConfOpen,
@@ -170,9 +166,6 @@ const TasksContainer = ({
     }
   }
 
-  // receives and sets a new sort type for tasks
-  const sortTypeHandler = (type) => setSortType(page, type)
-  // console.log(history)
   // delete a tag and tasks associated with it
   const removeTasksByTag = (warned = false) => {
     if (!warned) {
@@ -198,7 +191,6 @@ const TasksContainer = ({
         showCompTasks={prefs.showCompletedTasks}
         toggleCompTasks={toggleCompTasks}
         sortType={sortType}
-        onSort={sortTypeHandler}
         page={page}
         removeTasksByTag={removeTasksByTag}
       />
