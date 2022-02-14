@@ -121,10 +121,7 @@ const TaskHeader = ({
   }
 
   const handleToggleSortAllPages = () => {
-    if (!prefs.isSortAppliedToAllPages) {
-      console.log('firing sortAll in TaskHeader.jsx')
-      sortAll(sortType, tags)
-    }
+    if (!prefs.isSortAppliedToAllPages) sortAll(sortType, tags)
     toggleApplySortToAllPages()
   }
 

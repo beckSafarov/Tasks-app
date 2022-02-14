@@ -1,10 +1,19 @@
+import produce from 'immer'
 import { useState, useEffect } from 'react'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
+  const [obj, setObj] = useState({ name: 'Begzod' })
 
-  const toggleFoo = (e) => {}
+  const toggleFoo = (e) => {
+    setObj(
+      produce((draft) => {
+        draft.name = 'Tomo'
+      })
+    )
+  }
 
+  console.log(obj)
   return (
     <div style={{ padding: '50px' }}>
       <h2>

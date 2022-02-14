@@ -20,16 +20,7 @@ import { Tooltip } from '@chakra-ui/tooltip'
 import DatePicker from 'react-datepicker'
 import { useColorMode } from '@chakra-ui/react'
 import { calendarDarkTheme as cd } from '../../themes'
-
-const dpClasses = {
-  modal: '.react-datepicker',
-  header: '.react-datepicker__header',
-  month: '.react-datepicker__current-month',
-  week: '.react-datepicker__week',
-  dayName: '.react-datepicker__day-name',
-  day: '.react-datepicker__day',
-  dayDisabled: '.react-datepicker__day--disabled',
-}
+import { handleCalendarTheme } from '../../helpers/datePickerHelpers'
 
 const TaskDrawer = ({
   show,
@@ -60,23 +51,6 @@ const TaskDrawer = ({
     }
   }, [show, task, fields])
 
-  const handleCalendarTheme = () => {
-    if (mode !== 'dark') return
-    const dpModal = document.querySelector(dpClasses.modal).style
-    const dpHeader = document.querySelector(dpClasses.header).style
-    const currMonth = document.querySelector(dpClasses.month).style
-    const dayNames = [...document.querySelectorAll(dpClasses.dayName)]
-    dpModal.backgroundColor = cd.modal.bg
-    dpModal.color = cd.modal.color
-    dpModal.border = cd.modal.border
-    dpHeader.backgroundColor = cd.header.bg
-    dpHeader.color = cd.header.color
-    currMonth.color = cd.currMonth.color
-    dayNames.forEach((d) => {
-      d.style.color = cd.dayNames.color
-    })
-  }
-
   const handleChanges = (name, value, shouldUpdate = false) => {
     updated = { ...fields }
     updated[name] = value
@@ -89,6 +63,11 @@ const TaskDrawer = ({
       onClose(fields)
     }
   }
+
+  const actions = [
+    { label: 'Close', onClick: onClose, icon: FaChevronRight },
+    { label: 'delete the task', onClick: () => onDelete(task), icon: FaTrash },
+  ]
 
   return (
     <Collapse in={show} animateOpacity>
@@ -162,7 +141,7 @@ const TaskDrawer = ({
                   onChange={(v) => handleChanges('dueDate', v, true)}
                   timeInputLabel='Time:'
                   dateFormat='MM/dd/yyyy'
-                  onCalendarOpen={handleCalendarTheme}
+                  onCalendarOpen={() => handleCalendarTheme(mode)}
                   shouldCloseOnSelect={false}
                   minDate={new Date()}
                   isClearable
@@ -202,30 +181,20 @@ const TaskDrawer = ({
             color={`${mode}.drawerText`}
             p='5px'
           >
-            <Tooltip label='Close'>
-              <Box
-                borderRadius='50%'
-                cursor='pointer'
-                _hover={{ backgroundColor: `${mode}.drawerActionsHover` }}
-                py='5px'
-                px='10px'
-                onClick={() => onClose()}
-              >
-                <Icon as={FaChevronRight} />
-              </Box>
-            </Tooltip>
-            <Tooltip label='delete the task'>
-              <Box
-                borderRadius='50%'
-                cursor='pointer'
-                _hover={{ backgroundColor: `${mode}.drawerActionsHover` }}
-                py='5px'
-                px='10px'
-                onClick={() => onDelete(task)}
-              >
-                <Icon as={FaTrash} />
-              </Box>
-            </Tooltip>
+            {actions.map((action, key) => (
+              <Tooltip key={key} label={action.label}>
+                <Box
+                  borderRadius='50%'
+                  cursor='pointer'
+                  _hover={{ backgroundColor: `${mode}.drawerActionsHover` }}
+                  py='5px'
+                  px='10px'
+                  onClick={action.onClick}
+                >
+                  <Icon as={action.icon} />
+                </Box>
+              </Tooltip>
+            ))}
           </Flex>
         </Box>
       </Box>

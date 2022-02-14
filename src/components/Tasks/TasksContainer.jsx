@@ -28,6 +28,7 @@ import {
   useTagsContext,
   useTasksContext,
 } from '../../hooks/ContextHooks'
+import BigAddTask from './BigAddTask'
 
 const TasksContainer = ({
   store: tasksFromDB,
@@ -196,7 +197,7 @@ const TasksContainer = ({
       />
       <Container id='container' maxW='container.md' pt={10}>
         <HStack mt={'30px'} w='full'>
-          <AddTask
+          <BigAddTask
             defaultTag={tag}
             defaultDate={defaultDate}
             page={page}

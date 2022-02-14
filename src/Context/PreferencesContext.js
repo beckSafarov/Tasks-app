@@ -8,6 +8,7 @@ export const defaultPrefs = {
   showCompletedTasks: false,
   sidebarTagsToggle: false,
   lastSelectedTag: 'untagged',
+  lastSelectedDate: 'today',
   draggingSubTask: { id: '', text: '' },
   isSortAppliedToAllPages: false,
   sorts: {
