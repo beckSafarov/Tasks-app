@@ -16,7 +16,6 @@ const ConfirmModal = ({
   onClose,
   onProceed,
   proceedTitle,
-  proceedScheme,
 }) => {
   return (
     <div>

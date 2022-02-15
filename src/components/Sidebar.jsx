@@ -100,16 +100,19 @@ const Sidebar = () => {
         borderRadius='md'
         onClick={() => setAccountModal(true)}
       >
-        {user.photoURL ? (
-          <Image
-            borderRadius='full'
-            boxSize='40px'
-            src={user.photoURL}
-            alt='Avatar'
-          />
-        ) : (
-          <CustomAvatar fullName={user.displayName} width='40' />
-        )}
+        <Image
+          hidden={true}
+          borderRadius='full'
+          boxSize='40px'
+          src={user?.photoURL || ''}
+          alt='Avatar'
+        />
+        <CustomAvatar
+          mode={mode}
+          hidden={false}
+          fullName={user.displayName}
+          width='40'
+        />
         <Text isTruncated>{user.displayName}</Text>
       </HStack>
 
@@ -127,7 +130,7 @@ const Sidebar = () => {
               p={2}
               position='relative'
               bg={handleActiveBg(page.link)}
-              fontSize={18}
+              fontSize='18'
               fontWeight='600'
               _hover={loc.pathname !== page.link ? menuOptionHover : {}}
               borderRadius='md'

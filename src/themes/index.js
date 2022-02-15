@@ -22,6 +22,7 @@ const theme = extendTheme({
       sidebar_text: '#333',
       sidebar_hover_text: '#000',
       sidebar_active_link: '#dfe5ef',
+      custom_avatar_color: '#2D3748', //gray.700
 
       // task header
       taskHeaderBg: '#fff',
@@ -37,14 +38,14 @@ const theme = extendTheme({
       // tasks
       tasks: '#f7f6f3', //tasks
       taskActive: '#E7EAEE',
-      taskTag: '#718096',
+      taskTag: '#718096', //gray.500
       taskText: '#333',
-      taskCircle: '#718096',
-      taskFuture: '#718096',
+      taskCircle: '#718096', //gray.500
+      taskFuture: '#718096', //gray.500
       taskPast: '#F56565',
       completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
-      taskIcon: '#4A5568', //600 for 800:#1A202C
+      taskIcon: '#4A5568', //gray.600
 
       //taskdrawer
       taskDrawer: 'whiteAlpha.200',
@@ -59,7 +60,7 @@ const theme = extendTheme({
       searchOnFocus: '#808080',
 
       // account window
-      accountLabel: '#718096',
+      accountLabel: '#718096', //gray.500
     },
     dark: {
       //generals
@@ -71,6 +72,7 @@ const theme = extendTheme({
       sidebar_hover: '#262F40',
       sidebar_hover_text: '#fff',
       sidebar_active_link: '#262F40',
+      custom_avatar_color: '#2D3748', //gray.700
 
       //task header
       taskHeaderBg: '#1A202C',
