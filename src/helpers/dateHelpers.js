@@ -136,15 +136,15 @@ export const taskTimeHandler = (dueDate) => {
   }
 }
 /**
- * @param String: today|tomorrow|upcoming
- * @returns Object | void 0
+ * @param String: today|tomorrow|upcoming|someday
+ * @returns Date Object | null
  */
-export const textToDate = (text) => {
-  const rand = () => Math.floor(Math.random() * 6 + 2)
+export const textToDate = (d, upcomingDate) => {
+  const dateText = d.toLowerCase()
   const cases = {
     today: () => new Date(),
     tomorrow: () => dayjs().add(1, 'day').$d,
-    upcoming: () => dayjs().add(rand(), 'day').$d,
+    upcoming: () => upcomingDate,
   }
-  return cases[text] ? cases[text]() : null
+  return cases[dateText] ? cases[dateText]() : null
 }

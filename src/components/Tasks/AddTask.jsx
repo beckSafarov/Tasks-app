@@ -59,38 +59,21 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
 
   useEffect(() => {
     if (isTagPage) setFormVals({ ...formVals, tag: defaultTag })
-    if (isDatePage)
-      setFormVals({ ...formVals, dueDate: textToDate(defaultDate) })
+    if (isDatePage) setFormVals({ ...formVals, dueDate: defaultDate })
   }, [path, defaultTag, defaultDate])
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
+  const handleChange = ({ target }) => {
     setFormVals(
       produce((draft) => {
-        draft[name] = value
+        draft[target.name] = target.value
       })
     )
-    if (name.match(/tag|dueDate/)) {
-      setPrefs(
-        name === 'dueDate'
-          ? { ...prefs, lastSelectedDate: value }
-          : { ...prefs, lastSelectedTag: value }
-      )
-    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!formVals.name) return
-    const d = formVals.dueDate
-    const chosenDate =
-      d === 'Upcoming'
-        ? formVals.upcomingDate
-        : d === 'Someday'
-        ? null
-        : typeof d === 'string'
-        ? textToDate(d.toLowerCase())
-        : d
+    const chosenDate = textToDate(formVals.dueDate, formVals.upcomingDate)
 
     addTask({
       ...taskSchema,
@@ -98,6 +81,12 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
       id: uuid4(),
       tag: formVals.tag,
       dueDate: chosenDate,
+      upcomingDate: formVals.upcomingDate,
+    })
+    setPrefs({
+      ...prefs,
+      lastSelectedDate: formVals.dueDate,
+      lastSelectedTag: formVals.tag,
     })
     setFormVals({ ...formVals, name: '' })
   }
@@ -165,7 +154,6 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
             onChange={(v) =>
               handleChange({ target: { name: 'upcomingDate', value: v } })
             }
-            timeInputLabel='Time:'
             dateFormat='MM/dd/yyyy'
             onCalendarOpen={() => handleCalendarTheme(mode)}
             minDate={new Date()}
