@@ -30,21 +30,13 @@ import { usePrefsContext } from '../../hooks/ContextHooks'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
-const Task = ({
-  task,
-  active,
-  onOpen,
-  completed,
-  onDelete,
-  page,
-  onUpdate,
-}) => {
+const Task = ({ task, active, onOpen, onDelete, page, onUpdate }) => {
   const { onClose: onModalClose } = useDisclosure()
   const { preferences: prefs } = usePrefsContext()
   const taskTime = taskTimeHandler(getDueDate(task))
   const { colorMode: mode } = useColorMode()
   const dateColor = taskTime.isPast ? `${mode}.taskPast` : `${mode}.taskFuture`
-  const circleColor = completed
+  const circleColor = task.done
     ? `${mode}.completedTaskCircle`
     : `${mode}.taskCircle`
 
@@ -84,7 +76,7 @@ const Task = ({
           <Box cursor='pointer' onClick={toggleDone}>
             <Icon
               color={circleColor}
-              as={completed ? FaCheckCircle : FaRegCircle}
+              as={task.done ? FaCheckCircle : FaRegCircle}
             />
           </Box>
         </Flex>
@@ -99,8 +91,8 @@ const Task = ({
           onClick={() => onOpen(task)}
         >
           <Text
-            as={completed ? 's' : ''}
-            color={completed ? `${mode}.crossedTask` : 'inherit'}
+            as={task.done ? 's' : ''}
+            color={task.done ? `${mode}.crossedTask` : 'inherit'}
             mb='0'
           >
             {task.name}
@@ -194,7 +186,6 @@ Task.defaultProps = {
   onOpen: () => void 0,
   onUpdate: () => void 0,
   onDelete: () => void 0,
-  completed: false,
   page: 'home',
 }
 

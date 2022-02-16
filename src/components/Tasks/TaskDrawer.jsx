@@ -35,8 +35,9 @@ const TaskDrawer = ({
   const [fields, setFields] = useState({ ...task })
   const { colorMode: mode } = useColorMode()
   const styles = useQuerySelector('#main').style || {}
-  const dpInput = useQuerySelector('#dpInput').style || {}
-  dpInput.backgroundColor = mode === 'dark' ? cd.input : ''
+  const dpInput = useQuerySelector('#dpInputTaskDrawer').style || {}
+  dpInput.background = mode === 'dark' ? cd.input : ''
+
   let updated = {}
 
   useEffect(() => {
@@ -125,7 +126,6 @@ const TaskDrawer = ({
 
             {/* date picker */}
             <HStack w='full' spacing={5}>
-              {/* <Text whiteSpace='nowrap'>Due Date</Text> */}
               <Tooltip label='Due Date'>
                 <Box aria-label='Due Date Icon'>
                   <Icon as={FaRegCalendarAlt} />
@@ -133,13 +133,12 @@ const TaskDrawer = ({
               </Tooltip>
               <Box>
                 <DatePicker
-                  id='dpInput'
+                  id='dpInputTaskDrawer'
                   name='dueDate'
                   placeholderText='Add Due Date'
                   className={`calendar-input ${mode}`}
                   selected={getDueDate(fields)}
                   onChange={(v) => handleChanges('dueDate', v, true)}
-                  timeInputLabel='Time:'
                   dateFormat='MM/dd/yyyy'
                   onCalendarOpen={() => handleCalendarTheme(mode)}
                   shouldCloseOnSelect={false}

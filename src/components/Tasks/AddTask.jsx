@@ -45,8 +45,8 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
   const isDatePage = Boolean(path.match(/today|tomorrow|upcoming/gi))
   const hideDatePicker =
     formVals.dueDate !== 'Upcoming' && defaultDate !== 'upcoming'
-  const dpInput = useQuerySelector('#dpInput').style || {}
-  dpInput.backgroundColor = mode === 'dark' ? cd.input : ''
+  const dpInput = useQuerySelector('#dpInputAddTask').style || {}
+  dpInput.background = mode === 'dark' ? cd.input : ''
 
   const selects = [
     { name: 'tag', list: collect(tags, 'tag'), hidden: isTagPage },
@@ -147,7 +147,7 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
         ))}
         <Box hidden={hideDatePicker}>
           <DatePicker
-            id='dpInput'
+            id='dpInputAddTask'
             placeholderText='Date'
             className={`calendar-input ${mode}`}
             selected={formVals.upcomingDate}

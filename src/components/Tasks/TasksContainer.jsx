@@ -249,7 +249,6 @@ const TasksContainer = ({
               onDelete={taskDeleteHandler}
               page={page}
               onUpdate={(u) => updateTasks(u, 'id', t.id, 10)}
-              completed
             />
           ))}
         </VStack>
