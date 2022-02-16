@@ -10,7 +10,6 @@ import {
   MenuItem,
   useDisclosure,
   Box,
-  Tooltip,
   useColorMode,
 } from '@chakra-ui/react'
 import {
@@ -27,6 +26,7 @@ import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { getDueDate, taskTimeHandler } from '../../helpers/dateHelpers'
+import { usePrefsContext } from '../../hooks/ContextHooks'
 dayjs.extend(localizedFormat)
 dayjs.extend(relativeTime)
 
@@ -40,16 +40,25 @@ const Task = ({
   onUpdate,
 }) => {
   const { onClose: onModalClose } = useDisclosure()
+  const { preferences: prefs } = usePrefsContext()
   const taskTime = taskTimeHandler(getDueDate(task))
-  const toggleDone = () => onUpdate({ ...task, done: !task.done })
   const { colorMode: mode } = useColorMode()
   const dateColor = taskTime.isPast ? `${mode}.taskPast` : `${mode}.taskFuture`
   const circleColor = completed
     ? `${mode}.completedTaskCircle`
     : `${mode}.taskCircle`
 
-  const toggleStar = () =>
+  const toggleDone = () => {
+    if (prefs.soundWhenTaskToggled && !task.done) {
+      const audio = document.querySelector('#toggle_sound')
+      audio.play()
+    }
+    onUpdate({ ...task, done: !task.done })
+  }
+
+  const toggleStar = () => {
     onUpdate({ ...task, starred: task.starred ? null : { date: new Date() } })
+  }
 
   const handleRemoveTask = (e) => {
     onDelete(task)
@@ -58,6 +67,9 @@ const Task = ({
 
   return (
     <div style={{ width: '100%', marginTop: '5px' }}>
+      <audio id='toggle_sound'>
+        <source src='/toggle_sound.wav' type='audio/wav' />
+      </audio>
       <Flex
         w='full'
         bg={active ? `${mode}.taskActive` : `${mode}.tasks`}

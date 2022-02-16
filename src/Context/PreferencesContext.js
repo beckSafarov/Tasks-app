@@ -11,6 +11,7 @@ export const defaultPrefs = {
   lastSelectedDate: 'today',
   draggingSubTask: { id: '', text: '' },
   isSortAppliedToAllPages: false,
+  soundWhenTaskToggled: true,
   sorts: {
     'All Tasks': 'creation_date',
   },
