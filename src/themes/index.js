@@ -19,10 +19,10 @@ const theme = extendTheme({
       text: '#333',
       // sidebar
       sidebar: '#f7f6f3',
-      sidebar_text: '#333',
-      sidebar_hover_text: '#000',
-      sidebar_active_link: '#dfe5ef',
-      custom_avatar_color: '#2D3748', //gray.700
+      sidebarText: '#333',
+      sidebarHoverText: '#000',
+      sidebarActiveLink: '#dfe5ef',
+      customAvatarColor: '#2D3748', //gray.700
 
       // task header
       taskHeaderBg: '#fff',
@@ -68,11 +68,11 @@ const theme = extendTheme({
 
       // sidebar
       sidebar: '#2D384D',
-      sidebar_text: '#D5E0EC',
+      sidebarText: '#D5E0EC',
       sidebar_hover: '#262F40',
-      sidebar_hover_text: '#fff',
-      sidebar_active_link: '#262F40',
-      custom_avatar_color: '#2D3748', //gray.700
+      sidebarHoverText: '#fff',
+      sidebarActiveLink: '#262F40',
+      customAvatarColor: '#2D3748', //gray.700
 
       //task header
       taskHeaderBg: '#1A202C',

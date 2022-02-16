@@ -77,10 +77,10 @@ const Sidebar = () => {
   }
 
   const handleActiveBg = (link) =>
-    loc.pathname === link ? `${mode}.sidebar_active_link` : ''
+    loc.pathname === link ? `${mode}.sidebarActiveLink` : ''
 
   const menuOptionHover = {
-    color: `${mode}.sidebar_hover_text`,
+    color: `${mode}.sidebarHoverText`,
   }
 
   return (

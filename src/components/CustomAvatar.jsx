@@ -27,7 +27,7 @@ const CustomAvatar = ({ mode, fullName, width, bg, hidden }) => {
         justifyContent='center'
         alignItems='center'
         fontSize={fontSize}
-        color={`${mode}.custom_avatar_color`}
+        color={`${mode}.customAvatarColor`}
       >
         {firstLetter + lastLetter}
       </Flex>
