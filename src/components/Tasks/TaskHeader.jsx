@@ -36,6 +36,8 @@ import {
   FaSun,
   FaRegMoon,
   FaSortAmountDown,
+  FaVolumeUp,
+  FaVolumeMute,
 } from 'react-icons/fa'
 import { useState, useEffect, useRef } from 'react'
 import {
@@ -77,6 +79,7 @@ const TaskHeader = ({
   const { updateTag: updateTaskTags } = useTasksContext()
   const {
     preferences: prefs,
+    set: setPrefs,
     setSortType,
     sortAll,
     toggleApplySortToAllPages,
@@ -86,6 +89,7 @@ const TaskHeader = ({
   const { colorMode: mode, toggleColorMode } = useColorMode()
 
   const tagEditInput = useRef(null)
+  const sound = prefs.soundWhenTaskToggled
   const toast = useToast()
   const loc = useLocation().pathname
   const noEditableTag = !loc.match(/tag/) || page === 'untagged'
@@ -149,6 +153,11 @@ const TaskHeader = ({
       hidden: noEditableTag,
       onClick: () => tagEditInput.current.focus(),
       label: 'Rename tag',
+    },
+    {
+      icon: sound ? FaVolumeMute : FaVolumeUp,
+      onClick: () => setPrefs({ ...prefs, soundWhenTaskToggled: !sound }),
+      label: `Turn ${sound ? 'off' : 'on'} the sound effect`,
     },
     {
       icon: FaTrash,
