@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+#screens 
+/src/screens/TestScreen.jsx
+
 # testing
 /coverage
 

@@ -13,7 +13,6 @@ const TestScreen = () => {
     )
   }
 
-  console.log(obj)
   return (
     <div style={{ padding: '50px' }}>
       <h2>

@@ -63,14 +63,13 @@ const SearchTask = ({ onSubmit, onClear }) => {
                     _focus={{ borderColor: `${mode}.searchOnFocus` }}
                     disabled={field.isSubmitting}
                   />
-                  {searchState && (
-                    <InputRightElement
-                      onClick={formClearHandler}
-                      children={
-                        <Icon color={`${mode}.searchIcon`} as={FaTimesCircle} />
-                      }
-                    />
-                  )}
+                  <InputRightElement
+                    hidden={!searchState}
+                    onClick={formClearHandler}
+                    children={
+                      <Icon color={`${mode}.searchIcon`} as={FaTimesCircle} />
+                    }
+                  />
                 </InputGroup>
               </FormControl>
             )}

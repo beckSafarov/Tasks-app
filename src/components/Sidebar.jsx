@@ -100,16 +100,19 @@ const Sidebar = () => {
         borderRadius='md'
         onClick={() => setAccountModal(true)}
       >
-        {user.photoURL ? (
-          <Image
-            borderRadius='full'
-            boxSize='40px'
-            src={user.photoURL}
-            alt='Avatar'
-          />
-        ) : (
-          <CustomAvatar fullName={user.displayName} width='40' />
-        )}
+        <Image
+          borderRadius='full'
+          boxSize='40px'
+          src={user.photoURL}
+          alt='Avatar'
+          hidden={!user.photoURL}
+        />
+        <CustomAvatar
+          hidden={user.photoURL}
+          fullName={user.displayName}
+          width='40'
+          mode={mode}
+        />
         <Text isTruncated>{user.displayName}</Text>
       </HStack>
 
