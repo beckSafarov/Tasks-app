@@ -43,10 +43,12 @@ const TasksScreen = () => {
   const onKeydown = (e) => {
     // Command+Shift+L keydown
     if (e.shiftKey && e.metaKey && e.key === 'l') {
+      e.preventDefault()
       toggleColorMode()
     }
     // Command+Alt+A keydown
     if (e.altKey && e.metaKey && e.key === 'å') {
+      e.preventDefault()
       toggleShowCompletedTasks()
     }
   }

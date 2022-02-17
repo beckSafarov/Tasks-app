@@ -44,7 +44,7 @@ export const mainPageLinks = [
     link: '/all-tasks',
     icon: FaTasks,
   },
-  { text: 'Test', link: '/test', icon: FaHammer },
+  // { text: 'Test', link: '/test', icon: FaHammer },
 ]
 
 const Sidebar = () => {
@@ -101,7 +101,7 @@ const Sidebar = () => {
         onClick={() => setAccountModal(true)}
       >
         <Image
-          hidden={true}
+          hidden={!user.photoURL}
           borderRadius='full'
           boxSize='40px'
           src={user?.photoURL || ''}
@@ -109,7 +109,7 @@ const Sidebar = () => {
         />
         <CustomAvatar
           mode={mode}
-          hidden={false}
+          hidden={user.photoURL}
           fullName={user.displayName}
           width='40'
         />

@@ -17,6 +17,13 @@ const theme = extendTheme({
     light: {
       // generals
       text: '#333',
+
+      // landing screen
+      landing: {
+        bg: '#fffefc',
+        titleColor: '#333',
+      },
+
       // sidebar
       sidebar: '#f7f6f3',
       sidebarText: '#333',
@@ -65,6 +72,12 @@ const theme = extendTheme({
     dark: {
       //generals
       text: '#EDF2F7',
+
+      // landing screen
+      landing: {
+        bg: '#1A202C',
+        titleColor: '#EDF2F7',
+      },
 
       // sidebar
       sidebar: '#2D384D',

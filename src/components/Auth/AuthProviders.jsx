@@ -18,7 +18,7 @@ const AuthProviders = ({ showForm, onEmailClicked }) => {
   ]
   return (
     <VStack w='full' py='20px' hidden={showForm}>
-      {providers.map((provider) => (
+      {providers.map((provider, key) => (
         <Button
           background='white'
           _hover={{ background: 'gray.50' }}
@@ -27,6 +27,7 @@ const AuthProviders = ({ showForm, onEmailClicked }) => {
           onClick={provider.onClick}
           px='10px'
           w='full'
+          key={key}
           fontSize='1rem'
         >
           <HStack spacing={2}>
