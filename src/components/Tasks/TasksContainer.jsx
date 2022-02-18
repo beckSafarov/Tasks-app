@@ -72,6 +72,7 @@ const TasksContainer = ({
     (!prefs.showCompletedTasks && !showCompTasks) || areTasksHidden
 
   useEffect(() => {
+    document.title = title
     setTasks(tasksFromDB)
 
     if (error)
@@ -80,7 +81,7 @@ const TasksContainer = ({
         title: 'Firebase Error',
         description: error,
       })
-  }, [tasksFromDB, tag, error])
+  }, [tasksFromDB, tag, error, title])
 
   const handleOpenTaskDrawer = (task) => {
     setTaskDrawer({ task, open: true })

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Text, Image, Flex, Heading, useColorMode } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
+import { Text, Flex, Heading, useColorMode } from '@chakra-ui/react'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
 import { emailSignUp } from '../../firebase/auth'
@@ -9,6 +9,7 @@ import ShowAlert from '../../components/ShowAlert'
 import AuthProviders from '../../components/Auth/AuthProviders'
 import { useAppContext } from '../../hooks/ContextHooks'
 import { HOME_PAGE } from '../../config'
+import PublicHeader from '../../components/PublicHeader'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -29,6 +30,10 @@ const SignUpScreen = ({ history }) => {
   const [error, setError] = useState('')
   const { setUser } = useAppContext()
   const { colorMode: mode } = useColorMode()
+
+  useEffect(() => {
+    document.title = 'TaskX Sign up'
+  }, [])
 
   const emailSignIn = async (values, props) => {
     const res = await emailSignUp(values)
@@ -55,18 +60,7 @@ const SignUpScreen = ({ history }) => {
       height='100vh'
       bg={`${mode}.auth.bg`}
     >
-      <Flex
-        position='absolute'
-        top='0'
-        py='10px'
-        px='70px'
-        w='full'
-        justifyContent='flex-start'
-      >
-        <Link to='/'>
-          <Image boxSize='70px' src={`/logo/${mode}.png`} alt='TaskX' />
-        </Link>
-      </Flex>
+      <PublicHeader mode={mode} />
       <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
         <Heading mb='30px' size='2xl' textAlign='center'>
           Sign up
