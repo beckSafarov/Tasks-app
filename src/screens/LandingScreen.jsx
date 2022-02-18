@@ -1,17 +1,13 @@
 import { Button } from '@chakra-ui/button'
-import { Image, useColorMode } from '@chakra-ui/react'
+import { Image, useColorMode, Text } from '@chakra-ui/react'
 import { Flex, Heading, HStack } from '@chakra-ui/layout'
 import { Link } from 'react-router-dom'
 
 const LandingScreen = () => {
   const { colorMode: mode } = useColorMode()
+  const c = `${mode}.landing`
   return (
-    <Flex
-      height='100vh'
-      w='full'
-      background={`${mode}.landing.bg`}
-      alignItems='center'
-    >
+    <Flex height='100vh' w='full' background={`${c}.bg`} alignItems='center'>
       <Flex
         position='absolute'
         top='0'
@@ -21,16 +17,16 @@ const LandingScreen = () => {
         justifyContent='space-between'
       >
         <Link to='/'>
-          <Image boxSize='70px' src={`/logo/${mode}.png`} alt='TaskX' />
+          <Image boxSize='70px' src={`/logo/${mode}.png`} alt='TaskX Logo' />
         </Link>
         <HStack>
           <Link to='/login'>
-            <Button size='md' colorScheme='gray'>
+            <Button size='md' variant='ghost'>
               Login
             </Button>
           </Link>
           <Link to='/signup'>
-            <Button size='md' colorScheme='blue'>
+            <Button size='md' colorScheme='teal'>
               Sign up
             </Button>
           </Link>
@@ -38,9 +34,9 @@ const LandingScreen = () => {
       </Flex>
       <Flex px='70px' w='full'>
         <Flex flex='1' w='full' alignItems='center'>
-          <Heading size='4xl' color={`${mode}.landing.titleColor`}>
+          <Heading size='4xl' color={`${c}.title.color`}>
             Welcome to <br />
-            TaskX
+            <Text color={`${c}.title.highlighted`}>TaskX</Text>
           </Heading>
         </Flex>
         <Image

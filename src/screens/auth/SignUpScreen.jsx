@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Text, Flex, Heading } from '@chakra-ui/react'
+import { Text, Image, Flex, Heading, useColorMode } from '@chakra-ui/react'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
 import { emailSignUp } from '../../firebase/auth'
@@ -28,6 +28,7 @@ const SignUpScreen = ({ history }) => {
   const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState('')
   const { setUser } = useAppContext()
+  const { colorMode: mode } = useColorMode()
 
   const emailSignIn = async (values, props) => {
     const res = await emailSignUp(values)
@@ -48,7 +49,24 @@ const SignUpScreen = ({ history }) => {
   }
 
   return (
-    <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
+    <Flex
+      justifyContent='center'
+      pt='150px'
+      height='100vh'
+      bg={`${mode}.auth.bg`}
+    >
+      <Flex
+        position='absolute'
+        top='0'
+        py='10px'
+        px='70px'
+        w='full'
+        justifyContent='flex-start'
+      >
+        <Link to='/'>
+          <Image boxSize='70px' src={`/logo/${mode}.png`} alt='TaskX' />
+        </Link>
+      </Flex>
       <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
         <Heading mb='30px' size='2xl' textAlign='center'>
           Sign up
@@ -59,11 +77,12 @@ const SignUpScreen = ({ history }) => {
         <AuthProviders
           showForm={showForm}
           onEmailClicked={() => setShowForm(true)}
+          mode={mode}
         />
         <Text hidden={showForm} fontSize='0.8em' textAlign='center' py='5'>
           Already have an account?{' '}
-          <Text as='span' color='blue.500'>
-            <Link to='/login'>Sign in</Link>
+          <Text as='span' color={`${mode}.auth.linkColor`}>
+            <Link to='/login'>Log in</Link>
           </Text>
         </Text>
 
@@ -74,6 +93,7 @@ const SignUpScreen = ({ history }) => {
           onSubmit={emailSignIn}
           validationSchema={validationSchema}
           initialValues={{ name: '', email: '', password: '' }}
+          mode={mode}
         />
       </Flex>
     </Flex>

@@ -1,45 +1,45 @@
 import React from 'react'
-import { VStack, Button, HStack, Img, Text, Icon } from '@chakra-ui/react'
-import { FaEnvelope } from 'react-icons/fa'
+import { VStack, Button, Flex, Img, Text, Icon } from '@chakra-ui/react'
+import { FaEnvelope, FaGoogle } from 'react-icons/fa'
 import { signInWithGoogle } from '../../firebase/auth'
 
-const AuthProviders = ({ showForm, onEmailClicked }) => {
+const AuthProviders = ({ showForm, onEmailClicked, mode }) => {
   const providers = [
     {
       text: 'Continue with Google',
-      img: { src: '/google3.png', alt: 'Google logo' },
+      icon: FaGoogle,
       onClick: signInWithGoogle,
+      className: 'googleBtn',
     },
     {
       text: 'Email',
       icon: FaEnvelope,
       onClick: onEmailClicked,
+      className: 'emailBtn',
     },
   ]
   return (
     <VStack w='full' py='20px' hidden={showForm}>
       {providers.map((provider, key) => (
         <Button
-          background='white'
-          _hover={{ background: 'gray.50' }}
-          border='1px solid'
-          borderColor='blackAlpha.300'
+          bg={`${mode}.auth.${provider.className}.bg`}
+          _hover={{}}
+          color={`${mode}.auth.${provider.className}.color`}
           onClick={provider.onClick}
-          px='10px'
+          borderRadius='0'
+          borderWidth={'1px'}
+          borderStyle='solid'
+          borderColor={`${`${mode}.auth.${provider.className}.borderColor`}`}
           w='full'
           key={key}
           fontSize='1rem'
         >
-          <HStack spacing={2}>
-            <Img
-              hidden={!provider.img}
-              width='1rem'
-              src={provider?.img?.src || ''}
-              alt={provider?.img?.alt || ''}
-            />
-            <Icon hidden={!provider.icon} as={provider?.icon} />
-            <Text color='gray.600'>{provider.text}</Text>
-          </HStack>
+          <Flex w='full'>
+            <Icon as={provider?.icon} />
+            <Text flex={15} color={`${mode}.auth.${provider.className}.color`}>
+              {provider.text}
+            </Text>
+          </Flex>
         </Button>
       ))}
     </VStack>

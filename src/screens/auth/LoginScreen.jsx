@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Text, Flex, Heading, Box } from '@chakra-ui/react'
+import { Text, Image, Flex, Heading, Box, useColorMode } from '@chakra-ui/react'
 import * as Yup from 'yup'
 import { Link, useHistory } from 'react-router-dom'
 import FormBuild from '../../components/FormBuild'
@@ -23,7 +23,8 @@ const LoginScreen = () => {
   const [showForm, setShowForm] = useState(false)
   const [error, setError] = useState('')
   const { setUser } = useAppContext()
-
+  const { colorMode: mode } = useColorMode()
+  const c = `${mode}.auth`
   const submitHandler = async (values, props) => {
     const res = await emailSignIn(values)
     if (res.success) {
@@ -38,7 +39,19 @@ const LoginScreen = () => {
   }
 
   return (
-    <Flex justifyContent='center' pt='150px' height='100vh' bg='#FFFEFC'>
+    <Flex justifyContent='center' pt='150px' height='100vh' bg={`${c}.bg`}>
+      <Flex
+        position='absolute'
+        top='0'
+        py='10px'
+        px='70px'
+        w='full'
+        justifyContent='flex-start'
+      >
+        <Link to='/'>
+          <Image boxSize='70px' src={`/logo/${mode}.png`} alt='TaskX' />
+        </Link>
+      </Flex>
       <Flex flexDir='column' width='450px' pt='20px' pb='50px' px='30px'>
         <Heading mb='30px' size='2xl' textAlign='center'>
           Login
@@ -53,10 +66,11 @@ const LoginScreen = () => {
         <AuthProviders
           showForm={showForm}
           onEmailClicked={() => setShowForm(true)}
+          mode={mode}
         />
         <Text hidden={showForm} fontSize='0.8em' textAlign='center' py='5'>
           Do not have an account?{' '}
-          <Text as='span' color='blue.500'>
+          <Text as='span' color={`${c}.linkColor`}>
             <Link to='/signup'>Create one</Link>
           </Text>
         </Text>
@@ -68,15 +82,20 @@ const LoginScreen = () => {
           onSubmit={submitHandler}
           validationSchema={validationSchema}
           initialValues={{ email: '', password: '' }}
+          mode={mode}
         />
 
         {/* forgot password link */}
         <Box textAlign='center' py='5' hidden={!showForm}>
           <Text
             fontSize='0.8em'
-            color='gray.600'
+            color={`${c}.forgot.color`}
             cursor='pointer'
-            _hover={{ color: 'blue.400', textDecor: 'underline' }}
+            _hover={{
+              color: `${c}.forgot.hoverColor`,
+              textDecor: 'underline',
+            }}
+            onClick={() => alert('Please try to remember what you forgot')}
           >
             Forgot Password?
           </Text>

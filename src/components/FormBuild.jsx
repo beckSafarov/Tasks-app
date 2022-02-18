@@ -23,6 +23,7 @@ const FormBuild = ({
   onSubmit,
   validationSchema,
   initialValues,
+  mode,
 }) => {
   const hasError = (form, prop) => form.touched[prop] && form.errors[prop]
   const handleSubmit = (values, onSubmitProps) => {
@@ -44,7 +45,11 @@ const FormBuild = ({
               <Field name={prop}>
                 {({ field, form }) => (
                   <FormControl isInvalid={hasError(form, prop)}>
-                    <FormLabel htmlFor={prop} fontSize='0.8em' color='gray.500'>
+                    <FormLabel
+                      htmlFor={prop}
+                      fontSize='0.8em'
+                      color={`${mode}.auth.formLabelColor`}
+                    >
                       {lookUp[prop].label}
                     </FormLabel>
                     <Input
@@ -89,6 +94,7 @@ FormBuild.defaultProps = {
   onCancel: () => void 0,
   onSubmit: () => void 0,
   validationSchema: () => {},
+  mode: 'light',
 }
 
 export default FormBuild

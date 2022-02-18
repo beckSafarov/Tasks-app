@@ -20,7 +20,7 @@ import {
   Switch,
   Divider,
 } from '@chakra-ui/react'
-import SearchTask from '../SearchTask'
+import SearchTask from '../Tasks/SearchTask'
 import {
   FaEye,
   FaEyeSlash,

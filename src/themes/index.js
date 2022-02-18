@@ -22,6 +22,30 @@ const theme = extendTheme({
       landing: {
         bg: '#fffefc',
         titleColor: '#333',
+        title: {
+          color: '#333',
+          highlighted: '#319795',
+        },
+      },
+
+      auth: {
+        bg: '#FFFEFC',
+        linkColor: '#3182ce',
+        googleBtn: {
+          bg: '#e16259',
+          color: '#EDF2F7',
+          borderColor: '#c22e24',
+        },
+        emailBtn: {
+          bg: 'inherit',
+          color: '#333',
+          borderColor: '#333',
+        },
+        forgot: {
+          color: '#4A5568',
+          hoverColor: '#2b6cb0',
+        },
+        formLabelColor: '#718096',
       },
 
       // sidebar
@@ -76,7 +100,30 @@ const theme = extendTheme({
       // landing screen
       landing: {
         bg: '#1A202C',
-        titleColor: '#EDF2F7',
+        title: {
+          color: 'EDF2F7',
+          highlighted: '#4FD1C5',
+        },
+      },
+
+      auth: {
+        bg: '#1A202C',
+        linkColor: '#5a9bd8',
+        googleBtn: {
+          bg: '#e16259',
+          color: '#EDF2F7',
+          borderColor: '#fc1d1d',
+        },
+        emailBtn: {
+          bg: 'inherit',
+          color: '#EDF2F7',
+          borderColor: '#EDF2F7',
+        },
+        forgot: {
+          color: '#b9cbdf',
+          hoverColor: '#2b6cb0',
+        },
+        formLabeLColor: 'b9cbdf',
       },
 
       // sidebar
