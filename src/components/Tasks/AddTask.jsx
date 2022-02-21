@@ -99,14 +99,7 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
     if (e.key === 13) handleSubmit({ preventDefault: () => void 0 })
   }
 
-  const onInputFocus = () => {
-    window.addEventListener('keydown', submitOnEnter)
-    setFullForm(true)
-  }
-
-  const onInputFocusOut = () => {
-    window.removeEventListener('keydown', submitOnEnter)
-  }
+  const onInputFocus = () => setFullForm(true)
 
   const onMouseClick = (e) => {
     if (e.target.id.match(/main|container|completedTasksList|tasksContainer/)) {
@@ -130,8 +123,8 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
             onChange={handleChange}
             value={formVals.name}
             variant='flushed'
+            onKeyDown={submitOnEnter}
             onFocus={onInputFocus}
-            onBlur={onInputFocusOut}
             _focus={{ borderColor: `${mode}.addTaskOnFocus` }}
           />
         </InputGroup>
