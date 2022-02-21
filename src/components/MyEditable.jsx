@@ -11,6 +11,7 @@ const MyEditable = ({
   name,
   isEditableOnClick,
   isEditable: editStatus,
+  submitOnEnter,
 }) => {
   const [value, setValue] = useState('')
   const [isEditable, setEditable] = useState(false)
@@ -23,24 +24,32 @@ const MyEditable = ({
     if (!isEditableOnClick) setEditable(editStatus)
   }, [children, isEditable, editStatus])
 
-  const submitHandler = (e) => {
-    const updated = e.target.textContent
+  const handleSubmit = (e) => {
+    const updated = e.target.textContent.trim()
     setValue(updated)
     setEditable(false)
     if (updated !== children) onSubmit(updated)
   }
 
-  const changeHandler = (e) =>
-    e.keyCode === 13 ? submitHandler(e) : onChange(e)
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      if (submitOnEnter) {
+        e.preventDefault()
+        handleSubmit(e)
+      }
+    } else {
+      onChange(e)
+    }
+  }
 
-  const clickHandler = () => {
+  const handleClick = () => {
     if (isEditableOnClick) setEditable(true)
   }
 
   return (
     <>
       <div
-        onClick={clickHandler}
+        onClick={handleClick}
         className={isEditable ? 'hidden' : ''}
         name={name}
         style={{ ...style }}
@@ -48,10 +57,11 @@ const MyEditable = ({
         {value || <span style={{ color: '#A0AEC0' }}>{placeholder}</span>}
       </div>
       <div
+        id='editableDiv'
         className={!isEditable ? 'hidden' : ''}
         name={name}
-        onBlur={submitHandler}
-        onKeyDown={changeHandler}
+        onBlur={handleSubmit}
+        onKeyDown={handleKeyDown}
         style={{ ...style }}
         placeholder='Something'
         ref={editInput}
@@ -75,6 +85,7 @@ MyEditable.defaultProps = {
   fontSize: 'inherit',
   placeholder: '',
   name: 'MyEditable',
+  submitOnEnter: false,
 }
 
 export default MyEditable

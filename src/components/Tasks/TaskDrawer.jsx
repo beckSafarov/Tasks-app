@@ -53,6 +53,7 @@ const TaskDrawer = ({
   }, [show, task, fields])
 
   const handleChanges = (name, value, shouldUpdate = false) => {
+    if (!value) return
     updated = { ...fields }
     updated[name] = value
     setFields(updated)
@@ -88,7 +89,10 @@ const TaskDrawer = ({
       >
         <Box py={7} px='20px'>
           <Heading size='md' w='full'>
-            <MyEditable onSubmit={(n) => handleChanges('name', n, true)}>
+            <MyEditable
+              onSubmit={(n) => handleChanges('name', n, true)}
+              submitOnEnter
+            >
               {fields.name}
             </MyEditable>
           </Heading>

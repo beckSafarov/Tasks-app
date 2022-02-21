@@ -1,5 +1,6 @@
 import produce from 'immer'
 import { useState, useEffect } from 'react'
+import MyEditable from '../components/MyEditable'
 
 const TestScreen = () => {
   const [foo, setFoo] = useState(false)
@@ -22,6 +23,7 @@ const TestScreen = () => {
         </span>
       </h2>
       <br />
+      <MyEditable onSubmit={(r) => console.log(r)}>Sample text</MyEditable>
       <button
         className='jobona'
         name='my name is d'
