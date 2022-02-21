@@ -44,7 +44,7 @@ export const mainPageLinks = [
     link: '/all-tasks',
     icon: FaTasks,
   },
-  // { text: 'Test', link: '/test', icon: FaHammer },
+  { text: 'Test', link: '/test', icon: FaHammer },
 ]
 
 const Sidebar = () => {

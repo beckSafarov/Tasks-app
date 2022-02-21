@@ -31,7 +31,7 @@ const MyEditable = ({
   }
 
   const changeHandler = (e) =>
-    e.keyCode === 27 ? submitHandler(e) : onChange(e)
+    e.keyCode === 13 ? submitHandler(e) : onChange(e)
 
   const clickHandler = () => {
     if (isEditableOnClick) setEditable(true)

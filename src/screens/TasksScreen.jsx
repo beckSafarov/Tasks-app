@@ -53,18 +53,12 @@ const TasksScreen = () => {
     }
   }
 
-  const onMouseClick = (e) => {
-    console.log(e.target)
-  }
-
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload)
     window.addEventListener('keydown', onKeydown)
-    window.addEventListener('click', onMouseClick)
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload)
       window.removeEventListener('keydown', onKeydown)
-      window.removeEventListener('click', onMouseClick)
     }
   }, [updateLoading, mode])
 
