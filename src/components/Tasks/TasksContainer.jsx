@@ -184,7 +184,7 @@ const TasksContainer = ({
   }
 
   return (
-    <>
+    <Box pb='100px' id='tasksContainer'>
       <TaskHeader
         title={title}
         onSearchSubmit={onSearch}
@@ -208,7 +208,7 @@ const TasksContainer = ({
         <Box hidden={!pageTasksLoading} pt='50px'>
           <SkeletonLoading show={pageTasksLoading} count={5} />
         </Box>
-        <VStack pt='50px' hidden={areTasksHidden}>
+        <VStack id='tasksList' pt='50px' hidden={areTasksHidden}>
           {sortTasks(
             tasks.filter((t) => !t.done),
             sortType,
@@ -236,7 +236,7 @@ const TasksContainer = ({
         />
 
         {/* completed tasks */}
-        <VStack pt='50px' id='completed_tasks_div' hidden={areCompTasksHidden}>
+        <VStack pt='50px' id='completedTasksList' hidden={areCompTasksHidden}>
           {sortTasks(
             tasks.filter((t) => t.done),
             sortType,
@@ -262,7 +262,7 @@ const TasksContainer = ({
           proceedTitle={confModal.proceedTitle}
         />
       </Container>
-    </>
+    </Box>
   )
 }
 

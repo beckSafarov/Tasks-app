@@ -53,12 +53,18 @@ const TasksScreen = () => {
     }
   }
 
+  const onMouseClick = (e) => {
+    console.log(e.target)
+  }
+
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload)
     window.addEventListener('keydown', onKeydown)
+    window.addEventListener('click', onMouseClick)
     return () => {
       window.removeEventListener('beforeunload', onBeforeUnload)
       window.removeEventListener('keydown', onKeydown)
+      window.removeEventListener('click', onMouseClick)
     }
   }, [updateLoading, mode])
 
@@ -75,7 +81,7 @@ const TasksScreen = () => {
       >
         <Sidebar />
       </Box>
-      <Box ml={sidebarWidth} id='main' pb='100px'>
+      <Box ml={sidebarWidth} id='main' height='100%'>
         <TasksContainer
           loading={pageTasksLoading}
           store={tasks}

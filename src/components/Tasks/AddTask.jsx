@@ -60,6 +60,10 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
   useEffect(() => {
     if (isTagPage) setFormVals({ ...formVals, tag: defaultTag })
     if (isDatePage) setFormVals({ ...formVals, dueDate: defaultDate })
+    window.addEventListener('click', onMouseClick)
+    return () => {
+      window.removeEventListener('click', onMouseClick)
+    }
   }, [path, defaultTag, defaultDate])
 
   const handleChange = ({ target }) => {
@@ -102,6 +106,12 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
 
   const onInputFocusOut = () => {
     window.removeEventListener('keydown', submitOnEnter)
+  }
+
+  const onMouseClick = (e) => {
+    if (e.target.id.match(/main|container|completedTasksList|tasksContainer/)) {
+      setFullForm(false)
+    }
   }
 
   return (

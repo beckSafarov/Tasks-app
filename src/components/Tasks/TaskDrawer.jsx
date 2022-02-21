@@ -60,7 +60,7 @@ const TaskDrawer = ({
   }
 
   const outsideClicked = (e) => {
-    if (show && e.target.id.match(/main|container|completed_tasks_flex/)) {
+    if (show && e.target.id.match(/main|tasksContainer|container|tasksList/i)) {
       onClose(fields)
     }
   }
