@@ -13,7 +13,6 @@ import {
   EditableInput,
   EditablePreview,
   HStack,
-  Tooltip,
   useToast,
   useColorMode,
   FormLabel,
@@ -212,17 +211,15 @@ const TaskHeader = ({
         <Box flex='1' display='flex' justifyContent='right'>
           {/* --- sorts menu --- */}
           <Menu>
-            <Tooltip label='Sort' closeOnClick closeOnMouseDown>
-              <MenuButton
-                as={IconButton}
-                aria-label='Menu'
-                icon={<Icon as={FaSortAmountDown} />}
-                variant='flushed'
-                _focus={{ borderColor: 'none' }}
-                borderRadius='50%'
-                _hover={{ background: `${mode}.headerMenuBtnHover` }}
-              />
-            </Tooltip>
+            <MenuButton
+              as={IconButton}
+              aria-label='Menu'
+              icon={<Icon as={FaSortAmountDown} />}
+              variant='flushed'
+              _focus={{ borderColor: 'none' }}
+              borderRadius='50%'
+              _hover={{ background: `${mode}.headerMenuBtnHover` }}
+            />
             <MenuList fontSize='0.8rem'>
               {sorts.map((sort, i) => (
                 <MenuItem
@@ -254,22 +251,15 @@ const TaskHeader = ({
           </Menu>
           {/* --- settings menu */}
           <Menu>
-            <Tooltip
-              aria-label='A tooltip'
-              label='Settings'
-              closeOnClick
-              closeOnMouseDown
-            >
-              <MenuButton
-                as={IconButton}
-                aria-label='Menu'
-                icon={<Icon as={FaCog} />}
-                variant='flushed'
-                _focus={{ borderColor: 'none' }}
-                borderRadius={'50%'}
-                _hover={{ background: `${mode}.headerMenuBtnHover` }}
-              />
-            </Tooltip>
+            <MenuButton
+              as={IconButton}
+              aria-label='Menu'
+              icon={<Icon as={FaCog} />}
+              variant='flushed'
+              _focus={{ borderColor: 'none' }}
+              borderRadius={'50%'}
+              _hover={{ background: `${mode}.headerMenuBtnHover` }}
+            />
             <MenuList fontSize='0.8rem'>
               {settings.map((action, i) => (
                 <MenuItem

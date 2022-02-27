@@ -22,7 +22,7 @@ import {
   FaRegMoon,
   FaCalendarDay,
   FaTags,
-  FaHammer,
+  // FaHammer,
 } from 'react-icons/fa'
 import AddTagModal from './Modals/AddTagModal'
 import CustomAvatar from './CustomAvatar'
@@ -44,7 +44,7 @@ export const mainPageLinks = [
     link: '/all-tasks',
     icon: FaTasks,
   },
-  { text: 'Test', link: '/test', icon: FaHammer },
+  // { text: 'Test', link: '/test', icon: FaHammer },
 ]
 
 const Sidebar = () => {
