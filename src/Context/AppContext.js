@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from 'react'
 import { getUserData, setUserData } from '../firebase/controllers'
 import { dataSchema } from '../firebase/config'
-import produce, { current } from 'immer'
+import produce from 'immer'
 
 const initialState = {
   loading: false,

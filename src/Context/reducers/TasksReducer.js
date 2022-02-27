@@ -1,4 +1,4 @@
-import produce, { current } from 'immer'
+import produce from 'immer'
 
 const TasksReducer = produce((draft, action) => {
   switch (action.type) {

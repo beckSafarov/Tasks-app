@@ -97,7 +97,7 @@ const TaskHeader = ({
 
   useEffect(() => {
     if (title !== tagName) setTagName(title)
-  }, [title])
+  }, [title, tagName])
 
   const validated = (newTitle) => {
     if (!tagName || newTitle === title) return false
@@ -296,7 +296,6 @@ TaskHeader.defaultProps = {
   onSearchSubmit: () => void 0,
   onSearchClear: () => void 0,
   toggleCompTasks: () => void 0,
-  showCompTasks: false,
   removeTasksByTag: () => void 0,
   page: 'home',
 }

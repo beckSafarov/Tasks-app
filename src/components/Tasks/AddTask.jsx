@@ -58,13 +58,13 @@ const AddTask = ({ defaultTag, defaultDate, onSubmit: addTask }) => {
   ]
 
   useEffect(() => {
-    if (isTagPage) setFormVals({ ...formVals, tag: defaultTag })
-    if (isDatePage) setFormVals({ ...formVals, dueDate: defaultDate })
+    if (isTagPage) setFormVals((f) => ({ ...f, tag: defaultTag }))
+    if (isDatePage) setFormVals((f) => ({ ...f, dueDate: defaultDate }))
     window.addEventListener('click', onMouseClick)
     return () => {
       window.removeEventListener('click', onMouseClick)
     }
-  }, [path, defaultTag, defaultDate])
+  }, [defaultTag, defaultDate, isDatePage, isTagPage])
 
   const handleChange = ({ target }) => {
     setFormVals(

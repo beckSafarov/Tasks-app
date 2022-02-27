@@ -29,12 +29,7 @@ const getPage = ({ pathname: path }) => {
 }
 
 const usePageData = (loc = defLoc) => {
-  const {
-    data: userData,
-    loading: appLoading,
-    error,
-    getData,
-  } = useAppContext()
+  const { data: userData, error, getData } = useAppContext()
   const { data: contextTasks, set: setTasks } = useTasksContext()
   const { set: setTags, tags: contextTags } = useTagsContext()
   const [pageTasks, setPageTasks] = useState([])

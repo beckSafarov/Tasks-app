@@ -81,7 +81,7 @@ const TasksContainer = ({
         title: 'Firebase Error',
         description: error,
       })
-  }, [tasksFromDB, tag, error, title])
+  }, [tasksFromDB, tag, error, title, toast])
 
   const handleOpenTaskDrawer = (task) => {
     setTaskDrawer({ task, open: true })
@@ -103,6 +103,8 @@ const TasksContainer = ({
           break
         case 'remove':
           removeTasksInContext(prop, propVal)
+          break
+        default:
           break
       }
       backup(data, updateType, prop, propVal)

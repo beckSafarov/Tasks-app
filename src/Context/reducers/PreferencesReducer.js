@@ -1,4 +1,4 @@
-import produce, { current } from 'immer'
+import produce from 'immer'
 import { setStore } from '../../helpers/lcs'
 
 const PreferencesReducer = produce((draft, action) => {

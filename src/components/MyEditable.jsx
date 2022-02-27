@@ -22,7 +22,7 @@ const MyEditable = ({
     if (children !== value) setValue(children)
     if (isEditable) editInput.current.focus()
     if (!isEditableOnClick) setEditable(editStatus)
-  }, [children, isEditable, editStatus])
+  }, [children, isEditable, editStatus, isEditableOnClick, value])
 
   const handleSubmit = (e) => {
     const updated = e.target.textContent.trim()

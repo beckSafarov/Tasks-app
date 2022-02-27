@@ -2,8 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import theme from './themes'
 import './index.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import TestScreen from './screens/TestScreen'
+import { BrowserRouter as Router } from 'react-router-dom'
 import LandingScreen from './screens/LandingScreen'
 import SignUpScreen from './screens/auth/SignUpScreen'
 import LoginScreen from './screens/auth/LoginScreen'
@@ -66,7 +65,7 @@ const App = () => {
           </PrivateRoute>
 
           {/* PlayGround screen route */}
-          <Route path='/test' component={TestScreen} />
+          {/* <Route path='/test' component={TestScreen} /> */}
         </Router>
       )}
     </ChakraProvider>

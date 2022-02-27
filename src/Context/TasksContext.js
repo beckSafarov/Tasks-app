@@ -56,6 +56,8 @@ export const TasksProvider = ({ children }) => {
         case 'remove':
           await removeTaskOrTag(propVal, 'tasks', prop)
           break
+        default:
+          break
       }
       dispatch({ type: 'loading' })
     } catch (err) {

@@ -34,13 +34,13 @@ const TaskDrawer = ({
 }) => {
   const [fields, setFields] = useState({ ...task })
   const { colorMode: mode } = useColorMode()
-  const styles = useQuerySelector('#main').style || {}
   const dpInput = useQuerySelector('#dpInputTaskDrawer').style || {}
   dpInput.background = mode === 'dark' ? cd.input : ''
 
   let updated = {}
 
   useEffect(() => {
+    const styles = document.querySelector('#main').style || {}
     styles.marginRight = show ? width : '0'
     styles.transition = transition
     document.addEventListener('click', outsideClicked)
@@ -50,7 +50,7 @@ const TaskDrawer = ({
     return () => {
       document.removeEventListener('click', outsideClicked)
     }
-  }, [show, task, fields])
+  }, [show, task, fields, transition, width])
 
   const handleChanges = (name, value, shouldUpdate = false) => {
     if (!value) return
@@ -145,7 +145,7 @@ const TaskDrawer = ({
                   onChange={(v) => handleChanges('dueDate', v, true)}
                   dateFormat='MM/dd/yyyy'
                   onCalendarOpen={() => handleCalendarTheme(mode)}
-                  shouldCloseOnSelect={false}
+                  shouldCloseOnSelect={true}
                   minDate={new Date()}
                   isClearable
                 />

@@ -1,5 +1,5 @@
 import React from 'react'
-import { VStack, Button, Flex, Img, Text, Icon } from '@chakra-ui/react'
+import { VStack, Button, Flex, Text, Icon } from '@chakra-ui/react'
 import { FaEnvelope, FaGoogle } from 'react-icons/fa'
 import { signInWithGoogle } from '../../firebase/auth'
 
