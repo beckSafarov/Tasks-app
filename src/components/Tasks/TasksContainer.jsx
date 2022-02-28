@@ -238,7 +238,11 @@ const TasksContainer = ({
         />
 
         {/* completed tasks */}
-        <VStack pt='50px' id='completedTasksList' hidden={areCompTasksHidden}>
+        <VStack
+          pt={tasks.find((t) => !t.done) ? '50px' : '0'}
+          id='completedTasksList'
+          hidden={areCompTasksHidden}
+        >
           {sortTasks(
             tasks.filter((t) => t.done),
             sortType,
