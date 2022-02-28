@@ -72,7 +72,7 @@ const TasksContainer = ({
     (!prefs.showCompletedTasks && !showCompTasks) || areTasksHidden
 
   useEffect(() => {
-    document.title = title
+    document.title = `${title} | TaskX`
     setTasks(tasksFromDB)
 
     if (error)

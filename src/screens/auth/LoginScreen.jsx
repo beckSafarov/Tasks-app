@@ -28,7 +28,7 @@ const LoginScreen = () => {
   const c = `${mode}.auth`
 
   useEffect(() => {
-    document.title = 'TaskX Login'
+    document.title = 'Login | TaskX'
   }, [])
 
   const submitHandler = async (values, props) => {

@@ -32,7 +32,7 @@ const SignUpScreen = ({ history }) => {
   const { colorMode: mode } = useColorMode()
 
   useEffect(() => {
-    document.title = 'TaskX Sign up'
+    document.title = 'Sign up | TaskX'
   }, [])
 
   const emailSignIn = async (values, props) => {
