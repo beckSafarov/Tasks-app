@@ -24,11 +24,14 @@ const FormBuild = ({
   validationSchema,
   initialValues,
   mode,
+  dontClearAfterSubmit,
 }) => {
   const hasError = (form, prop) => form.touched[prop] && form.errors[prop]
   const handleSubmit = (values, onSubmitProps) => {
-    onSubmitProps.resetForm()
-    onSubmitProps.setSubmitting(false)
+    if (!dontClearAfterSubmit) {
+      onSubmitProps.resetForm()
+      onSubmitProps.setSubmitting(false)
+    }
     onSubmit(values)
   }
 
@@ -94,6 +97,7 @@ FormBuild.defaultProps = {
   onCancel: () => void 0,
   onSubmit: () => void 0,
   validationSchema: () => {},
+  dontClearAfterSubmit: false,
   mode: 'light',
 }
 

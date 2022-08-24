@@ -8,7 +8,6 @@ import FormBuild from '../../components/FormBuild'
 import ShowAlert from '../../components/ShowAlert'
 import AuthProviders from '../../components/Auth/AuthProviders'
 import { useAppContext } from '../../hooks/ContextHooks'
-import { HOME_PAGE } from '../../config'
 import PublicHeader from '../../components/PublicHeader'
 
 const validationSchema = Yup.object().shape({
@@ -35,22 +34,20 @@ const SignUpScreen = ({ history }) => {
     document.title = 'Sign up | TaskX'
   }, [])
 
-  const emailSignIn = async (values, props) => {
+  const emailSignIn = async (values) => {
     const res = await emailSignUp(values)
-    if (res.success) {
-      props.resetForm()
-      props.setSubmitting(false)
-      await updateCurrUser({ displayName: values.name })
-      setUser({ ...res.user, displayName: values.name })
-      history.replace(HOME_PAGE)
-    } else {
+    if (!res.success) {
+      console.log(res)
       res.errorCode.match(/email-already-in-use/)
         ? setError(
             'Account with such email already exists. Please log in to continue'
           )
         : setError(res.errorMessage)
-      console.log(res)
+      return false
     }
+    await updateCurrUser({ displayName: values.name })
+    setUser({ ...res.user, displayName: values.name })
+    history.push('/today')
   }
 
   return (
@@ -88,6 +85,7 @@ const SignUpScreen = ({ history }) => {
           validationSchema={validationSchema}
           initialValues={{ name: '', email: '', password: '' }}
           mode={mode}
+          dontClearAfterSubmit
         />
       </Flex>
     </Flex>

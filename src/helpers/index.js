@@ -57,6 +57,26 @@ export const collect = (arr = [], prop = 'id') => arr.map((v) => v[prop])
 export const pluralize = (word = '', n = 0) =>
   n === 0 ? `No ${word}s` : n === 1 ? `1 ${word}` : `${n} ${word}s`
 
+export const isDate = (param) => Boolean(param?.getTime)
+
+export const isObject = (param) => param && typeof param === 'object'
+
+export const isArray = (param) =>
+  param && typeof param === 'object' && param?.length !== undefined
+
+/**
+ * @desc checks whether an element is defined and contains value
+ * @elem array|object|variable|null|undefined|NaN
+ * @returns true|false
+ */
+export const isNone = (elem, exceptZero = false) => {
+  if (exceptZero && elem === 0) return false
+  if (!elem) return true
+  if (isDate(elem)) return false
+  if (isObject(elem)) return Object.keys(elem).length < 1
+  return !Boolean(elem)
+}
+
 /**
  * @param sizes:Array, e.g. [1, 2, 3]
  * @returns Array

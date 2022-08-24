@@ -119,9 +119,9 @@ const TasksContainer = ({
     }, timer)
   }
 
-  const addTask = (t) => {
-    setTasks([...tasks, t])
-    runBackup(t, 'add', 0, 0, 200)
+  const addTask = (task) => {
+    setTasks([...tasks, task])
+    runBackup(task, 'add', 0, 0, 200)
   }
 
   const updateTasks = (updates, prop, propVal, timer) => {
@@ -223,7 +223,7 @@ const TasksContainer = ({
           justifyContent='center'
           alignItems='center'
           color='light.emptyTasksSign'
-          hidden={!showEmptyIcon}
+          hidden={!showEmptyIcon || pageTasksLoading}
         >
           <Text fontSize='6xl'>
             <Icon as={FaUmbrellaBeach} />
