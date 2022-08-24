@@ -64,6 +64,6 @@ export const pluralize = (word = '', n = 0) =>
 export const getScreenWidths = (sizes = []) => {
   const width = window?.screen?.availWidth || 1440
   const sum = sizes.reduce((a, c) => (a += c), 0)
-  const div = width / sum
-  return sizes.map((s) => Math.floor(div * s))
+  const div = Math.floor(width / sum)
+  return sizes.map((s) => div * s)
 }

@@ -77,6 +77,7 @@ const theme = extendTheme({
       completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
       taskIcon: '#4A5568', //gray.600
+      emptyTasksSign: '#A0AEC0',
 
       //taskdrawer
       taskDrawer: 'whiteAlpha.200',
@@ -156,6 +157,7 @@ const theme = extendTheme({
       completedTaskCircle: '#90cdf4',
       crossedTask: '#718096',
       taskIcon: '#b9cbdf',
+      emptyTasksSign: '#A0AEC0',
 
       // task drawer
       taskDrawer: '#2D384D',

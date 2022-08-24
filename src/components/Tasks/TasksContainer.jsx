@@ -6,6 +6,9 @@ import {
   useDisclosure,
   useToast,
   Box,
+  Icon,
+  Flex,
+  Text,
 } from '@chakra-ui/react'
 import Task from './Task'
 import TaskDrawer from './TaskDrawer'
@@ -13,6 +16,7 @@ import TaskHeader from './TaskHeader'
 import ConfirmModal from '../Modals/ConfirmModal'
 import AddTask from './AddTask'
 import SkeletonLoading from '../SkeletonLoading'
+import { FaUmbrellaBeach } from 'react-icons/fa'
 
 // --- library methods & custom hooks ---
 import { useEffect, useState } from 'react'
@@ -68,8 +72,12 @@ const TasksContainer = ({
   const history = useHistory()
   const sortType = prefs?.sorts?.[page] || 'creationDate'
   const areTasksHidden = tasks.length === 0 || pageTasksLoading
+  const uncompTasks = tasks.filter((t) => !t.done)
+  const compTasks = tasks.filter((t) => t.done)
   const areCompTasksHidden =
     (!prefs.showCompletedTasks && !showCompTasks) || areTasksHidden
+  const showEmptyIcon =
+    tasks.length < 1 || (uncompTasks.length < 1 && areCompTasksHidden)
 
   useEffect(() => {
     document.title = `${title} | TaskX`
@@ -157,7 +165,7 @@ const TasksContainer = ({
   const taskDeleteHandler = (deletingTask = {}, warned = false) => {
     if (!warned) {
       setConfModal({
-        title: `Task "${deletingTask.name}"" will be permanently deleted`,
+        title: `Task "${deletingTask.name}" will be permanently deleted`,
         body: `You will not be able to reverse this action`,
         onProceed: () => taskDeleteHandler(deletingTask, true),
       })
@@ -207,15 +215,29 @@ const TasksContainer = ({
           />
         </HStack>
 
+        {/* no tasks sign  */}
+        <Flex
+          w='full'
+          h='300px'
+          flexDir='column'
+          justifyContent='center'
+          alignItems='center'
+          color='light.emptyTasksSign'
+          hidden={!showEmptyIcon}
+        >
+          <Text fontSize='6xl'>
+            <Icon as={FaUmbrellaBeach} />
+          </Text>
+          <Text fontSize='4xl'>Nothing to do</Text>
+        </Flex>
+
+        {/* skeleton loading */}
         <Box hidden={!pageTasksLoading} pt='50px'>
           <SkeletonLoading show={pageTasksLoading} count={5} />
         </Box>
+
         <VStack id='tasksList' pt='50px' hidden={areTasksHidden}>
-          {sortTasks(
-            tasks.filter((t) => !t.done),
-            sortType,
-            tags
-          ).map((task) => (
+          {sortTasks(uncompTasks, sortType, tags).map((task) => (
             <Task
               key={task.id}
               task={task}
@@ -239,15 +261,11 @@ const TasksContainer = ({
 
         {/* completed tasks */}
         <VStack
-          pt={tasks.find((t) => !t.done) ? '50px' : '0'}
+          pt={uncompTasks.length > 0 ? '50px' : '0'}
           id='completedTasksList'
           hidden={areCompTasksHidden}
         >
-          {sortTasks(
-            tasks.filter((t) => t.done),
-            sortType,
-            tags
-          ).map((t) => (
+          {sortTasks(compTasks, sortType, tags).map((t) => (
             <Task
               key={t.id}
               task={t}
